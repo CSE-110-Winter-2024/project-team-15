@@ -6,12 +6,16 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
+import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 
 public class InMemoryDataSource {
     private final Map<Integer, Goal> goals = new HashMap<>();
-    // remember to implement MutableSubject
+    // we are using the SimpleSubject implementation of MutableSubject for now
+    // if this causes issues, we should reimplement MutableSubject
+    // maybe we should also add the ability to return immutable Subjects later
+    // - Yoav blurb
     private final Map<Integer, MutableSubject<Goal>> goalSubjects = new HashMap<>();
-    private final MutableSubject<List<Goal>> allGoalsSubject = new MutableSubject<>();
+    private final MutableSubject<List<Goal>> allGoalsSubject = new SimpleSubject<>();
     public InMemoryDataSource(){
         /*EMPTY*/
     }
@@ -33,7 +37,7 @@ public class InMemoryDataSource {
     // - Keren blurb
     public MutableSubject<Goal> getGoalSubject(int id) {
         if (!goalSubjects.containsKey(id)) {
-            var subject = new MutableSubject<Goal>();
+            var subject = new SimpleSubject<Goal>();
             subject.setValue(getGoal(id));
             goalSubjects.put(id, subject);
         }
