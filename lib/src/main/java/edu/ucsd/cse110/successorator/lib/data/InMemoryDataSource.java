@@ -65,8 +65,8 @@ public class InMemoryDataSource {
     );
     public static InMemoryDataSource fromDefault(){
         var data = new InMemoryDataSource();
-        for (Goal flashcard : DEFAULT_GOALS) {
-            data.putGoal(flashcard);
+        for (Goal goal : DEFAULT_GOALS) {
+            data.putGoal(goal);
         }
         return data;
     }
