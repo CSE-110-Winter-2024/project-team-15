@@ -9,7 +9,7 @@ import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 
 public class InMemoryDataSource {
     private final Map<Integer, Goal> goals = new HashMap<>();
-    // remember to implement Subject
+    // remember to implement MutableSubject
     private final Map<Integer, MutableSubject<Goal>> goalSubjects = new HashMap<>();
     private final MutableSubject<List<Goal>> allGoalsSubject = new MutableSubject<>();
     public InMemoryDataSource(){
@@ -51,5 +51,19 @@ public class InMemoryDataSource {
         }
         allGoalsSubject.setValue(getGoals());
     }
-
+    public final static List<Goal> DEFAULT_GOALS = List.of(
+            new Goal("SRP", 0),
+            new Goal("OCP", 1),
+            new Goal("LSP", 2),
+            new Goal("ISP", 3),
+            new Goal("DIP", 4),
+            new Goal("LKP", 5)
+    );
+    public static InMemoryDataSource fromDefault(){
+        var data = new InMemoryDataSource();
+        for (Goal flashcard : DEFAULT_GOALS) {
+            data.putGoal(flashcard);
+        }
+        return data;
+    }
 }
