@@ -14,7 +14,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
-        view.placeholderText.setText(R.string.hello_world);
+//        view.placeholderText.setText(R.string.hello_world);
+        view.placeholderText.setText(null);
 
         setContentView(view.getRoot());
     }

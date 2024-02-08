@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentGoalListBinding;
+import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 
 
 /**
@@ -22,6 +24,7 @@ import edu.ucsd.cse110.successorator.databinding.FragmentGoalListBinding;
 public class GoalListFragment extends Fragment {
 
     private FragmentGoalListBinding view;
+    private GoalListAdapter adapter;
 
     public GoalListFragment() {
         // Required empty public constructor
@@ -38,6 +41,12 @@ public class GoalListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO: MainViewModel stuff
+        /*REPLACE*/
+        // init adapter
+        this.adapter = new GoalListAdapter(requireContext(), InMemoryDataSource.DEFAULT_GOALS);
+        // More MainViewModel stuff after this as well
+
     }
 
     @Nullable
@@ -49,7 +58,7 @@ public class GoalListFragment extends Fragment {
     ) {
        // return inflater.inflate(R.layout.fragment_goal_list, container, false);
         this.view = FragmentGoalListBinding.inflate(inflater, container, false);
-        return view.getRoot();
+        view.goalList.setAdapter(adapter); return view.getRoot();
     }
 
 }
