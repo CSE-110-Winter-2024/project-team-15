@@ -56,12 +56,11 @@ public class InMemoryDataSource {
         allGoalsSubject.setValue(getGoals());
     }
     public final static List<Goal> DEFAULT_GOALS = List.of(
-            new Goal("SRP", 0),
-            new Goal("OCP", 1),
-            new Goal("LSP", 2),
-            new Goal("ISP", 3),
-            new Goal("DIP", 4),
-            new Goal("LKP", 5)
+            new Goal("Prepare for the midterm", 0),
+            new Goal("Grocery shopping", 1),
+            new Goal("Make dinner", 2),
+            new Goal("Text Maria", 3)
+//            new Goal("This Massive Wall Of Text Goes On And On For All Eternity Or At Least Until It gets Off THe Screen In which Case You Will Stop Seeing It At All", 4)
     );
     public static InMemoryDataSource fromDefault(){
         var data = new InMemoryDataSource();

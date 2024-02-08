@@ -45,7 +45,9 @@ public class GoalListFragment extends Fragment {
         /*REPLACE*/
         // init adapter
         this.adapter = new GoalListAdapter(requireContext(), InMemoryDataSource.DEFAULT_GOALS);
-        // More MainViewModel stuff after this as well
+        // Need to implement MainViewModel's observer that changes the given list.
+        // Otherwise it will always only show the default.
+        // (look into labs 4 and 5 for this)
 
     }
 
