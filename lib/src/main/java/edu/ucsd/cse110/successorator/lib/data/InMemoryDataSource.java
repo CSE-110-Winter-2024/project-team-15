@@ -62,6 +62,8 @@ public class InMemoryDataSource {
             new Goal("Text Maria", 3, false)
 //            new Goal("This Massive Wall Of Text Goes On And On For All Eternity Or At Least Until It gets Off THe Screen In which Case You Will Stop Seeing It At All", 4)
     );
+
+
     public static InMemoryDataSource fromDefault(){
         var data = new InMemoryDataSource();
         for (Goal goal : DEFAULT_GOALS) {
@@ -69,4 +71,19 @@ public class InMemoryDataSource {
         }
         return data;
     }
+
+    // most likely we dont need this
+    public final static List<Goal> DEFAULT_EMPTY = List.of(
+    );
+    public static InMemoryDataSource fromDefaultEmpty(){
+        var data = new InMemoryDataSource();
+
+        // completely unnecessary
+        for (Goal goal : DEFAULT_EMPTY) {
+            data.putGoal(goal);
+        }
+
+        return data;
+    }
+
 }
