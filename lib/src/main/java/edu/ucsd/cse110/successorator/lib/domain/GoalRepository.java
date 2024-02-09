@@ -6,6 +6,7 @@ import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 
 public class GoalRepository {
+    //need to add dummy goal repository
     private final InMemoryDataSource dataSource;
     public GoalRepository(InMemoryDataSource dataSource){
         this.dataSource = dataSource;
