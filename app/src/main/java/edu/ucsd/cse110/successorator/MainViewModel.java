@@ -39,8 +39,9 @@ public class MainViewModel extends ViewModel {
         this.goalRepository = goalRepository;
 
         /* PLANS:
-         * 1. Observe goalRepository so that when it changes, a different list of goals
-         *    is given to the ListView
+         * 1. Observe goalRepository so that when it changes, the updated list of goals
+         *    is given to the ListView.
+         *    (might need to add an observer to GoalListFragment)
          * 2. When goalRepository changes, update noGoals to be True iff goalRepository
          *    is empty.
          * 3. When noGoals changes, either enable or disable the TextView that displays
