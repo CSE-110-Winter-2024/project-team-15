@@ -80,7 +80,6 @@ public class GoalListFragment extends Fragment {
             ViewGroup container,
             Bundle savedInstanceState
     ) {
-       // return inflater.inflate(R.layout.fragment_goal_list, container, false);
         this.view = FragmentGoalListBinding.inflate(inflater, container, false);
         view.goalList.setAdapter(adapter);
         return view.getRoot();
@@ -105,7 +104,7 @@ public class GoalListFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
-        // the internet told me this was a good thing
+        // TODO: replace findViewById with the normal way
         TextView noGoalsView = view.findViewById(R.id.noGoalsView);
         activityModel.getNoGoals().observe(noGoalsState -> {
             // has to be initialized because otherwise null errors

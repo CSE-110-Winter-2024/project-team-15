@@ -59,11 +59,11 @@ public class MainViewModel extends ViewModel {
 
         // When the list of goals changes (or is first loaded), reset the ordering.
         goalRepository.findAll().observe(goals -> {
-            if (goals == null) {
+            if (goals == null) { // not ready yet, ignore
                 noGoals.setValue(true); // No goals available
                 orderedGoals.setValue(Collections.emptyList()); // Clear the list
                 return;
-            } // not ready yet, ignore
+            }
             // sort here
 
             var ordering = new ArrayList<Integer>();
@@ -74,7 +74,7 @@ public class MainViewModel extends ViewModel {
             noGoals.setValue(false); // now there are goals
         });
 
-        // ordering changes then update ordered goals
+        // if ordering changes, then update ordered goals
         goalOrdering.observe(ordering -> {
             if (ordering == null) return;
 
@@ -87,17 +87,6 @@ public class MainViewModel extends ViewModel {
             this.orderedGoals.setValue(goals);
 
         });
-
-
-    // will comment cleanup when done, probably
-//        orderedGoals.observe(goals -> {});
-
-        // here's the fun part, if noGoals changes then so does the
-        // text display
-        // ......I take it back
-//        noGoals.observe(goal -> {
-//            // TODO: fill in with disable/enable empty text
-//        });
     }
     public MutableSubject<List<Goal>> getOrderedGoals(){
         return orderedGoals;

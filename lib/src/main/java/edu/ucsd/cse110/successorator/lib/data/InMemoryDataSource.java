@@ -72,7 +72,7 @@ public class InMemoryDataSource {
         return data;
     }
 
-    // most likely we dont need this
+    // most likely we don't need this
     public final static List<Goal> DEFAULT_EMPTY = List.of(
     );
     public static InMemoryDataSource fromDefaultEmpty(){
