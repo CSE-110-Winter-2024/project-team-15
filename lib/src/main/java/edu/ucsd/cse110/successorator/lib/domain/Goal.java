@@ -29,4 +29,13 @@ public class Goal {
     public int sortOrder() {
         return this.sortOrder;
     }
+    public @NonNull Goal withId(@NonNull Integer id){
+        return new Goal(this.contents, id, this.completed, this.sortOrder);
+    }
+    public @NonNull Goal withSortOrder(int sortOrder){
+        return new Goal(this.contents, this.id, this.completed, sortOrder);
+    }
+    public @NonNull Goal withComplete(@NonNull Boolean completed){
+        return new Goal(this.contents, this.id, completed, this.sortOrder);
+    }
 }
