@@ -9,12 +9,14 @@ public class Goal {
     private final @Nullable Integer id;
 
     private final @NonNull Boolean completed;
+    private final @Nullable int sortOrder;
 
-    public Goal(@NonNull String contents,
-                @Nullable Integer id, @NonNull Boolean completed) {
+    public Goal(@NonNull String contents, @Nullable Integer id,
+                @NonNull Boolean completed, int sortOrder) {
         this.contents = contents;
         this.id = id;
         this.completed = completed;
+        this.sortOrder = sortOrder;
     }
 
     public @NonNull String contents(){
@@ -24,4 +26,7 @@ public class Goal {
         return this.id;
     }
     public @NonNull Boolean completed() { return this.completed; }
+    public int sortOrder() {
+        return this.sortOrder;
+    }
 }
