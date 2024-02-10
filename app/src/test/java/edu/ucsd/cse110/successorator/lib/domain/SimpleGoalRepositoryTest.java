@@ -5,30 +5,30 @@ import org.junit.Test;
 public class SimpleGoalRepositoryTest {
 
     @Test
-    void find() {
+    public void find() {
     }
 
     @Test
-    void findAll() {
+    public void findAll() {
     }
 
     @Test
-    void save() {
+    public void save() {
     }
 
     @Test
-    void testSave() {
+    public void testSave() {
     }
 
     @Test
-    void remove() {
+    public void remove() {
     }
 
     @Test
-    void append() {
+    public void append() {
     }
 
     @Test
-    void prepend() {
+    public void prepend() {
     }
 }
