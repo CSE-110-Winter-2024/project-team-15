@@ -23,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view.getRoot());
     }
 
+    @Override
+    public boolean onCreateCompleteGoal(Menu menu){
+
+    }
     // for the button
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

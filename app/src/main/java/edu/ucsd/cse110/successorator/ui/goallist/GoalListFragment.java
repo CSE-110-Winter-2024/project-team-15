@@ -62,8 +62,10 @@ public class GoalListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
+        var strikethroughDrawable = getResources().getDrawable(R.drawable.line, null);
+
         // init the adapter (with empty list for now)
-        this.adapter = new GoalListAdapter(requireContext(), List.of());
+        this.adapter = new GoalListAdapter(requireContext(), List.of(), strikethroughDrawable);
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
             adapter.clear();
