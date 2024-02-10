@@ -3,12 +3,16 @@ package edu.ucsd.cse110.successorator.lib.data;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 
 public class InMemoryDataSource {
+    private int minSortOrder = Integer.MAX_VALUE;
+    private int maxSortOrder = Integer.MIN_VALUE;
+    private int nextId = 0;
     private final Map<Integer, Goal> goals = new HashMap<>();
     // we are using the SimpleSubject implementation of MutableSubject for now
     // if this causes issues, we should reimplement MutableSubject
@@ -22,6 +26,7 @@ public class InMemoryDataSource {
     public List<Goal> getGoals(){
         return List.copyOf(goals.values());
     }
+
     public Goal getGoal(int id){
         return goals.get(id);
     }
@@ -36,6 +41,7 @@ public class InMemoryDataSource {
     // maybe ill ask in OH or Tutor hours
     // - Keren blurb
     public MutableSubject<Goal> getGoalSubject(int id) {
+        // we don't set observers for these subjects... yet
         if (!goalSubjects.containsKey(id)) {
             var subject = new SimpleSubject<Goal>();
             subject.setValue(getGoal(id));
@@ -49,18 +55,124 @@ public class InMemoryDataSource {
     }
 
     public void putGoal(Goal goal) {
-        goals.put(goal.id(), goal);
-        if (goalSubjects.containsKey(goal.id())) {
-            goalSubjects.get(goal.id()).setValue(goal);
+        var fixedCard = preInsert(goal);
+
+        goals.put(fixedCard.id(), fixedCard);
+        postInsert();
+        assertSortOrderConstraints();
+
+        if (goalSubjects.containsKey(fixedCard.id())) {
+            goalSubjects.get(fixedCard.id()).setValue(fixedCard);
         }
         allGoalsSubject.setValue(getGoals());
     }
+    public void putGoals(List<Goal> goalsList) {
+        var fixedGoals = goalsList.stream()
+                .map(this::preInsert)
+                .collect(Collectors.toList());
+
+        fixedGoals.forEach(goal -> goals.put(goal.id(), goal));
+        postInsert();
+        assertSortOrderConstraints();
+
+        fixedGoals.forEach(goal -> {
+            if (goalSubjects.containsKey(goal.id())) {
+                goalSubjects.get(goal.id()).setValue(goal);
+            }
+        });
+        allGoalsSubject.setValue(getGoals());
+    }
+    public void removeGoal(int id) {
+        var card = goals.get(id);
+        var sortOrder = card.sortOrder();
+
+        goals.remove(id);
+        shiftSortOrders(sortOrder, maxSortOrder, -1);
+
+        if (goalSubjects.containsKey(id)) {
+            goalSubjects.get(id).setValue(null);
+        }
+        allGoalsSubject.setValue(getGoals());
+    }
+    public void shiftSortOrders(int from, int to, int by) {
+        var cards = goals.values().stream()
+                .filter(card -> card.sortOrder() >= from && card.sortOrder() <= to)
+                .map(card -> card.withSortOrder(card.sortOrder() + by))
+                .collect(Collectors.toList());
+
+        putGoals(cards);
+    }
+    public int getMinSortOrder() {
+        return this.minSortOrder;
+    }
+    public int getMaxSortOrder() {
+        return this.maxSortOrder;
+    }
+
+    /**
+     * Private utility method to maintain state of the fake DB: ensures that new
+     * cards inserted have an id, and updates the nextId if necessary.
+     * Directly from Lab 5. Thank you Dylan!
+     */
+    private Goal preInsert(Goal goal) {
+        var id = goal.id();
+        if (id == null) {
+            // If the goal has no id, give it one.
+            goal = goal.withId(nextId++);
+        }
+        else if (id > nextId) {
+            // If the goal has an id, update nextId if necessary to avoid giving out the same
+            // one. This is important for when we pre-load goals like in fromDefault().
+            nextId = id + 1;
+        }
+
+        return goal;
+    }
+    /**
+     * Private utility method to maintain state of the fake DB: ensures that the
+     * min and max sort orders are up to date after an insert.
+     * Directly from Lab 5. Thank you Dylan!
+     */
+    private void postInsert() {
+        // Keep the min and max sort orders up to date.
+        minSortOrder = goals.values().stream()
+                .map(Goal::sortOrder)
+                .min(Integer::compareTo)
+                .orElse(Integer.MAX_VALUE);
+
+        maxSortOrder = goals.values().stream()
+                .map(Goal::sortOrder)
+                .max(Integer::compareTo)
+                .orElse(Integer.MIN_VALUE);
+    }
+    /**
+     * Safety checks to ensure the sort order constraints are maintained.
+     * If any of the constraints are violated, it will throw an AssertionError.
+     * We would like to avoid this becoming a problem.
+     * Written by Dylan. Thanks Dylan!
+     */
+    private void assertSortOrderConstraints() {
+        // Get all the sort orders...
+        var sortOrders = goals.values().stream()
+                .map(Goal::sortOrder)
+                .collect(Collectors.toList());
+
+        // Non-negative...
+        assert sortOrders.stream().allMatch(i -> i >= 0);
+
+        // Unique...
+        assert sortOrders.size() == sortOrders.stream().distinct().count();
+
+        // Between min and max...
+        assert sortOrders.stream().allMatch(i -> i >= minSortOrder);
+        assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
+    }
     public final static List<Goal> DEFAULT_GOALS = List.of(
-            new Goal("Prepare for the midterm", 0, false),
-            new Goal("Grocery shopping", 1, false),
-            new Goal("Make dinner", 2, false),
-            new Goal("Text Maria", 3, false)
-//            new Goal("This Massive Wall Of Text Goes On And On For All Eternity Or At Least Until It gets Off THe Screen In which Case You Will Stop Seeing It At All", 4)
+            new Goal("Prepare for the midterm", 0, false, 0),
+            new Goal("Grocery shopping", 1, false, 1),
+            new Goal("Make dinner", 2, false, 2),
+            new Goal("Text Maria", 3, false, 3)
+//             new Goal("This Massive Wall Of Text Goes On And On For All Eternity Or At Least Until It gets Off THe Screen In which Case You Will Stop Seeing It At All", 4)
     );
 
 
