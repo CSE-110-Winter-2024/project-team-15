@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,11 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(view.getRoot());
     }
-    TextView listItemGoalOnClickListener = (TextView) findViewById(R.id.goal_text);
-    listItemGoalOnClickListener.setOnClickListener
 
-
-    public void onClick(View v){
+    @Override
+    public boolean onCreateCompleteGoal(Menu menu){
 
     }
     // for the button
