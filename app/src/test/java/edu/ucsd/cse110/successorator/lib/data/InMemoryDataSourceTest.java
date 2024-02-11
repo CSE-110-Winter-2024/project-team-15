@@ -65,7 +65,16 @@ public class InMemoryDataSourceTest extends TestCase {
     }
 
     public void testPutGoal() {
+        InMemoryDataSource dataSource = new InMemoryDataSource();
 
+        // expected
+        Goal expectedGoal = new Goal("Prepare for the midterm", 0, false, 0);
+
+        // actual
+        dataSource.putGoal(expectedGoal);
+        Goal actualGoal = dataSource.getGoal(0); // we know getGoal works from previous tests
+
+        assertEquals(expectedGoal, actualGoal);
     }
 
     public void testPutGoals() {
@@ -90,20 +99,58 @@ public class InMemoryDataSourceTest extends TestCase {
     }
 
     public void testRemoveGoal() {
+        InMemoryDataSource dataSource = InMemoryDataSource.fromDefault();
+        dataSource.removeGoal(0);
+        MutableSubject<List<Goal>> actual = dataSource.getAllGoalsSubject();
+
+        // we check expected size against getValue, and since getValue gets us a list, it should be 4
+        assertEquals(3, actual.getValue().size());
+
+        // making sure there's nothing at ID 0
+        assertNull(dataSource.getGoal(0));
     }
 
-    public void testShiftSortOrders() {
-    }
 
-    public void testGetMinSortOrder() {
-    }
-
-    public void testGetMaxSortOrder() {
-    }
+//    These do not require testing since this is not part of the story. Will be used in add/remove.
+//    public void testShiftSortOrders() {
+//
+//    }
+//
+//    public void testGetMinSortOrder() {
+//    }
+//
+//    public void testGetMaxSortOrder() {
+//    }
 
     public void testFromDefault() {
+        InMemoryDataSource dataSource = InMemoryDataSource.fromDefault();
+
+        // just to be sure they're the same cards
+        // this is what they should be but let's see if it gets it right
+        List<Goal> expected = List.of(
+                new Goal("Prepare for the midterm", 0, false, 0),
+                new Goal("Grocery shopping", 1, false, 1),
+                new Goal("Make dinner", 2, false, 2),
+                new Goal("Text Maria", 3, false, 3)
+        );
+
+        List <Goal> actual = dataSource.getGoals();
+
+        assertEquals(actual, expected);
     }
 
     public void testFromDefaultEmpty() {
+        InMemoryDataSource dataSource = InMemoryDataSource.fromDefaultEmpty();
+
+        // just to be sure they're the same cards
+        // this is what they should be but let's see if it gets it right
+        List<Goal> expected = List.of(
+        );
+
+        List <Goal> actual = dataSource.getGoals();
+
+        assertEquals(actual, expected);
+
     }
+
 }
