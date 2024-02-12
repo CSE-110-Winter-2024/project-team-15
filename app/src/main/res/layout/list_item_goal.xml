@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="96dp">
-
+<!--US7: added tags to each text view so the goals can be found and updated from registered click-->
+<!--    https://stackoverflow.com/questions/35343138/use-of-androidtag-parameter-in-xml-->
+<!--    https://stackoverflow.com/questions/6226699/how-to-make-text-view-clickable-in-android-->
     <TextView
         android:id="@+id/goal_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:clickable="true"
+        android:onClick="onClick"
+        android:tag="@{goal}"
         android:text="@string/goal_text"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"

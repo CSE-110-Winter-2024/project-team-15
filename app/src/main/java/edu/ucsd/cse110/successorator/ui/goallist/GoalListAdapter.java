@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -21,7 +22,6 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 public class GoalListAdapter extends ArrayAdapter<Goal> {
     Drawable strikethroughDrawable;
-
     public GoalListAdapter(Context context, List<Goal> goals, Drawable strikethroughDrawable){
         super(context, 0, new ArrayList<>(goals));
         this.strikethroughDrawable = strikethroughDrawable;
@@ -35,7 +35,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // Check if a view is being reused...
         ListItemGoalBinding binding;
-        if (convertView != null){
+        if (convertView != null) {
             // if so, bind to it
             binding = ListItemGoalBinding.bind(convertView);
         } else {
@@ -46,6 +46,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // populate view with goal data
         binding.goalText.setText(goal.contents());
+        binding.goalText.setTag(goal);//so that we can access goal to update complete later for onClick
         if (goal.completed()) {//US7 adding strikethrough
             binding.goalText.setForeground(strikethroughDrawable); //strikethroughDrawable is found in GoalListFragment
         }
@@ -65,4 +66,5 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         return id;
     }
+
 }

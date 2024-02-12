@@ -27,7 +27,7 @@ import edu.ucsd.cse110.successorator.databinding.FragmentGoalListBinding;
  * Use the {@link GoalListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GoalListFragment extends Fragment {
+public class GoalListFragment extends Fragment{
 
     private MainViewModel activityModel;
     private FragmentGoalListBinding view;
@@ -62,9 +62,9 @@ public class GoalListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-        var strikethroughDrawable = getResources().getDrawable(R.drawable.line, null);
 
-        // init the adapter (with empty list for now)
+        var strikethroughDrawable = getResources().getDrawable(R.drawable.line, null);
+            // init the adapter (with empty list for now)
         this.adapter = new GoalListAdapter(requireContext(), List.of(), strikethroughDrawable);
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
@@ -83,7 +83,10 @@ public class GoalListFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         this.view = FragmentGoalListBinding.inflate(inflater, container, false);
-        view.goalList.setAdapter(adapter);
+        if (view != null) {
+            view.goalList.setAdapter(adapter);
+        }
+
         return view.getRoot();
     }
 

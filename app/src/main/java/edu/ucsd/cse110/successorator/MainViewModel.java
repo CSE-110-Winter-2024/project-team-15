@@ -84,6 +84,7 @@ public class MainViewModel extends ViewModel {
                 if (goal == null) return; // don't need to set noGoals here
                 goals.add(goal);
             }
+
             this.orderedGoals.setValue(goals);
 
         });
