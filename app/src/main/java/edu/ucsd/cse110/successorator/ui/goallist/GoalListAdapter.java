@@ -48,6 +48,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         binding.goalText.setText(goal.contents());
         binding.goalText.setTag(goal);//so that we can access goal to update complete later for onClick
         if (goal.completed()) {//US7 adding strikethrough
+            val scaled = 
             binding.goalText.setForeground(strikethroughDrawable); //strikethroughDrawable is found in GoalListFragment
         }
 
