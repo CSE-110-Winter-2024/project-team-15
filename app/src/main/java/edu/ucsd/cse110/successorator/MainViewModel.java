@@ -10,7 +10,9 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
@@ -25,7 +27,6 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<List<Goal>> orderedGoals;
     private final MutableSubject<Boolean> noGoals;
 
-    private final MutableSubject<List<Integer>> goalOrdering;
 //    private final MutableSubject<String> displayedText;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -50,7 +51,7 @@ public class MainViewModel extends ViewModel {
          *    the empty goal list (ITERATION 2)
          */
         // Create the observable subjects.
-        this.goalOrdering = new SimpleSubject<>();
+
         this.orderedGoals = new SimpleSubject<>();
         this.noGoals = new SimpleSubject<>();
 
@@ -66,26 +67,11 @@ public class MainViewModel extends ViewModel {
             }
             // sort here
 
-            var ordering = new ArrayList<Integer>();
-            for (int i = 0; i < goals.size(); i++) {
-                ordering.add(i);
-            }
-            goalOrdering.setValue(ordering); // order of goals
+            var newOrderedGoals = goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::sortOrder))
+                    .collect(Collectors.toList());
+            orderedGoals.setValue(newOrderedGoals); // order of goals
             noGoals.setValue(false); // now there are goals
-        });
-
-        // if ordering changes, then update ordered goals
-        goalOrdering.observe(ordering -> {
-            if (ordering == null) return;
-
-            var goals = new ArrayList<Goal>();
-            for(var id: ordering){
-                var goal = goalRepository.find(id).getValue();
-                if (goal == null) return; // don't need to set noGoals here
-                goals.add(goal);
-            }
-            this.orderedGoals.setValue(goals);
-
         });
     }
     public MutableSubject<List<Goal>> getOrderedGoals(){
@@ -97,4 +83,11 @@ public class MainViewModel extends ViewModel {
         return noGoals;
     }
 
+    //lab makes dialogFragment call a method that is only
+    //in goalRepository using a mainViewModel.  This method is here bc
+    //I don't think I can call that method without this being here
+    //Ethan blurb
+    public void insertIncompleteGoal(Goal goal) {
+        goalRepository.insertIncompleteGoal(goal);
+    }
 }

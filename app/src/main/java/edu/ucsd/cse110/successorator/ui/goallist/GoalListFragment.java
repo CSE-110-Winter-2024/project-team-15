@@ -81,6 +81,7 @@ public class GoalListFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         this.view = FragmentGoalListBinding.inflate(inflater, container, false);
+
         view.goalList.setAdapter(adapter);
         return view.getRoot();
     }
