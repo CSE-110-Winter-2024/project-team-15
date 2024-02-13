@@ -10,7 +10,9 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,7 +29,7 @@ import edu.ucsd.cse110.successorator.databinding.FragmentGoalListBinding;
  * Use the {@link GoalListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GoalListFragment extends Fragment{
+public class GoalListFragment extends Fragment {
 
     private MainViewModel activityModel;
     private FragmentGoalListBinding view;
@@ -62,17 +64,19 @@ public class GoalListFragment extends Fragment{
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
-
-        var strikethroughDrawable = getResources().getDrawable(R.drawable.line, null);
-            // init the adapter (with empty list for now)
-        this.adapter = new GoalListAdapter(requireContext(), List.of(), strikethroughDrawable);
+        // init the adapter (with empty list for now)
+        this.adapter = new GoalListAdapter(
+                requireContext(),
+                List.of(),
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.line, null),
+                activityModel::toggleCompleted
+        );
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
         });
-
     }
 
     @Nullable
@@ -83,43 +87,21 @@ public class GoalListFragment extends Fragment{
             Bundle savedInstanceState
     ) {
         this.view = FragmentGoalListBinding.inflate(inflater, container, false);
-        if (view != null) {
-            view.goalList.setAdapter(adapter);
-        }
+
+        setupMvp();
 
         return view.getRoot();
     }
 
-    // why onViewCreated?
-    // well after onCreateView we have a guarantee the variables are initialized
-    // so now we can make any changes we want after initialization
-    // and using observers!
-
-    // let's not pretend i fully understand this
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        // init
-        super.onViewCreated(view, savedInstanceState);
-
-        // just doing the same thing as oncreate..
-        activityModel.getOrderedGoals().observe(goals -> {
-            if (goals == null) return;
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
-            adapter.notifyDataSetChanged();
-        });
-
-        // TODO: replace findViewById with the normal way
-        TextView noGoalsView = view.findViewById(R.id.noGoalsView);
-        activityModel.getNoGoals().observe(noGoalsState -> {
-            // has to be initialized because otherwise null errors
-            if (getView() != null) {
-                if (noGoalsState) {
-                    noGoalsView.setVisibility(View.VISIBLE);
-                } else {
-                    noGoalsView.setVisibility(View.INVISIBLE);
-                }
-            }
+    /**
+     * Model and view are both ready. Do binding.
+     */
+    private void setupMvp() {
+        // M - > V
+        view.goalList.setAdapter(adapter);
+        activityModel.getNoGoals().observe(isNoGoals -> {
+            if (isNoGoals == null) return;
+            view.noGoalsView.setVisibility(isNoGoals ? View.VISIBLE : View.INVISIBLE);
         });
     }
 }

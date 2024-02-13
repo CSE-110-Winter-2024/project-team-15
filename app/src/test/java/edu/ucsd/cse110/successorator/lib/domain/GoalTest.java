@@ -4,6 +4,8 @@ package edu.ucsd.cse110.successorator.lib.domain;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import edu.ucsd.cse110.successorator.MainViewModel;
+
 public class GoalTest {
 
     @Test
@@ -40,4 +42,10 @@ public class GoalTest {
         assertNotEquals(gol, bad_sort);
         assertNotEquals(gol, bad_id);
     }
+
+    /*@Test
+    public void completed() {
+        MainViewModel mvm = new MainViewModel(new SimpleGoalRepository());
+        mvm.toggleCompleted();
+    }*/
 }

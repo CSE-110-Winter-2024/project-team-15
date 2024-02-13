@@ -24,32 +24,15 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 public class MainActivity extends AppCompatActivity {
     private GoalListAdapter adapter;
     Drawable strikethroughDrawable;
-    private GoalRepository goalRepository;
+    private MainViewModel model;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
-//        view.placeholderText.setText(R.string.hello_world);
         view.placeholderText.setText(null);
-        var strikethroughDrawable = getResources().getDrawable(R.drawable.line, null);
-        SuccessoratorApplication app = (SuccessoratorApplication) getApplication();
-        goalRepository = app.getGoalRepository();
 
-        adapter = new GoalListAdapter(this, new ArrayList<>(), strikethroughDrawable);
         setContentView(view.getRoot());
-
-
-    }
-    public void onClick(View view){
-        if(view.getId() == R.id.goal_text){ //checks for correct view
-            Goal goal = (Goal) view.getTag();
-            //getting goal associated with view that we tagged earlier
-            if(goal!=null && goal.completed()==false) {
-                //US7: checking for falseness here to set up for undoing completion in the future
-                Goals.markComplete(goalRepository, goal);
-            }
-        }
     }
 
     @Override
