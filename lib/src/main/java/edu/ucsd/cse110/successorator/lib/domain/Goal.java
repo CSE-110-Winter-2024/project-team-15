@@ -31,8 +31,6 @@ public class Goal {
     public int sortOrder() {
         return this.sortOrder;
     }
-
-
     public @NonNull Goal withId(@NonNull Integer id){
         return new Goal(this.contents, id, this.completed, this.sortOrder);
     }
