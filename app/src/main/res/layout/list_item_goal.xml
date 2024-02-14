@@ -12,8 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:clickable="true"
-        android:onClick="onClick"
         android:text="@string/goal_text"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"

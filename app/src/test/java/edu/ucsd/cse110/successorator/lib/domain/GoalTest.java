@@ -71,7 +71,7 @@ public class GoalTest {
                 new Goal("Grocery shopping", 1, false, 1),
                 new Goal("Make dinner", 2, false, 2),
                 new Goal("Text Maria", 3, false, 3)
-//             
+//
         );
         var dataSource = new InMemoryDataSource();
         for (Goal goal : testGoals) {
