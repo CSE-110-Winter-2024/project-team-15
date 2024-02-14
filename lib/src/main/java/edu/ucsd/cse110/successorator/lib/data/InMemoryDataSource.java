@@ -187,10 +187,10 @@ public class InMemoryDataSource {
         assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
     }
     public final static List<Goal> DEFAULT_GOALS = List.of(
-            new Goal("Prepare for the midterm", 0, true, 0),
-            new Goal("Grocery shopping", 1, true, 1),
-            new Goal("Make dinner", 2, true, 2),
-            new Goal("Text Maria", 3, true, 3)
+            new Goal("Prepare for the midterm", 0, false, 0),
+            new Goal("Grocery shopping", 1, false, 1),
+            new Goal("Make dinner", 2, false, 2),
+            new Goal("Text Maria", 3, false, 3)
 //             new Goal("This Massive Wall Of Text Goes On And On For All Eternity Or At Least Until It gets Off THe Screen In which Case You Will Stop Seeing It At All", 4)
     );
 
