@@ -72,9 +72,10 @@ public class MainViewModel extends ViewModel {
         return noGoals;
     }
 
-    public void toggleCompleted(Goal goal) {
-        var toggledGoal = goal.withComplete(!goal.completed());
-        goalRepository.save(toggledGoal);
-    }
+//     not SRP
+//    public void toggleCompleted(Goal goal) {
+//        var toggledGoal = goal.withComplete(!goal.completed());
+//        goalRepository.save(toggledGoal);
+//    }
 
 }

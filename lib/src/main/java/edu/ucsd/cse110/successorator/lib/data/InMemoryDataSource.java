@@ -12,6 +12,7 @@ import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 public class InMemoryDataSource {
     private int minSortOrder = Integer.MAX_VALUE;
     private int maxSortOrder = Integer.MIN_VALUE;
+    private int minSortOrderCompleted = minSortOrder;
     private int nextId = 0;
     private final Map<Integer, Goal> goals = new HashMap<>();
     // we are using the SimpleSubject implementation of MutableSubject for now
@@ -94,6 +95,22 @@ public class InMemoryDataSource {
         }
         allGoalsSubject.setValue(getGoals());
     }
+
+    public void setComplete(Goal goal) {
+        var toggledGoal = goal.withComplete(!goal.completed());
+        // goalRepository.save(toggledGoal);
+
+        // just move it to the bottom if there have been no completed goals
+        // and set minsortordercompleted
+        if(minSortOrderCompleted == minSortOrder) {
+            minSortOrderCompleted = maxSortOrder;
+        } else {
+            // BRAINSTORMING
+        }
+
+    }
+
+
     public void shiftSortOrders(int from, int to, int by) {
         var cards = goals.values().stream()
                 .filter(card -> card.sortOrder() >= from && card.sortOrder() <= to)
@@ -102,12 +119,17 @@ public class InMemoryDataSource {
 
         putGoals(cards);
     }
+
+
     public int getMinSortOrder() {
         return this.minSortOrder;
     }
     public int getMaxSortOrder() {
         return this.maxSortOrder;
     }
+
+    public int getMinSortOrderCompleted() { return this.minSortOrderCompleted; }
+
 
     /**
      * Private utility method to maintain state of the fake DB: ensures that new

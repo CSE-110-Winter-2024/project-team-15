@@ -51,4 +51,21 @@ public class SimpleGoalRepository implements GoalRepository {
                 goal.withSortOrder(dataSource.getMinSortOrder() - 1)
         );
     }
+
+
+    public void prependCompleted(Goal goal) {
+
+        dataSource.shiftSortOrders(
+                dataSource.getMinSortOrderCompleted(),
+                dataSource.getMaxSortOrder(),
+                1);
+
+        dataSource.putGoal(
+                goal.withSortOrder(dataSource.getMinSortOrderCompleted() -1)
+        );
+
+        dataSource.setComplete(goal);
+
+    }
+
 }
