@@ -102,6 +102,25 @@ public class InMemoryDataSource {
 
         putGoals(cards);
     }
+
+    //method for opening space between complete and incomplete goals
+    //returns the order value that is now opened by the shift
+    public int shiftCompletedSortOrders(){
+        int openOrderSlot = -1;
+        var cards = goals.values().stream()
+                .filter(card -> !card.completed())
+                .collect(Collectors.toList());
+        for(Goal card : cards){
+            if(card.sortOrder() > openOrderSlot){
+                openOrderSlot = card.sortOrder();
+            }
+        }
+        //incremented to avoid changing the order of the incomplete goal
+        openOrderSlot++;
+        shiftSortOrders(openOrderSlot, this.maxSortOrder, 1);
+        return openOrderSlot;
+    }
+
     public int getMinSortOrder() {
         return this.minSortOrder;
     }

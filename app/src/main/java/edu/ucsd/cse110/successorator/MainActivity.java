@@ -8,35 +8,44 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.ui.goallist.GoalListFragment;
+import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
+
+    private boolean isShowingList = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
 //        view.placeholderText.setText(R.string.hello_world);
         view.placeholderText.setText(null);
+
+
 
         setContentView(view.getRoot());
     }
 
     // for the button
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
+
         getMenuInflater().inflate(R.menu.action_bar, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
-        var itemId = item.getItemId();
+        if (item.getItemId() == R.id.action_bar_menu_swap_views){
 
-        if (itemId == R.id.action_bar_menu_swap_views){
-            // swapFragments();
+            var dialogFragment = CreateGoalDialogFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");
+
         }
         return super.onOptionsItemSelected(item);
     }
-
 }
