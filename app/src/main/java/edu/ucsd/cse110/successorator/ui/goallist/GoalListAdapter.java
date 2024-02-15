@@ -1,22 +1,38 @@
 package edu.ucsd.cse110.successorator.ui.goallist;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import edu.ucsd.cse110.successorator.databinding.ListItemGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+//import edu.ucsd.cse110.successorator.R;
 
 public class GoalListAdapter extends ArrayAdapter<Goal> {
-    public GoalListAdapter(Context context, List<Goal> goals){
+
+    private final Supplier<Drawable> strikethroughSupplier;
+    private final Consumer<Goal> onGoalClicked;
+
+    public GoalListAdapter(
+            Context context,
+            List<Goal> goals,
+            Supplier<Drawable> strikethroughSupplier,
+            Consumer<Goal> onGoalClicked
+    ){
         super(context, 0, new ArrayList<>(goals));
+        this.strikethroughSupplier = strikethroughSupplier;
+        this.onGoalClicked = onGoalClicked;
     }
 
     @NonNull
@@ -27,7 +43,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // Check if a view is being reused...
         ListItemGoalBinding binding;
-        if (convertView != null){
+        if (convertView != null) {
             // if so, bind to it
             binding = ListItemGoalBinding.bind(convertView);
         } else {
@@ -38,6 +54,17 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // populate view with goal data
         binding.goalText.setText(goal.contents());
+
+        if (goal.completed()) {//US7 adding strikethrough
+            var drawable = strikethroughSupplier.get();
+            binding.goalText.setForeground(drawable); //strikethroughDrawable is found in GoalListFragment
+//            binding.goalText.setForegroundGravity(Gravity.FILL_HORIZONTAL);
+//            binding.goalText.setForegroundGravity(Gravity.CENTER_VERTICAL);
+        } else {
+            binding.goalText.setForeground(null);
+        }
+
+        binding.goalText.setOnClickListener(v -> onGoalClicked.accept(goal));
 
         return binding.getRoot();
     }
@@ -54,4 +81,5 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         return id;
     }
+
 }

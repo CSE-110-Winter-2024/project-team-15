@@ -10,7 +10,9 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
@@ -24,9 +26,6 @@ public class MainViewModel extends ViewModel {
     // UI state
     private final MutableSubject<List<Goal>> orderedGoals;
     private final MutableSubject<Boolean> noGoals;
-
-    private final MutableSubject<List<Integer>> goalOrdering;
-//    private final MutableSubject<String> displayedText;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -50,42 +49,18 @@ public class MainViewModel extends ViewModel {
          *    the empty goal list (ITERATION 2)
          */
         // Create the observable subjects.
-        this.goalOrdering = new SimpleSubject<>();
         this.orderedGoals = new SimpleSubject<>();
         this.noGoals = new SimpleSubject<>();
+        this.noGoals.setValue(true);
 
-        // Initialize...
-        noGoals.setValue(true);
-
-        // When the list of goals changes (or is first loaded), reset the ordering.
         goalRepository.findAll().observe(goals -> {
-            if (goals == null) { // not ready yet, ignore
-                noGoals.setValue(true); // No goals available
-                orderedGoals.setValue(Collections.emptyList()); // Clear the list
-                return;
-            }
-            // sort here
+            if (goals == null) return;
 
-            var ordering = new ArrayList<Integer>();
-            for (int i = 0; i < goals.size(); i++) {
-                ordering.add(i);
-            }
-            goalOrdering.setValue(ordering); // order of goals
-            noGoals.setValue(false); // now there are goals
-        });
+            orderedGoals.setValue(goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::sortOrder))
+                    .collect(Collectors.toList()));
 
-        // if ordering changes, then update ordered goals
-        goalOrdering.observe(ordering -> {
-            if (ordering == null) return;
-
-            var goals = new ArrayList<Goal>();
-            for(var id: ordering){
-                var goal = goalRepository.find(id).getValue();
-                if (goal == null) return; // don't need to set noGoals here
-                goals.add(goal);
-            }
-            this.orderedGoals.setValue(goals);
-
+            noGoals.setValue(goals.size() == 0);
         });
     }
     public MutableSubject<List<Goal>> getOrderedGoals(){
@@ -95,6 +70,11 @@ public class MainViewModel extends ViewModel {
     // for usage in fragment. to goal or not to goal?
     public MutableSubject<Boolean> getNoGoals() {
         return noGoals;
+    }
+
+    public void toggleCompleted(Goal goal) {
+        var toggledGoal = goal.withComplete(!goal.completed());
+        goalRepository.save(toggledGoal);
     }
 
 }
