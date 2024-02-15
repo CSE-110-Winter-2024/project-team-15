@@ -11,15 +11,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
 import edu.ucsd.cse110.successorator.ui.goallist.GoalListFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
-
+    private DateTracker dateTracker;
     private boolean isShowingList = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.dateTracker = new DateTracker();
+        setTitle(dateTracker.currDate());
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
 //        view.placeholderText.setText(R.string.hello_world);
         view.placeholderText.setText(null);
