@@ -27,6 +27,7 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<List<Goal>> orderedGoals;
     private final MutableSubject<Boolean> noGoals;
 
+
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
                     MainViewModel.class,
@@ -55,7 +56,6 @@ public class MainViewModel extends ViewModel {
 
         goalRepository.findAll().observe(goals -> {
             if (goals == null) return;
-
             orderedGoals.setValue(goals.stream()
                     .sorted(Comparator.comparingInt(Goal::sortOrder))
                     .collect(Collectors.toList()));
@@ -77,4 +77,11 @@ public class MainViewModel extends ViewModel {
         goalRepository.save(toggledGoal);
     }
 
+    //lab makes dialogFragment call a method that is only
+    //in goalRepository using a mainViewModel.  This method is here bc
+    //I don't think I can call that method without this being here
+    //Ethan blurb
+    public void insertIncompleteGoal(Goal goal) {
+        goalRepository.insertIncompleteGoal(goal);
+    }
 }

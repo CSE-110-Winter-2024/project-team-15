@@ -89,7 +89,6 @@ public class GoalListFragment extends Fragment {
         this.view = FragmentGoalListBinding.inflate(inflater, container, false);
 
         setupMvp();
-
         return view.getRoot();
     }
 
