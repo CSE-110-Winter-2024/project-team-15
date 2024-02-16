@@ -68,9 +68,16 @@ public class MainViewModel extends ViewModel {
         return noGoals;
     }
 
-    ///I think this does not follow SRP, but I'm keeping it like this for now since i don't want to mess anything up
+    /// I think this does not follow SRP, but I'm keeping it like this for now since I don't want to mess anything up
     public void toggleCompleted(Goal goal) {
-        // if it's now complete, we move it
+        // NOTE: if I toggle the goal directly here and pass it into the functions,
+        // it causes them to crash and I don't fully understand why
+        // I don't like it since it repeats that one line in both funcs
+        // "var toggledGoal = goal.withComplete(!goal.completed());"
+        // LMK if any of you can tell me why
+        // - Keren blurb
+
+        // if it's now complete, we move it to top of completed
         goalRepository.moveCompleteGoal(goal);
 
         // if it's now not complete, that's a different story (US11)
