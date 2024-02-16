@@ -17,7 +17,7 @@ public interface GoalRepository {
 
     void append(Goal goal);
 
-    void insertIncompleteGoal(Goal goal);
+    void insertUnderIncompleteGoals(Goal goal);
 
     void prepend(Goal goal);
 }

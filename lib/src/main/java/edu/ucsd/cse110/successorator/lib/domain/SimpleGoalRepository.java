@@ -45,7 +45,7 @@ public class SimpleGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void insertIncompleteGoal(Goal goal){
+    public void insertUnderIncompleteGoals(Goal goal){
         dataSource.putGoal(
                 goal.withSortOrder(dataSource.shiftCompletedSortOrders())
         );
