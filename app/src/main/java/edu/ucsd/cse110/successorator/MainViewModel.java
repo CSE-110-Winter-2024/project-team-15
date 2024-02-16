@@ -89,6 +89,7 @@ public class MainViewModel extends ViewModel {
     //in goalRepository using a mainViewModel.  This method is here bc
     //I don't think I can call that method without this being here
     //Ethan blurb
+    // we're also going to need to add this to a viewModelTest - Keren
     public void insertIncompleteGoal(Goal goal) {
         goalRepository.insertUnderIncompleteGoals(goal);
     }

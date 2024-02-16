@@ -37,7 +37,7 @@ public class SimpleGoalRepositoryTest {
     }
 
     @Test
-    public void insertIncompleteGoal(){
+    public void insertUnderIncompleteGoals(){
         SimpleGoalRepository testRepository = new SimpleGoalRepository(InMemoryDataSource.fromDefaultEmpty());
 
         Goal g1 = new Goal("1", null, false, -1);
@@ -77,6 +77,56 @@ public class SimpleGoalRepositoryTest {
     }
     @Test
     void moveCompleteGoal() {
+        // initialize
+        // by the way, I do know this style of testing is wasteful, but it helps me understand...
+        // it's java it's fine
+        SimpleGoalRepository testRepository;
+        InMemoryDataSource testMemoryDataSource;
+        Goal g1;
+        Goal g2;
+        Goal g3;
+        Goal g4;
+
+
+        // two goals, mark the top as complete, that goal should now have the last sort order
+        // (and be completed)
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
+
+        g1 = new Goal("1", null, false, -1);
+        g2 = new Goal("2", null, false, -1);
+        testMemoryDataSource.putGoal(g1); // 0 = sort order
+        testMemoryDataSource.putGoal(g2); // 1 = sort order
+
+        testRepository.moveCompleteGoal(g1);
+
+        assertEquals(1, testMemoryDataSource.getGoal(0).sortOrder()); // sort order
+        assertEquals(Boolean.TRUE, testMemoryDataSource.getGoal(0).completed()); // is completed
+
+
+
+        // two goals, mark the bottom as complete, that goal should not move
+        // (but be completed)
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
+
+        g1 = new Goal("1", null, false, -1);
+        g2 = new Goal("2", null, false, -1);
+
+
+
+        // four goals, top two complete, bottom two incomplete, mark the top as complete
+        // should now have the sort order of being at #3
+        // (and be complete)
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
+
+        g1 = new Goal("1", null, false, -1);
+        g2 = new Goal("2", null, false, -1);
+        g3 = new Goal("3", null, true, -1);
+        g4 = new Goal("4", null, true, -1);
+
+
 
     }
 
