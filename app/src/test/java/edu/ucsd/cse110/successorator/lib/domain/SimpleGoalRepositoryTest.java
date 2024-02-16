@@ -75,4 +75,14 @@ public class SimpleGoalRepositoryTest {
         //g4 with lower order than g3
         assertEquals(g3order2-1, g4order);
     }
+    @Test
+    void moveCompleteGoal() {
+
+    }
+
+    @Test
+    void moveIncompleteGoal() {
+
+    }
+
 }
