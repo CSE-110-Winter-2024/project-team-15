@@ -76,7 +76,7 @@ public class SimpleGoalRepositoryTest {
         assertEquals(g3order2-1, g4order);
     }
     @Test
-    public void moveCompleteGoal() {
+    public void toggleCompleteGoal() {
         // initialize
         // by the way, I do know this style of testing is wasteful, but it helps me understand...
         // it's java it's fine
@@ -98,55 +98,12 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource.putGoal(g1); // 0 = sort order
         testMemoryDataSource.putGoal(g2); // 1 = sort order
 
-        testRepository.moveCompleteGoal(g1);
+        testRepository.toggleCompleteGoal(g1);
 
         assertEquals(1, testMemoryDataSource.getGoal(0).sortOrder()); // sort order
         assertEquals(Boolean.TRUE, testMemoryDataSource.getGoal(0).completed()); // is completed
 
-
-//
-//        // two goals, mark the bottom as complete, that goal should not move
-//        // (but be completed)
-//        testMemoryDataSource = new InMemoryDataSource();
-//        testRepository = new SimpleGoalRepository(testMemoryDataSource);
-//
-//        g1 = new Goal("1", null, false, -1);
-//        g2 = new Goal("2", null, false, -1);
-//        testMemoryDataSource.putGoal(g1); // 0 = sort order
-//        testMemoryDataSource.putGoal(g2); // 1 = sort order
-//
-//        testRepository.moveCompleteGoal(g2);
-//
-//        assertEquals(1, testMemoryDataSource.getGoal(1).sortOrder()); // sort order
-//        assertEquals(Boolean.TRUE, testMemoryDataSource.getGoal(1).completed()); // is completed
-//
-//
-//
-//        // four goals, top two complete, bottom two incomplete, mark the top as complete
-//        // should now have the sort order of being at 2nd place
-//        // (and be complete)
-//        testMemoryDataSource = new InMemoryDataSource();
-//        testRepository = new SimpleGoalRepository(testMemoryDataSource);
-//
-//        g1 = new Goal("1", null, false, -1);
-//        g2 = new Goal("2", null, false, -1);
-//        g3 = new Goal("3", null, true, -1);
-//        g4 = new Goal("4", null, true, -1);
-//        testMemoryDataSource.putGoal(g1); // 0 = sort order
-//        testMemoryDataSource.putGoal(g2); // 1 = sort order
-//        testMemoryDataSource.putGoal(g1); // 2 = sort order
-//        testMemoryDataSource.putGoal(g2); // 3 = sort order
-//
-//        testRepository.moveCompleteGoal(g1);
-//
-//        assertEquals(1, testMemoryDataSource.getGoal(0).sortOrder()); // sort order
-//        assertEquals(Boolean.TRUE, testMemoryDataSource.getGoal(1).completed()); // is completed
-
     }
 
-    @Test
-    public void moveIncompleteGoal() {
-        assertEquals(0, 0);
-    }
 
 }

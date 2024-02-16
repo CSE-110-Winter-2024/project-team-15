@@ -52,37 +52,18 @@ public class SimpleGoalRepository implements GoalRepository {
         );
     }
 
-//    public void moveCompleteGoal(Goal goal) {
-//        var toggledGoal = goal.withComplete(!goal.completed());
-//
-//        if(toggledGoal.completed()) {
-//            // the reason I can use insertUnderIncompleteGoals here is because
-//            // we want to put completed goals under the incomplete goals
-//            insertUnderIncompleteGoals(toggledGoal);
-//        }
-//
-//    }
-//
-//    public void moveIncompleteGoal(Goal goal) {
-//        var toggledGoal = goal.withComplete(!goal.completed());
-//
-//        if(!toggledGoal.completed()) {
-//            // the reason I can use insertUnderIncompleteGoals here is because
-//            // we want to put completed goals under the incomplete goals
-//            prepend(toggledGoal);
-//        }
-//
-//    }
 
-    // Yoav made this idea work, didn't work when I did it aha
+    // Yoav convinced me I should combine moveCompleteGoal and moveIncompleteGoal into
+    // toggleCompleteGoal ... it was a good idea
     public void toggleCompleteGoal(Goal goal) {
         var toggledGoal = goal.withComplete(!goal.completed());
 
         if(toggledGoal.completed()) {
             // the reason I can use insertUnderIncompleteGoals here is because
-            // we want to put completed goals under the incomplete goals
+            // we want to put new completed goals under the incomplete goals
             insertUnderIncompleteGoals(toggledGoal);
         } else {
+            // complete -> incomplete puts them at the top of the list
             prepend(toggledGoal);
         }
 
