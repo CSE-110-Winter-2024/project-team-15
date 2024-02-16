@@ -36,6 +36,7 @@ public class SimpleGoalRepositoryTest {
     public void prepend() {
     }
 
+    // should I split these into multiple functions? it would look a LOT nicer
     @Test
     public void insertUnderIncompleteGoals(){
         SimpleGoalRepository testRepository = new SimpleGoalRepository(InMemoryDataSource.fromDefaultEmpty());
@@ -101,8 +102,8 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource.putGoal(g1); // 1 = sort order
         testMemoryDataSource.putGoal(g2); // 2 = sort order
 
-
-        testRepository.toggleCompleteGoal(g1); // first goal moves to bottom. max sort order + 1
+        // first goal moves to bottom. max incomplete sort order + 1
+        testRepository.toggleCompleteGoal(g1);
 
         actualCompleted = testMemoryDataSource.getGoal(1).completed();
         actualSortOrder = testMemoryDataSource.getGoal(1).sortOrder();
@@ -112,7 +113,7 @@ public class SimpleGoalRepositoryTest {
 
 
 
-        // two goals, mark the bottom as complete, that goal should now have the last sort order
+        // two goals, mark the bottom as complete, that goal should now have the last sort order +1
         // (and be completed)
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
@@ -122,8 +123,8 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource.putGoal(g1); // 1 = sort order
         testMemoryDataSource.putGoal(g2); // 2 = sort order
 
-
-        testRepository.toggleCompleteGoal(g2); // second  goal stays at bottom. max sort order + 1
+        // second  goal stays at bottom. max incomplete sort order + 1
+        testRepository.toggleCompleteGoal(g2);
 
         actualCompleted = testMemoryDataSource.getGoal(2).completed();
         actualSortOrder = testMemoryDataSource.getGoal(2).sortOrder();
@@ -149,8 +150,8 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource.putGoal(g3);
         testMemoryDataSource.putGoal(g4);
 
-
-        testRepository.toggleCompleteGoal(g1); // first goal complete. max sort order + 1
+        // first goal complete. max incomplete sort order + 1
+        testRepository.toggleCompleteGoal(g1);
 
         actualCompleted = testMemoryDataSource.getGoal(1).completed();
         actualSortOrder = testMemoryDataSource.getGoal(1).sortOrder();
@@ -162,7 +163,8 @@ public class SimpleGoalRepositoryTest {
 
         // Four goals, two incomplete, two complete, mark the last goal as incomplete
         // Should now be incomplete and have the earliest sort order of 1
-        // all other goals get 1 added to their sort order
+        // since it replaces where the earliest goal was
+        // all other goals get 1 added to their sort order (shifted down)
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
 
@@ -192,7 +194,6 @@ public class SimpleGoalRepositoryTest {
 
         g1 = new Goal("1", 1, false, 1);
         testMemoryDataSource.putGoal(g1);
-
 
         testRepository.toggleCompleteGoal(g1);
 
