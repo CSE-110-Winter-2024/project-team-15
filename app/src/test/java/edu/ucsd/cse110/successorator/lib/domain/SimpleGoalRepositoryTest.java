@@ -82,10 +82,13 @@ public class SimpleGoalRepositoryTest {
         // it's java it's fine
         SimpleGoalRepository testRepository;
         InMemoryDataSource testMemoryDataSource;
+        Boolean actualCompleted;
+        int actualSortOrder;
         Goal g1;
         Goal g2;
         Goal g3;
         Goal g4;
+
 
 
         // two goals, mark the top as complete, that goal should now have the last sort order
@@ -93,16 +96,119 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
 
-        g1 = new Goal("1", null, false, 1);
-        g2 = new Goal("2", null, false, 2);
-        testMemoryDataSource.putGoal(g1); // 0 = sort order
-        testMemoryDataSource.putGoal(g2); // 1 = sort order
+        g1 = new Goal("1", 1, false, 1);
+        g2 = new Goal("2", 2, false, 2);
+        testMemoryDataSource.putGoal(g1); // 1 = sort order
+        testMemoryDataSource.putGoal(g2); // 2 = sort order
+
+
+        testRepository.toggleCompleteGoal(g1); // first goal moves to bottom. max sort order + 1
+
+        actualCompleted = testMemoryDataSource.getGoal(1).completed();
+        actualSortOrder = testMemoryDataSource.getGoal(1).sortOrder();
+
+        assertEquals(3, actualSortOrder); // sort order
+        assertEquals(Boolean.TRUE, actualCompleted); // is completed
+
+
+
+        // two goals, mark the bottom as complete, that goal should now have the last sort order
+        // (and be completed)
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
+
+        g1 = new Goal("1", 1, false, 1);
+        g2 = new Goal("2", 2, false, 2);
+        testMemoryDataSource.putGoal(g1); // 1 = sort order
+        testMemoryDataSource.putGoal(g2); // 2 = sort order
+
+
+        testRepository.toggleCompleteGoal(g2); // second  goal stays at bottom. max sort order + 1
+
+        actualCompleted = testMemoryDataSource.getGoal(2).completed();
+        actualSortOrder = testMemoryDataSource.getGoal(2).sortOrder();
+
+        assertEquals(3, actualSortOrder); // sort order
+        assertEquals(Boolean.TRUE, actualCompleted); // is completed
+
+
+
+        // Four goals, two incomplete, two complete, mark the first goal as complete
+        // Should now be complete and have a sort order of
+        // max previous incomplete sort order + 1 (in our case, 3)
+        // and all other complete goals' sort order goes up by 1
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
+
+        g1 = new Goal("1", 1, false, 1);
+        g2 = new Goal("2", 2, false, 2);
+        g3 = new Goal("3", 3, true, 3);
+        g4 = new Goal("4", 4, true, 4);
+        testMemoryDataSource.putGoal(g1);
+        testMemoryDataSource.putGoal(g2);
+        testMemoryDataSource.putGoal(g3);
+        testMemoryDataSource.putGoal(g4);
+
+
+        testRepository.toggleCompleteGoal(g1); // first goal complete. max sort order + 1
+
+        actualCompleted = testMemoryDataSource.getGoal(1).completed();
+        actualSortOrder = testMemoryDataSource.getGoal(1).sortOrder();
+
+        assertEquals(3, actualSortOrder); // sort order
+        assertEquals(Boolean.TRUE, actualCompleted); // is completed
+
+
+
+        // Four goals, two incomplete, two complete, mark the last goal as incomplete
+        // Should now be incomplete and have the earliest sort order of 1
+        // all other goals get 1 added to their sort order
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
+
+        g1 = new Goal("1", 1, false, 1);
+        g2 = new Goal("2", 2, false, 2);
+        g3 = new Goal("3", 3, true, 3);
+        g4 = new Goal("4", 4, true, 4);
+        testMemoryDataSource.putGoal(g1);
+        testMemoryDataSource.putGoal(g2);
+        testMemoryDataSource.putGoal(g3);
+        testMemoryDataSource.putGoal(g4);
+
+
+        testRepository.toggleCompleteGoal(g4); // last goal incomplete.
+
+        actualCompleted = testMemoryDataSource.getGoal(4).completed();
+        actualSortOrder = testMemoryDataSource.getGoal(4).sortOrder();
+
+        assertEquals(1, actualSortOrder); // sort order
+        assertEquals(Boolean.FALSE, actualCompleted); // is completed
+
+
+
+        // One goal, it's incomplete. Toggle complete twice.
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
+
+        g1 = new Goal("1", 1, false, 1);
+        testMemoryDataSource.putGoal(g1);
+
 
         testRepository.toggleCompleteGoal(g1);
 
-        assertEquals(1, testMemoryDataSource.getGoal(0).sortOrder()); // sort order
-        assertEquals(Boolean.TRUE, testMemoryDataSource.getGoal(0).completed()); // is completed
+        actualCompleted = testMemoryDataSource.getGoal(1).completed();
+        actualSortOrder = testMemoryDataSource.getGoal(1).sortOrder();
 
+        assertEquals(2, actualSortOrder); // sort order
+        assertEquals(Boolean.TRUE, actualCompleted); // is completed
+
+        testRepository.toggleCompleteGoal(testMemoryDataSource.getGoal(1));
+
+        actualCompleted = testMemoryDataSource.getGoal(1).completed();
+        actualSortOrder = testMemoryDataSource.getGoal(1).sortOrder();
+
+        assertEquals(2, actualSortOrder); // sort order (2 is now the earliest)
+        assertEquals(Boolean.FALSE, actualCompleted); // is completed
     }
 
 

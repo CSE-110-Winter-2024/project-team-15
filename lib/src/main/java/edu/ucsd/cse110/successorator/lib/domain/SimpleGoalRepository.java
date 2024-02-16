@@ -61,9 +61,20 @@ public class SimpleGoalRepository implements GoalRepository {
         if(toggledGoal.completed()) {
             // the reason I can use insertUnderIncompleteGoals here is because
             // we want to put new completed goals under the incomplete goals
+            // also adding doesn't add duplicates, just moves them
             insertUnderIncompleteGoals(toggledGoal);
+
+            // NOTE: Newly completed goals will have a sortOrder of incomplete max sort order +1
+            // This builds up. But it still functions correctly.
+            // Should we fix?
+
         } else {
             // complete -> incomplete puts them at the top of the list
+
+            // Newly incompleted goals will have a sortOrder of whatever is currently
+            // at the top. If there's only one goal that gets toggled consistently this
+            // number will just keep going up. It still functions correctly.
+            // Should we fix?
             prepend(toggledGoal);
         }
 
