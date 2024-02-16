@@ -6,10 +6,6 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
 
-import android.view.View;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,8 +68,21 @@ public class MainViewModel extends ViewModel {
         return noGoals;
     }
 
+    ///I think this does not follow SRP, but I'm keeping it like this for now since i don't want to mess anything up
     public void toggleCompleted(Goal goal) {
         var toggledGoal = goal.withComplete(!goal.completed());
+
+        // if it wasn't complete, I want to move it
+        if(!goal.completed()) {
+            goalRepository.remove(goal.id());
+
+            // the reason I can use insertUnderIncompleteGoals here is because
+            // we want to put completed goals under the incomplete goals
+            goalRepository.insertUnderIncompleteGoals(toggledGoal);
+
+            return;
+        }
+
         goalRepository.save(toggledGoal);
     }
 
@@ -82,6 +91,7 @@ public class MainViewModel extends ViewModel {
     //I don't think I can call that method without this being here
     //Ethan blurb
     public void insertIncompleteGoal(Goal goal) {
-        goalRepository.insertIncompleteGoal(goal);
+        goalRepository.insertUnderIncompleteGoals(goal);
     }
+
 }
