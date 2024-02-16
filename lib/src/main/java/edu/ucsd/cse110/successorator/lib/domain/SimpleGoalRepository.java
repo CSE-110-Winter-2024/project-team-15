@@ -70,6 +70,7 @@ public class SimpleGoalRepository implements GoalRepository {
             // we want to put completed goals under the incomplete goals
             prepend(toggledGoal);
         }
+
     }
 
     @Override

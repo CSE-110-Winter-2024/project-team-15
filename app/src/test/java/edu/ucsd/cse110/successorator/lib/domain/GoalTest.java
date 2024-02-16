@@ -46,6 +46,7 @@ public class GoalTest {
         assertNotEquals(gol, bad_id);
     }
 
+    // we should move these to a MainViewModel testing place
     @Test
     public void completedOne() {
         List<Goal> testGoals = List.of(
