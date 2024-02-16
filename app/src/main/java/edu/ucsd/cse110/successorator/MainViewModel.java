@@ -70,20 +70,12 @@ public class MainViewModel extends ViewModel {
 
     ///I think this does not follow SRP, but I'm keeping it like this for now since i don't want to mess anything up
     public void toggleCompleted(Goal goal) {
-        var toggledGoal = goal.withComplete(!goal.completed());
+        // if it's now complete, we move it
+        goalRepository.moveCompleteGoal(goal);
 
-        // if it wasn't complete, I want to move it
-        if(!goal.completed()) {
-            goalRepository.remove(goal.id());
+        // if it's now not complete, that's a different story (US11)
+        goalRepository.moveIncompleteGoal(goal);
 
-            // the reason I can use insertUnderIncompleteGoals here is because
-            // we want to put completed goals under the incomplete goals
-            goalRepository.insertUnderIncompleteGoals(toggledGoal);
-
-            return;
-        }
-
-        goalRepository.save(toggledGoal);
     }
 
     //lab makes dialogFragment call a method that is only
