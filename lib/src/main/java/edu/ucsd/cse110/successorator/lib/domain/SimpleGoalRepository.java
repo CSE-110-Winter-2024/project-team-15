@@ -51,6 +51,27 @@ public class SimpleGoalRepository implements GoalRepository {
         );
     }
 
+    public void moveCompleteGoal(Goal goal) {
+        var toggledGoal = goal.withComplete(!goal.completed());
+
+        if(toggledGoal.completed()) {
+            // the reason I can use insertUnderIncompleteGoals here is because
+            // we want to put completed goals under the incomplete goals
+            insertUnderIncompleteGoals(toggledGoal);
+        }
+
+    }
+
+    public void moveIncompleteGoal(Goal goal) {
+        var toggledGoal = goal.withComplete(!goal.completed());
+
+        if(!toggledGoal.completed()) {
+            // the reason I can use insertUnderIncompleteGoals here is because
+            // we want to put completed goals under the incomplete goals
+            prepend(toggledGoal);
+        }
+    }
+
     @Override
     public void prepend(Goal goal) {
         dataSource.shiftSortOrders(0, dataSource.getMaxSortOrder(), 1);
