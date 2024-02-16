@@ -69,6 +69,7 @@ public class MainViewModel extends ViewModel {
     }
 
     /// I think this does not follow SRP, but I'm keeping it like this for now since I don't want to mess anything up
+    // FIXED: FOLLOWS SRP
     public void toggleCompleted(Goal goal) {
         // NOTE: if I toggle the goal directly here and pass it into the functions,
         // it causes them to crash and I don't fully understand why
@@ -78,10 +79,12 @@ public class MainViewModel extends ViewModel {
         // - Keren blurb
 
         // if it's now complete, we move it to top of completed
-        goalRepository.moveCompleteGoal(goal);
+//        goalRepository.moveCompleteGoal(goal);
 
         // if it's now not complete, that's a different story (US11)
-        goalRepository.moveIncompleteGoal(goal);
+//        goalRepository.moveIncompleteGoal(goal);
+
+        goalRepository.toggleCompleteGoal(goal);
 
     }
 
