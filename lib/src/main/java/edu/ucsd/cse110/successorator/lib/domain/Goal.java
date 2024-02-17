@@ -51,8 +51,9 @@ public class Goal {
         if (o == null || getClass() != o.getClass()) return false;
         Goal goal = (Goal) o;
         // Removed sort order from equals method, since a goal can be the same..
-        return Objects.equals(contents, goal.contents) && Objects.equals(id, goal.id) && Objects.equals(completed, goal.completed);
+        return sortOrder == goal.sortOrder && Objects.equals(contents, goal.contents) && Objects.equals(id, goal.id) && Objects.equals(completed, goal.completed);
     }
+
 
     @Override
     public int hashCode() {
