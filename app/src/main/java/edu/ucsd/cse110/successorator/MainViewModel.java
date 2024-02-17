@@ -69,12 +69,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void toggleCompleted(Goal goal) {
-        // NOTE: if I toggle the goal directly here and pass it into the functions,
-        // it causes them to crash and I don't fully understand why
-        // "var toggledGoal = goal.withComplete(!goal.completed());"
-        // LMK if any of you can tell me why
-        // - Keren blurb
-        // also, SRP issue fixed by forward passing
+        // SRP issue fixed by forward passing
         goalRepository.toggleCompleteGoal(goal);
 
     }
