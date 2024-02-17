@@ -6,10 +6,6 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
 
-import android.view.View;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,15 +69,18 @@ public class MainViewModel extends ViewModel {
     }
 
     public void toggleCompleted(Goal goal) {
-        var toggledGoal = goal.withComplete(!goal.completed());
-        goalRepository.save(toggledGoal);
+        // SRP issue fixed by forward passing
+        goalRepository.toggleCompleteGoal(goal);
+
     }
 
     //lab makes dialogFragment call a method that is only
     //in goalRepository using a mainViewModel.  This method is here bc
     //I don't think I can call that method without this being here
     //Ethan blurb
+    // we're also going to need to add this to a viewModelTest - Keren
     public void insertIncompleteGoal(Goal goal) {
-        goalRepository.insertIncompleteGoal(goal);
+        goalRepository.insertUnderIncompleteGoals(goal);
     }
+
 }
