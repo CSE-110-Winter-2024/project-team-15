@@ -13,11 +13,12 @@ public class SuccessoratorApplication extends Application {
     public void onCreate(){
         super.onCreate();
         // we use the default goals here -- change later
-        this.dataSource = InMemoryDataSource.fromDefault();
+//        this.dataSource = InMemoryDataSource.fromDefault();
+        this.dataSource = InMemoryDataSource.fromDefaultEmpty(); // it works
         this.goalRepository = new SimpleGoalRepository(dataSource);
         // if we eventually go custom this is the way
         //this.dataSource = InMemoryDataSource.fromDefault();
-//        this.dataSource = InMemoryDataSource.fromDefaultEmpty(); // it works
+
 //        this.goalRepository = new GoalRepository(dataSource);
     }
     public GoalRepository getGoalRepository() {
