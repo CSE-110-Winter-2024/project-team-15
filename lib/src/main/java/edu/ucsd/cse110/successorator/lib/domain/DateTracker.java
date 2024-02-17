@@ -13,7 +13,7 @@ public class DateTracker {
         this.currentDate = dateFormat.format(calendar.getTime());
     }
 
-    public String currDate(){
+    public String getDate(){
         update();
         return this.currentDate;
     }
