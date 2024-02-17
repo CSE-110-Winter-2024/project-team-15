@@ -31,7 +31,7 @@ public class CreateGoalDialogFragment extends DialogFragment {
                 .setMessage("Provide your Most Important Thing!")
                 .setView(view.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
-                .setNegativeButton("X", this::onNegativeButtonClick)
+                .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
         //method of implementing confirm creation
         //will also implement cancel creation
