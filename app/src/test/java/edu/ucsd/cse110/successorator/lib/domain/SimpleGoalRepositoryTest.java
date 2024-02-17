@@ -2,9 +2,24 @@ package edu.ucsd.cse110.successorator.lib.domain;
 
 import static junit.framework.TestCase.assertEquals;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.fragment.app.FragmentManager;
+
 import org.junit.Test;
 
+import java.util.List;
+
+import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.R;
+import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.databinding.FragmentGoalListBinding;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
+import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
+import edu.ucsd.cse110.successorator.ui.goallist.GoalListFragment;
 
 public class SimpleGoalRepositoryTest {
 
@@ -74,5 +89,23 @@ public class SimpleGoalRepositoryTest {
 
         //g4 with lower order than g3
         assertEquals(g3order2-1, g4order);
+    }
+
+    @Test
+    public void DisplayNoGoals() {
+        List<Goal> testGoals = List.of();
+        var dataSource = new InMemoryDataSource();
+        for (Goal goal : testGoals) {
+            dataSource.putGoal(goal);
+        }
+        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
+        MainViewModel mvm = new MainViewModel(testRepo);
+//        GoalListFragment fragmentTest = new GoalListFragment().newInstance();
+//        var inflater = fragmentTest.getLayoutInflater();
+////        ViewGroup container = R.layout.fragment_goal_list;
+//        var view = FragmentGoalListBinding.inflate(inflater, null, false);
+        Boolean expected = true;
+        Boolean actual= mvm.getNoGoals().getValue();
+        assertEquals(expected, actual);
     }
 }

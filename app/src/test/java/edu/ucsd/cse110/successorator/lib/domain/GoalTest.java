@@ -9,6 +9,7 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 
+
 public class GoalTest {
 
     @Test
