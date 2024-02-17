@@ -41,16 +41,15 @@ public class Goal {
         return new Goal(this.contents, this.id, completed, this.sortOrder);
     }
 
-    public @NonNull Goal copiedGoal(){
-        return new Goal(this.contents, this.id, this.completed, this.sortOrder);
-    }
+//    public @NonNull Goal copiedGoal(){
+//        return new Goal(this.contents, this.id, this.completed, this.sortOrder);
+//    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Goal goal = (Goal) o;
-        // Removed sort order from equals method, since a goal can be the same..
         return sortOrder == goal.sortOrder && Objects.equals(contents, goal.contents) && Objects.equals(id, goal.id) && Objects.equals(completed, goal.completed);
     }
 
