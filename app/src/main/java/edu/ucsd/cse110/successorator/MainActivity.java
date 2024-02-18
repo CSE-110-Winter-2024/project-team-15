@@ -1,10 +1,5 @@
 package edu.ucsd.cse110.successorator;
 
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,13 +7,11 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-
-import java.util.Calendar;
 
 import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
-import edu.ucsd.cse110.successorator.ui.goallist.GoalListFragment;
+import edu.ucsd.cse110.successorator.lib.domain.MockDateTracker;
+import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.dateTracker = new DateTracker();
+        this.dateTracker = new SimpleDateTracker();
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
 //        view.placeholderText.setText(R.string.hello_world);
         view.placeholderText.setText(null);
@@ -52,7 +45,13 @@ public class MainActivity extends AppCompatActivity {
             var dialogFragment = CreateGoalDialogFragment.newInstance();
             dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");
 
+        } else if (item.getItemId() == R.id.action_bar_menu_forward_day){
+//            dateTracker = new MockDateTracker();
+//            setTitle(dateTracker.getDate());
+            dateTracker.forwardUpdate();
+            setTitle(dateTracker.getDate());
         }
+
         return super.onOptionsItemSelected(item);
     }
 

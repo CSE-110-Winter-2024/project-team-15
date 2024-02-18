@@ -47,6 +47,7 @@ public class GoalTest {
     }
 
     // we should move these to a MainViewModel testing place
+    // still need to do this
     @Test
     public void completedOne() {
         List<Goal> testGoals = List.of(
