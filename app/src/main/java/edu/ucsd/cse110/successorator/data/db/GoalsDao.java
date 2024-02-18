@@ -78,25 +78,15 @@ public interface GoalsDao {
         insert(gol);
     }
 
-    //kept most comments from implementation in SimpleGoalRepository
-    //maybe need to change argument type to goalEntity
     @Transaction
     default void toggleCompleteGoal(Goal goal) {
         var toggledGoal = GoalEntity.fromGoal(goal.withComplete(!goal.completed()));
-        delete(Integer.valueOf(goal.id()));
+        delete(Integer.valueOf(goal.id())); // delete old goal, insert new one
 
+        // then add into correct location with toggled complete
         if (toggledGoal.completed) {
-            // the reason I can use insertUnderIncompleteGoals here is because
-            // we want to put new completed goals under the incomplete goals
-            // also adding doesn't add duplicates, just moves them
             insertUnderIncompleteGoals(toggledGoal);
-
-            // NOTE: Newly completed goals will have a sortOrder of incomplete max sort order +1
-            // This builds up. But it still functions correctly.
-            // Should we fix?
-
         } else {
-            // complete -> incomplete puts them at the top of the list
             prepend(toggledGoal);
         }
     }
