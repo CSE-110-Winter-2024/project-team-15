@@ -45,8 +45,7 @@ public interface GoalsDao {
     Integer getMaxIncompleteSortOrder();
 
 
-    //I don't know if query update happens before or after method body, definitely need to test
-    //also unsure if it matters as long as both happen now
+
     @Query("UPDATE goals SET sort_order = sort_order + 1 " +
             "WHERE completed = true")
     void shiftCompletedSortOrders();
@@ -79,7 +78,6 @@ public interface GoalsDao {
     }
 
     //kept most comments from implementation in SimpleGoalRepository
-    //maybe need to change argument type to goalEntity
     @Transaction
     default void toggleCompleteGoal(Goal goal) {
         var toggledGoal = GoalEntity.fromGoal(goal.withComplete(!goal.completed()));
