@@ -1,6 +1,11 @@
 package edu.ucsd.cse110.successorator;
 
 import android.app.Application;
+
+import androidx.room.Room;
+
+import edu.ucsd.cse110.successorator.data.db.RoomGoalRepository;
+import edu.ucsd.cse110.successorator.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
@@ -12,13 +17,30 @@ public class SuccessoratorApplication extends Application {
     @Override
     public void onCreate(){
         super.onCreate();
-        // we use the default goals here -- change later
-        this.dataSource = InMemoryDataSource.fromDefault();
-        this.goalRepository = new SimpleGoalRepository(dataSource);
-        // if we eventually go custom this is the way
-        //this.dataSource = InMemoryDataSource.fromDefault();
-//        this.dataSource = InMemoryDataSource.fromDefaultEmpty(); // it works
-//        this.goalRepository = new GoalRepository(dataSource);
+        // InMemoryDataSource defaults
+//        this.dataSource = InMemoryDataSource.fromDefault();
+//        this.dataSource = InMemoryDataSource.fromEmpty(); // use if want empty
+//        this.goalRepository = new SimpleGoalRepository(dataSource);
+        // NEW persistent storage
+        var database = Room.databaseBuilder(
+                        getApplicationContext(),
+                        SuccessoratorDatabase.class,
+                        "successorator-db"
+                )
+                .allowMainThreadQueries()
+                .build();
+        this.goalRepository = new RoomGoalRepository(database.goalsDao());
+
+        // loading preferences and such
+        var sharedPreferences = getSharedPreferences("successorator-db", MODE_PRIVATE);
+        var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
+        if (isFirstRun && database.goalsDao().count() == 0){
+            goalRepository.save(InMemoryDataSource.DEFAULT_EMPTY);
+
+            sharedPreferences.edit()
+                    .putBoolean("isFirstRun", false)
+                    .apply();
+        }
     }
     public GoalRepository getGoalRepository() {
         return goalRepository;

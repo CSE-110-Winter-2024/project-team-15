@@ -37,12 +37,12 @@ public class SimpleGoalRepository implements GoalRepository {
         dataSource.removeGoal(id);
     }
 
-    @Override
-    public void append(Goal goal) {
-        dataSource.putGoal(
-                goal.withSortOrder(dataSource.getMaxSortOrder() + 1)
-        );
-    }
+//    @Override
+//    public void append(Goal goal) {
+//        dataSource.putGoal(
+//                goal.withSortOrder(dataSource.getMaxSortOrder() + 1)
+//        );
+//    }
 
     // I renamed this but I can easily refactor back, let me know...
     @Override
