@@ -13,6 +13,7 @@ import edu.ucsd.cse110.successorator.util.LiveDataSubjectAdapter;
 
 public class RoomGoalRepository implements GoalRepository {
     private final GoalsDao goalsDao;
+    private String lastUpdated;
 
     public RoomGoalRepository(GoalsDao goalsDao){
         this.goalsDao = goalsDao;
@@ -54,4 +55,10 @@ public class RoomGoalRepository implements GoalRepository {
     public void remove(int id){
         goalsDao.delete(id);
     }
+
+    public void clearCompletedGoals() { goalsDao.clearCompletedGoals(); }
+
+    public String getLastUpdated(){ return this.lastUpdated; }
+
+    public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
 }
