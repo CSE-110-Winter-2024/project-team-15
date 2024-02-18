@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
+import edu.ucsd.cse110.successorator.lib.domain.MockDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
@@ -89,12 +90,16 @@ public class MainViewModel extends ViewModel {
         goalRepository.insertUnderIncompleteGoals(goal);
     }
 
-    public void clearCompletedGoals(){
+    public void clearCompletedGoals() {
         dateTracker.update();
         if(!goalRepository.getLastUpdated().equals(dateTracker.getDate()) && dateTracker.getHour()>=2) {
             goalRepository.setLastUpdated(dateTracker.getDate());
             goalRepository.clearCompletedGoals();
         }
+    }
+
+    public void forwardGoalDay() {
+        dateTracker.forwardUpdate();
     }
 
 

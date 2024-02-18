@@ -16,12 +16,14 @@ import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment
 
 public class MainActivity extends AppCompatActivity {
     private DateTracker dateTracker;
+    private Integer daysForwarded;
     private boolean isShowingList = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         this.dateTracker = new SimpleDateTracker();
+        this.daysForwarded = 0;
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
 //        view.placeholderText.setText(R.string.hello_world);
         view.placeholderText.setText(null);
@@ -40,16 +42,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
-        if (item.getItemId() == R.id.action_bar_menu_swap_views){
+        if (item.getItemId() == R.id.action_bar_menu_swap_views) {
 
             var dialogFragment = CreateGoalDialogFragment.newInstance();
             dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");
 
         } else if (item.getItemId() == R.id.action_bar_menu_forward_day){
+//            daysForwarded++;
 //            dateTracker = new MockDateTracker();
-//            setTitle(dateTracker.getDate());
+//            for(int i = 0; i < daysForwarded; i++) {
+//                dateTracker.getDate();
+//            }
             dateTracker.forwardUpdate();
-            setTitle(dateTracker.getDate());
+            onResume();
         }
 
         return super.onOptionsItemSelected(item);
@@ -58,9 +63,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        if(dateTracker.getHour()>=2){
+
+        if(dateTracker.getHour()>=2) {
             setTitle(dateTracker.getDate());
         }
+
     }
 
 }

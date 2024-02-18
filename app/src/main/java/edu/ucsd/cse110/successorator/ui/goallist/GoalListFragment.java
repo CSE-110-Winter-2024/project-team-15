@@ -108,5 +108,6 @@ public class GoalListFragment extends Fragment {
     public void onResume(){
         super.onResume();
         this.activityModel.clearCompletedGoals();
+        this.activityModel.forwardGoalDay();
     }
 }
