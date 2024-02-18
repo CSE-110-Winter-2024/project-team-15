@@ -13,16 +13,18 @@
 
         <TextView
             android:id="@+id/noGoalsView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="650dp"
-            android:text="No goals for the day"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="50dp"
+            android:text="No goals for the Day.  \n\nClick the + at the upper right to enter your Most Important Thing."
             android:textSize="24sp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/goalList" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ListView
             android:id="@+id/goalList"
