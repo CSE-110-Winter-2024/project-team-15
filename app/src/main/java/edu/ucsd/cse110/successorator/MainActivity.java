@@ -1,6 +1,10 @@
 package edu.ucsd.cse110.successorator;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,21 +14,24 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.Calendar;
+
 import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
 import edu.ucsd.cse110.successorator.ui.goallist.GoalListFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
-
+    private DateTracker dateTracker;
     private boolean isShowingList = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.dateTracker = new DateTracker();
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
 //        view.placeholderText.setText(R.string.hello_world);
         view.placeholderText.setText(null);
-
-
 
         setContentView(view.getRoot());
     }
@@ -48,4 +55,11 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        setTitle(dateTracker.getDate());
+    }
+
 }

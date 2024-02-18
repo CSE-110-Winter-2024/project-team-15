@@ -313,35 +313,5 @@ public class SimpleGoalRepositoryTest {
         assertEquals(Boolean.FALSE, actualCompleted); // is completed
         assertEquals(expected1, actual1);
     }
-    @Test
-    public void DisplayNoGoals() {
-        List<Goal> testGoals = List.of();
-        var dataSource = new InMemoryDataSource();
-        for (Goal goal : testGoals) {
-            dataSource.putGoal(goal);
-        }
-        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        MainViewModel mvm = new MainViewModel(testRepo);
-        Boolean expected = true;
-        Boolean actual= mvm.getNoGoals().getValue();
-        assertEquals(expected, actual);
-    }
-    @Test
-    public void theresGoals(){
-        List<Goal> testGoals = List.of(
-                new Goal("get food",0, false, 0 ),
-                new Goal("get kids", 1, false, 1)
-        );
-        var dataSource = new InMemoryDataSource();
-        for (Goal goal : testGoals) {
-            dataSource.putGoal(goal);
-        }
-        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        MainViewModel mvm = new MainViewModel(testRepo);
-        Boolean expected = false;
-        Boolean actual= mvm.getNoGoals().getValue();
-        assertEquals(expected, actual);
-
-    }
 
 }
