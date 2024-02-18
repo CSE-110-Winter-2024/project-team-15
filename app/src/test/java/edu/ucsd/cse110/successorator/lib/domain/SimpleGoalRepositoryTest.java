@@ -99,7 +99,9 @@ public class SimpleGoalRepositoryTest {
         Goal expected4;
 
 
-
+        /*
+         Below this point are tests for toggling incomplete -> complete
+         */
 
         // two goals, mark the top as complete, that goal should now have the last sort order
         // (and be completed)
@@ -225,6 +227,9 @@ public class SimpleGoalRepositoryTest {
 
 
 
+        /*
+         Below this point are tests for toggling complete -> incomplete (US11)
+         */
 
         // Four goals, two incomplete, two complete, mark the last goal as incomplete
         // Should now be incomplete and have the earliest sort order of 1
@@ -274,6 +279,80 @@ public class SimpleGoalRepositoryTest {
 
 
 
+
+        // Four goals, 1 incomplete, 3 complete, mark the second goal as incomplete
+        // Should now be incomplete and have the earliest sort order of 1
+        // since it replaces where the earliest goal was
+        // all other goals get 1 added to their sort order (shifted down)
+        // (the function doesn't know to swap or keep orders neatly, but the orders are correct)
+        // GIVEN
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
+
+        actual1 = new Goal("1", 1, false, 1);
+        actual2 = new Goal("2", 2, true, 2);
+        actual3 = new Goal("3", 3, true, 3);
+        actual4 = new Goal("4", 4, true, 4);
+
+        expected1 = new Goal("1", 1, false, 2);
+        expected2 = new Goal("2", 2, false, 1);
+        expected3 = new Goal("3", 3, true, 4);
+        expected4 = new Goal("4", 4, true, 5);
+
+        testMemoryDataSource.putGoal(actual1);
+        testMemoryDataSource.putGoal(actual2);
+        testMemoryDataSource.putGoal(actual3);
+        testMemoryDataSource.putGoal(actual4);
+
+
+        // WHEN
+        testRepository.toggleCompleteGoal(actual2); // second goal incomplete.
+        actual1 = testMemoryDataSource.getGoal(1);
+        actual2 = testMemoryDataSource.getGoal(2);
+        actual3 = testMemoryDataSource.getGoal(3);
+        actual4 = testMemoryDataSource.getGoal(4);
+
+
+        // THEN
+        // Goal 1
+        assertEquals(expected1, actual1);
+        // Goal 2
+        assertEquals(expected2, actual2);
+        // Goal 3
+        assertEquals(expected3, actual3);
+        // Goal 4
+        assertEquals(expected4, actual4);
+
+
+
+
+        // One complete goal, mark it as incomplete. Sort order should not change since
+        // its already at the top.
+        // GIVEN
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
+
+        actual1 = new Goal("1", 1, true, 1);
+
+        expected1 = new Goal("1", 1, false, 1);
+
+        testMemoryDataSource.putGoal(actual1);
+
+
+        // WHEN
+        testRepository.toggleCompleteGoal(actual1); // second goal incomplete.
+        actual1 = testMemoryDataSource.getGoal(1);
+
+
+        // THEN
+        assertEquals(expected1, actual1);
+
+
+
+
+        /*
+         Below this point is an integration test for incomplete -> complete -> incomplete
+         */
 
         // One goal, it's incomplete. Toggle complete twice.
         // Given
