@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        if(dateTracker.getHour()>2){
+        if(dateTracker.getHour()>=2){
             setTitle(dateTracker.getDate());
         }
     }

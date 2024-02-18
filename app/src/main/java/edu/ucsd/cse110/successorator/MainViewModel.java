@@ -90,7 +90,7 @@ public class MainViewModel extends ViewModel {
 
     public void clearCompletedGoals(){
         dateTracker.update();
-        if(!goalRepository.getLastUpdated().equals(dateTracker.getDate()) && dateTracker.getHour()>2) {
+        if(!goalRepository.getLastUpdated().equals(dateTracker.getDate()) && dateTracker.getHour()>=2) {
             goalRepository.setLastUpdated(dateTracker.getDate());
             goalRepository.clearCompletedGoals();
         }

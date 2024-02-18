@@ -317,13 +317,65 @@ public class SimpleGoalRepositoryTest {
   
     @Test
     public void clearCompletedGoalsTest(){
-        SimpleGoalRepository testRepo = new SimpleGoalRepository(InMemoryDataSource.fromDefault());
-        List<Goal> goals = testRepo.findAll().getValue();
-        Goal goal = goals.get(0);
-        assertEquals(goals.size(),4);
-        testRepo.toggleCompleteGoal(goal);
-        testRepo.clearCompletedGoals();
-        List<Goal> goals2 = testRepo.findAll().getValue();
-        assertEquals(goals2.size(),3);
+//        SimpleGoalRepository testRepo = new SimpleGoalRepository(InMemoryDataSource.fromDefault());
+//        List<Goal> goals = testRepo.findAll().getValue();
+//        Goal goal = goals.get(0);
+//        assertEquals(goals.size(),4);
+//        testRepo.toggleCompleteGoal(goal);
+//        testRepo.clearCompletedGoals();
+//        List<Goal> goals2 = testRepo.findAll().getValue();
+//        assertEquals(goals2.size(),3);
+
+        // initialize
+        SimpleGoalRepository testRepository;
+        InMemoryDataSource testMemoryDataSource;
+
+        Goal actual1;
+        Goal actual2;
+        Goal actual3;
+        Goal actual4;
+
+        Goal expected1;
+        Goal expected2;
+        Goal expected3;
+        Goal expected4;
+
+        // four goals, two are complete. call remove all completed goals
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
+
+        actual1 = new Goal("1", 1, false, 1);
+        actual2 = new Goal("2", 2, false, 2);
+        actual3 = new Goal("3", 3, true, 3);
+        actual4 = new Goal("4", 4, true, 4);
+
+        expected1 = new Goal("1", 1, false, 1);
+        expected2 = new Goal("2", 2, false, 2);
+        expected3 = null;
+        expected4 = null;
+
+        testMemoryDataSource.putGoal(actual1);
+        testMemoryDataSource.putGoal(actual2);
+        testMemoryDataSource.putGoal(actual3);
+        testMemoryDataSource.putGoal(actual4);
+
+        // WHEN I clear completed goals
+        testRepository.clearCompletedGoals();
+        actual1 = testMemoryDataSource.getGoal(1);
+        actual2 = testMemoryDataSource.getGoal(2);
+        actual3 = testMemoryDataSource.getGoal(3);
+        actual4 = testMemoryDataSource.getGoal(4);
+
+        // THEN expected3 and expected4 should be gone
+        // Goal 1
+        assertEquals(expected1, actual1);
+        // Goal 2
+        assertEquals(expected2, actual2);
+        // Goal 3
+        assertEquals(expected3, actual3);
+        // Goal 4
+        assertEquals(expected4, actual4);
+
     }
+
 }
