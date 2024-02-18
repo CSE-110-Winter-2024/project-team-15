@@ -42,23 +42,22 @@ public interface GoalsDao {
     void shiftSortOrders(int from, int to, int by);
 
     @Query("SELECT Max(sort_order) FROM goals WHERE completed = false")
-    int getMaxIncompleteSortOrder();
-    @Query("SELECT Min(sort_order) FROM goals WHERE completed = true")
-    int getMinCompleteSortOrder();
+    Integer getMaxIncompleteSortOrder();
+
 
     //I don't know if query update happens before or after method body, definitely need to test
+    //also unsure if it matters as long as both happen now
     @Query("UPDATE goals SET sort_order = sort_order + 1 " +
             "WHERE completed = true")
     default int shiftCompletedSortOrders(){
-        int compl = getMinCompleteSortOrder() - 1;
-        int incom = getMaxIncompleteSortOrder() + 1;
+
+        Integer incomp = getMaxIncompleteSortOrder();
         //assumes query update runs before this and that
-        //finding no goals for the query causes 0 to return on above getters
-        //if that is true, then minCompleterSortOder is -1 iff no completes exist,
-        //issue could more easily be solved if there is a way to make getMaxIncomplete default a -1
-        if(compl == -1){
-            return incom;
-        }else{return compl;}
+        //finding no goals for the MaxIncomplete query causes null to return
+        //if that is true, then this should work
+        if(incomp == null){
+            return 0;
+        }else{return (incomp + 1);}
     }
 
     @Transaction
@@ -77,6 +76,26 @@ public interface GoalsDao {
         insert(gol);
     }
 
+    //kept most comments from implementation in SimpleGoalRepository
+    @Transaction
+    default void toggleCompleteGoal(Goal goal) {
+        var toggledGoal = GoalEntity.fromGoal(goal);
+
+        if (toggledGoal.completed) {
+            // the reason I can use insertUnderIncompleteGoals here is because
+            // we want to put new completed goals under the incomplete goals
+            // also adding doesn't add duplicates, just moves them
+            insertUnderIncompleteGoals(toggledGoal);
+
+            // NOTE: Newly completed goals will have a sortOrder of incomplete max sort order +1
+            // This builds up. But it still functions correctly.
+            // Should we fix?
+
+        } else {
+            // complete -> incomplete puts them at the top of the list
+            prepend(toggledGoal);
+        }
+    }
     @Query("DELETE FROM goals WHERE id = :id")
     void delete(int id);
 }
