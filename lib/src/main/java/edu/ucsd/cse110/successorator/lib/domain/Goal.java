@@ -41,6 +41,10 @@ public class Goal {
         return new Goal(this.contents, this.id, completed, this.sortOrder);
     }
 
+//    public @NonNull Goal copiedGoal(){
+//        return new Goal(this.contents, this.id, this.completed, this.sortOrder);
+//    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,6 +52,7 @@ public class Goal {
         Goal goal = (Goal) o;
         return sortOrder == goal.sortOrder && Objects.equals(contents, goal.contents) && Objects.equals(id, goal.id) && Objects.equals(completed, goal.completed);
     }
+
 
     @Override
     public int hashCode() {
