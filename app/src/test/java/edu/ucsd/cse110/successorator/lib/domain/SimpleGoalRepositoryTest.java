@@ -4,6 +4,9 @@ import static junit.framework.TestCase.assertEquals;
 
 import org.junit.Test;
 
+import java.util.List;
+
+import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 
 public class SimpleGoalRepositoryTest {
@@ -310,6 +313,5 @@ public class SimpleGoalRepositoryTest {
         assertEquals(Boolean.FALSE, actualCompleted); // is completed
         assertEquals(expected1, actual1);
     }
-
 
 }
