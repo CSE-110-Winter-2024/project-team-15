@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
@@ -23,6 +24,8 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<List<Goal>> orderedGoals;
     private final MutableSubject<Boolean> noGoals;
 
+    private final DateTracker dateTracker;
+
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -35,6 +38,8 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
+        this.dateTracker = new DateTracker();
+        goalRepository.setLastUpdated(dateTracker.getDate());
 
         /* PLANS:
          * 1. Observe goalRepository so that when it changes, the updated list of goals
@@ -82,5 +87,14 @@ public class MainViewModel extends ViewModel {
     public void insertIncompleteGoal(Goal goal) {
         goalRepository.insertUnderIncompleteGoals(goal);
     }
+
+    public void clearCompletedGoals(){
+        dateTracker.update();
+        if(!goalRepository.getLastUpdated().equals(dateTracker.getDate()) && dateTracker.getHour()>2) {
+            goalRepository.setLastUpdated(dateTracker.getDate());
+            goalRepository.clearCompletedGoals();
+        }
+    }
+
 
 }

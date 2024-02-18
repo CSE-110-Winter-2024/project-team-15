@@ -4,6 +4,8 @@ import static junit.framework.TestCase.assertEquals;
 
 import org.junit.Test;
 
+import java.util.List;
+
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 
 public class SimpleGoalRepositoryTest {
@@ -309,6 +311,18 @@ public class SimpleGoalRepositoryTest {
         assertEquals(2, actualSortOrder); // sort order (2 is now the earliest)
         assertEquals(Boolean.FALSE, actualCompleted); // is completed
         assertEquals(expected1, actual1);
+    }
+
+    @Test
+    public void clearCompletedGoalsTest(){
+        SimpleGoalRepository testRepo = new SimpleGoalRepository(InMemoryDataSource.fromDefault());
+        List<Goal> goals = testRepo.findAll().getValue();
+        Goal goal = goals.get(0);
+        assertEquals(goals.size(),4);
+        testRepo.toggleCompleteGoal(goal);
+        testRepo.clearCompletedGoals();
+        List<Goal> goals2 = testRepo.findAll().getValue();
+        assertEquals(goals2.size(),3);
     }
 
 

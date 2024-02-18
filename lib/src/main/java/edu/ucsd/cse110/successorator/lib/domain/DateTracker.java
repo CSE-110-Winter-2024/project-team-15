@@ -18,6 +18,13 @@ public class DateTracker {
         return this.currentDate;
     }
 
+    public int getHour(){
+        update();
+        Calendar calendar =Calendar.getInstance(this.timeZone); // creates a new calendar instance
+        return calendar.get(Calendar.HOUR_OF_DAY); // gets hour in 24h format
+    }
+
+
     public void update(){
         this.timeZone = TimeZone.getDefault();
         this.calendar = Calendar.getInstance(this.timeZone);
