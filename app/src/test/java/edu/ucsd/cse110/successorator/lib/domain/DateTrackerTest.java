@@ -23,4 +23,12 @@ public class DateTrackerTest {
         assertTrue(temp.getDate().equals(currentDate));
     }
 
+    @Test
+    public void getHourTest(){
+        TimeZone timeZone = TimeZone.getDefault();
+        DateTracker temp = new DateTracker();
+        Calendar calendar =Calendar.getInstance(timeZone);
+        assertEquals(temp.getHour(), calendar.get(Calendar.HOUR_OF_DAY));
+    }
+
 }
