@@ -7,8 +7,10 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class SimpleGoalRepository implements GoalRepository {
     private final InMemoryDataSource dataSource;
+    private String lastUpdated;
 
     public SimpleGoalRepository(InMemoryDataSource dataSource) {
+        this.lastUpdated ="";
         this.dataSource = dataSource;
     }
 
@@ -87,4 +89,21 @@ public class SimpleGoalRepository implements GoalRepository {
                 goal.withSortOrder(dataSource.getMinSortOrder() - 1)
         );
     }
+    @Override
+    public String getLastUpdated(){ return this.lastUpdated; }
+    @Override
+    public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
+
+    @Override
+    public void clearCompletedGoals(){
+        List<Goal> goals = dataSource.getGoals();
+        goals.forEach(
+                (goal) -> {
+                    if(goal.completed()){
+                        dataSource.removeGoal(goal.id());
+                    }
+                });
+    }
+
+
 }
