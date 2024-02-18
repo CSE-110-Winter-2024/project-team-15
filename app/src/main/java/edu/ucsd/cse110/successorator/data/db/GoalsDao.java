@@ -77,6 +77,7 @@ public interface GoalsDao {
     }
 
     //kept most comments from implementation in SimpleGoalRepository
+    //maybe need to change argument type to goalEntity
     @Transaction
     default void toggleCompleteGoal(Goal goal) {
         var toggledGoal = GoalEntity.fromGoal(goal);

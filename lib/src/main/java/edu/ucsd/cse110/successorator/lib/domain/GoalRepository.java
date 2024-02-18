@@ -15,7 +15,8 @@ public interface GoalRepository {
 
     void remove(int id);
 
-    void append(Goal goal);
+    //commenting out because method is unused in project
+    //void append(Goal goal);
 
     void insertUnderIncompleteGoals(Goal goal);
 
