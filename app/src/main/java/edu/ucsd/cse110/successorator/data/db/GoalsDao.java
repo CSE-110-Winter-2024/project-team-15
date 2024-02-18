@@ -80,7 +80,8 @@ public interface GoalsDao {
     //maybe need to change argument type to goalEntity
     @Transaction
     default void toggleCompleteGoal(Goal goal) {
-        var toggledGoal = GoalEntity.fromGoal(goal);
+        var toggledGoal = GoalEntity.fromGoal(goal.withComplete(!goal.completed()));
+        delete(Integer.valueOf(goal.id()));
 
         if (toggledGoal.completed) {
             // the reason I can use insertUnderIncompleteGoals here is because
