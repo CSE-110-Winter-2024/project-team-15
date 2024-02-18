@@ -49,16 +49,7 @@ public interface GoalsDao {
     //also unsure if it matters as long as both happen now
     @Query("UPDATE goals SET sort_order = sort_order + 1 " +
             "WHERE completed = true")
-    default int shiftCompletedSortOrders(){
-
-        Integer incomp = getMaxIncompleteSortOrder();
-        //assumes query update runs before this and that
-        //finding no goals for the MaxIncomplete query causes null to return
-        //if that is true, then this should work
-        if(incomp == null){
-            return 0;
-        }else{return (incomp + 1);}
-    }
+    void shiftCompletedSortOrders();
 
     @Transaction
     default int prepend(GoalEntity goal){
@@ -70,8 +61,19 @@ public interface GoalsDao {
     }
     @Transaction
     default void insertUnderIncompleteGoals(GoalEntity goal){
+
+        shiftCompletedSortOrders();
+
+        Integer incomp = getMaxIncompleteSortOrder();
+        if(incomp == null) {
+            incomp = 0;
+        }
+        else {
+            incomp = incomp+1;
+        }
+
         GoalEntity gol = new GoalEntity(
-                goal.contents, shiftCompletedSortOrders(), goal.completed
+                goal.contents, incomp, goal.completed
         );
         insert(gol);
     }
