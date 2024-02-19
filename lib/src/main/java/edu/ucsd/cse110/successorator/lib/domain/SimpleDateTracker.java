@@ -8,6 +8,9 @@ import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class SimpleDateTracker implements DateTracker {
+    // the singleton design pattern is used here in a special way to accomplish the following:
+    // 1. maintain list of observers through all classes
+    // 2. avoid issues where part of the code is on different dates
     private static MutableSubject<SimpleDateTracker> instance;
     private Calendar calendar;
     private TimeZone timeZone;
@@ -67,6 +70,4 @@ public class SimpleDateTracker implements DateTracker {
         }
 
     }
-
-
 }

@@ -51,12 +51,15 @@ public class MainActivity extends AppCompatActivity {
             dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");
 
         } else if (item.getItemId() == R.id.action_bar_menu_forward_day){
+            // 1. update the DateTracker object within the subject
+            // 2. keep track of daysForwarded increasing
+            // 3. make the subject hold the new DateTracker object
             var rawDateTracker = this.dateTracker.getValue();
             daysForwarded++;
             rawDateTracker.setForwardBy(daysForwarded);
             rawDateTracker.update();
             this.dateTracker.setValue(rawDateTracker);
-            onResume();
+            onResume(); // onResume nicely sets the title
 
         }
 

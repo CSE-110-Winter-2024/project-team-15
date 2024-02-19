@@ -38,6 +38,7 @@ public class MainViewModel extends ViewModel {
                         return new MainViewModel(app.getGoalRepository(), app.getDateTracker());
                     });
 
+    // dateTracker is received here through the app. for usage in further methods.
     public MainViewModel(GoalRepository goalRepository, MutableSubject<SimpleDateTracker> dateTracker) {
         this.goalRepository = goalRepository;
         this.dateTracker = dateTracker;
@@ -67,6 +68,12 @@ public class MainViewModel extends ViewModel {
         });
 
         this.dateTracker.observe(timeChange -> {
+            // when the date changes, one of two things have happened:
+            // 1. the date was manually changed with the arrow
+            // 2. the date was changed in the onResume() of GoalListFragment
+            // in case 1, this part makes sure the date reflects the desired date and removes
+            // completed goals
+            // in case 2, it's redundant but not harmful.
             if(!goalRepository.getLastUpdated().equals(timeChange.getDate()) && timeChange.getHour()>=2) {
                 goalRepository.setLastUpdated(timeChange.getDate());
                 goalRepository.clearCompletedGoals();
@@ -98,6 +105,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void clearCompletedGoals() {
+        // this method is used only once for the onResume() of GoalListFragment
         var rawDateTracker = dateTracker.getValue();
         if(!goalRepository.getLastUpdated().equals(rawDateTracker.getDate()) && rawDateTracker.getHour()>=2) {
             goalRepository.setLastUpdated(rawDateTracker.getDate());
@@ -106,7 +114,4 @@ public class MainViewModel extends ViewModel {
         rawDateTracker.update();
         dateTracker.setValue(rawDateTracker);
     }
-
-
-
 }
