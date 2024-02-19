@@ -26,7 +26,7 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<List<Goal>> orderedGoals;
     private final MutableSubject<Boolean> noGoals;
 
-    private final DateTracker dateTracker;
+    private final MutableSubject<SimpleDateTracker> dateTracker;
 
 
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -38,10 +38,10 @@ public class MainViewModel extends ViewModel {
                         return new MainViewModel(app.getGoalRepository(), app.getDateTracker());
                     });
 
-    public MainViewModel(GoalRepository goalRepository, DateTracker dateTracker) {
+    public MainViewModel(GoalRepository goalRepository, MutableSubject<SimpleDateTracker> dateTracker) {
         this.goalRepository = goalRepository;
         this.dateTracker = dateTracker;
-        goalRepository.setLastUpdated(dateTracker.getDate());
+        goalRepository.setLastUpdated(dateTracker.getValue().getDate());
 
         /* PLANS:
          * 1. Observe goalRepository so that when it changes, the updated list of goals
@@ -66,9 +66,12 @@ public class MainViewModel extends ViewModel {
             noGoals.setValue(goals.size() == 0);
         });
 
-
-
-
+        this.dateTracker.observe(timeChange -> {
+            if(!goalRepository.getLastUpdated().equals(timeChange.getDate()) && timeChange.getHour()>=2) {
+                goalRepository.setLastUpdated(timeChange.getDate());
+                goalRepository.clearCompletedGoals();
+            }
+        });
     }
     public MutableSubject<List<Goal>> getOrderedGoals(){
         return orderedGoals;
@@ -95,12 +98,13 @@ public class MainViewModel extends ViewModel {
     }
 
     public void clearCompletedGoals() {
-        //dateTracker.update();
-        if(!goalRepository.getLastUpdated().equals(dateTracker.getDate()) && dateTracker.getHour()>=2) {
-            goalRepository.setLastUpdated(dateTracker.getDate());
+        var rawDateTracker = dateTracker.getValue();
+        if(!goalRepository.getLastUpdated().equals(rawDateTracker.getDate()) && rawDateTracker.getHour()>=2) {
+            goalRepository.setLastUpdated(rawDateTracker.getDate());
             goalRepository.clearCompletedGoals();
         }
-        dateTracker.update();
+        rawDateTracker.update();
+        dateTracker.setValue(rawDateTracker);
     }
 
 

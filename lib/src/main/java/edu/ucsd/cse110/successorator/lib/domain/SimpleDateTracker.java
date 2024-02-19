@@ -2,13 +2,18 @@ package edu.ucsd.cse110.successorator.lib.domain;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
+
+import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
+import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
+import edu.ucsd.cse110.successorator.lib.util.Subject;
+
 public class SimpleDateTracker implements DateTracker {
-    private static SimpleDateTracker instance;
+    private static MutableSubject<SimpleDateTracker> instance;
     private Calendar calendar;
     private TimeZone timeZone;
     private String currentDate;
     private Integer forwardBy;
-    public SimpleDateTracker(){
+    private SimpleDateTracker(){
         this.timeZone = TimeZone.getDefault();
         this.calendar = Calendar.getInstance(this.timeZone);
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
@@ -17,9 +22,11 @@ public class SimpleDateTracker implements DateTracker {
     }
 
     // singleton pattern to use this one EVERYWHERE
-    public static SimpleDateTracker getInstance() {
+    public static MutableSubject<SimpleDateTracker> getInstance() {
         if (instance == null) {
-            instance = new SimpleDateTracker();
+            var subj = new SimpleSubject<SimpleDateTracker>();
+            subj.setValue(new SimpleDateTracker());
+            instance = subj;
         }
         return instance;
     }

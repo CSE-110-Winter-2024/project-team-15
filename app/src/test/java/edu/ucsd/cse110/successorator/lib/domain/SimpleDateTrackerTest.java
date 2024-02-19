@@ -15,18 +15,18 @@ public class SimpleDateTrackerTest {
         Calendar calendar = Calendar.getInstance(timeZone);
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
         String currentDate = dateFormat.format(calendar.getTime());
-        SimpleDateTracker temp = new SimpleDateTracker();
-        assertTrue(temp.getDate().equals(currentDate));
+        var temp = SimpleDateTracker.getInstance();
+        assertTrue(temp.getValue().getDate().equals(currentDate));
     }
 
     @Test
     public void getHourTest(){
         TimeZone timeZone = TimeZone.getDefault();
-        SimpleDateTracker temp = new SimpleDateTracker();
+        var temp = SimpleDateTracker.getInstance();
         Calendar calendar =Calendar.getInstance(timeZone);
         // temp.forwardUpdate();
         // System.out.println(temp.getDate());
-        assertEquals(temp.getHour(), calendar.get(Calendar.HOUR_OF_DAY));
+        assertEquals(temp.getValue().getHour(), calendar.get(Calendar.HOUR_OF_DAY));
     }
 
 }

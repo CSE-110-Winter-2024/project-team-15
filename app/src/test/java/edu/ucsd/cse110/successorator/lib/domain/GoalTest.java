@@ -59,7 +59,7 @@ public class GoalTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        SimpleDateTracker dateTracker = SimpleDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(0));
         var actual = dataSource.getGoal(0).completed();
@@ -81,7 +81,7 @@ public class GoalTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        SimpleDateTracker dateTracker = SimpleDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(2));
         var actual = dataSource.getGoal(2).completed();
@@ -107,7 +107,7 @@ public class GoalTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        SimpleDateTracker dateTracker = SimpleDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(2));
         mvm.toggleCompleted(dataSource.getGoal(2));
@@ -130,7 +130,7 @@ public class GoalTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        SimpleDateTracker dateTracker = SimpleDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(3));
         var actual = dataSource.getGoal(3).completed();

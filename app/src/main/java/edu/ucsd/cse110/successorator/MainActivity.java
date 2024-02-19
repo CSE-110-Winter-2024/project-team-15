@@ -12,19 +12,21 @@ import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.MockDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
+import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
+import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
 
 // MAIN ACTIVITY does not know about date
 public class MainActivity extends AppCompatActivity {
-    private DateTracker dateTracker;
+    private MutableSubject<SimpleDateTracker> dateTracker;
     private Integer daysForwarded;
     private boolean isShowingList = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // this.dateTracker = new SimpleDateTracker();
-        this.dateTracker = SuccessoratorApplication.getDateTracker();
+        // this.dateTracker = SimpleDateTracker.getInstance();
+        this.dateTracker = SimpleDateTracker.getInstance();
         this.daysForwarded = 0;
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
         view.placeholderText.setText(null);
@@ -49,9 +51,11 @@ public class MainActivity extends AppCompatActivity {
             dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");
 
         } else if (item.getItemId() == R.id.action_bar_menu_forward_day){
+            var rawDateTracker = this.dateTracker.getValue();
             daysForwarded++;
-            dateTracker.setForwardBy(daysForwarded);
-            dateTracker.update();
+            rawDateTracker.setForwardBy(daysForwarded);
+            rawDateTracker.update();
+            this.dateTracker.setValue(rawDateTracker);
             onResume();
 
         }
@@ -62,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-
-        if(dateTracker.getHour()>=2) {
-            setTitle(dateTracker.getDate());
+        var rawDateTracker = dateTracker.getValue();
+        if(rawDateTracker.getHour()>=2) {
+            setTitle(rawDateTracker.getDate());
         }
 
     }

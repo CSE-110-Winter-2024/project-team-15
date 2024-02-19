@@ -26,7 +26,7 @@ public class MainViewModelTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        SimpleDateTracker dateTracker = SimpleDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         Boolean expected = true;
         Boolean actual= mvm.getNoGoals().getValue();
@@ -44,7 +44,7 @@ public class MainViewModelTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        SimpleDateTracker dateTracker = SimpleDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         Boolean expected = false;
         Boolean actual= mvm.getNoGoals().getValue();
