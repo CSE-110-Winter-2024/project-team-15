@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
@@ -18,6 +19,7 @@ import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment
 public class MainActivity extends AppCompatActivity {
     private DateTracker dateTracker;
     private Integer daysForwarded;
+    private MainViewModel activityModel;
     private boolean isShowingList = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,10 +31,15 @@ public class MainActivity extends AppCompatActivity {
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
         view.placeholderText.setText(null);
 
+        // this is very bad
+        var modelOwner = this;
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.activityModel = modelProvider.get(MainViewModel.class);
+
         setContentView(view.getRoot());
     }
 
-    // for the button
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -62,11 +69,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-
         if(dateTracker.getHour()>=2) {
             setTitle(dateTracker.getDate());
         }
-
+        this.activityModel.clearCompletedGoals();
     }
 
 }

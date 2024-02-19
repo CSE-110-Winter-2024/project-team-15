@@ -19,9 +19,9 @@ public class SuccessoratorApplication extends Application {
         this.dataSource = InMemoryDataSource.fromDefaultEmpty(); // it works
         this.goalRepository = new SimpleGoalRepository(dataSource);
         //this.dateTracker = new SimpleDateTracker();
-        dateTracker = SimpleDateTracker.getInstance();
-
+        this.dateTracker = SimpleDateTracker.getInstance();
     }
+
     public GoalRepository getGoalRepository() {
         return goalRepository;
     }
