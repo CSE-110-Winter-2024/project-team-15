@@ -3,6 +3,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 public class SimpleDateTracker implements DateTracker {
+    private static SimpleDateTracker instance;
     private Calendar calendar;
     private TimeZone timeZone;
     private String currentDate;
@@ -13,6 +14,14 @@ public class SimpleDateTracker implements DateTracker {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
         this.currentDate = dateFormat.format(calendar.getTime());
         this.forwardBy = 0;
+    }
+
+    // singleton pattern to use this one EVERYWHERE
+    public static SimpleDateTracker getInstance() {
+        if (instance == null) {
+            instance = new SimpleDateTracker();
+        }
+        return instance;
     }
 
     @Override

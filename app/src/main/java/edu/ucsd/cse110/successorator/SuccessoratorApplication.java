@@ -11,25 +11,23 @@ import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
 public class SuccessoratorApplication extends Application {
     private InMemoryDataSource dataSource;
     private GoalRepository goalRepository;
-    private DateTracker dateTracker;
+    private static DateTracker dateTracker;
     @Override
     public void onCreate(){
         super.onCreate();
         // we use the default goals here -- change later
-//        this.dataSource = InMemoryDataSource.fromDefault();
         this.dataSource = InMemoryDataSource.fromDefaultEmpty(); // it works
         this.goalRepository = new SimpleGoalRepository(dataSource);
-        this.dateTracker = new SimpleDateTracker();
-        // if we eventually go custom this is the way
-        //this.dataSource = InMemoryDataSource.fromDefault();
+        //this.dateTracker = new SimpleDateTracker();
+        dateTracker = SimpleDateTracker.getInstance();
 
-//        this.goalRepository = new GoalRepository(dataSource);
     }
     public GoalRepository getGoalRepository() {
         return goalRepository;
     }
 
-    public DateTracker getDateTracker() {
+    public static DateTracker getDateTracker() {
         return dateTracker;
     }
+
 }
