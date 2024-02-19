@@ -39,12 +39,12 @@ public class SimpleGoalRepository implements GoalRepository {
         dataSource.removeGoal(id);
     }
 
-    @Override
-    public void append(Goal goal) {
-        dataSource.putGoal(
-                goal.withSortOrder(dataSource.getMaxSortOrder() + 1)
-        );
-    }
+//    @Override
+//    public void append(Goal goal) {
+//        dataSource.putGoal(
+//                goal.withSortOrder(dataSource.getMaxSortOrder() + 1)
+//        );
+//    }
 
     // I renamed this but I can easily refactor back, let me know...
     @Override
@@ -55,28 +55,19 @@ public class SimpleGoalRepository implements GoalRepository {
     }
 
 
-    // Yoav convinced me I should combine moveCompleteGoal and moveIncompleteGoal into
-    // toggleCompleteGoal ... it was a good idea
+    // US11 and US8 cover this method
+    // NOTE: Newly completed goals will have a sortOrder of incomplete max sort order +1.
+    // This can lead to sort orders like 1,2,3 turning into 1,3,4, and it can build up, but
+    // it still functions correctly.
+    // Additionally, newly incompleted goals will have a sortOrder of whatever is currently
+    // at the top. If there's only one goal that gets toggled consistently this
+    // number will just keep going up
     public void toggleCompleteGoal(Goal goal) {
         var toggledGoal = goal.withComplete(!goal.completed());
 
         if(toggledGoal.completed()) {
-            // the reason I can use insertUnderIncompleteGoals here is because
-            // we want to put new completed goals under the incomplete goals
-            // also adding doesn't add duplicates, just moves them
             insertUnderIncompleteGoals(toggledGoal);
-
-            // NOTE: Newly completed goals will have a sortOrder of incomplete max sort order +1
-            // This builds up. But it still functions correctly.
-            // Should we fix?
-
         } else {
-            // complete -> incomplete puts them at the top of the list
-
-            // Newly incompleted goals will have a sortOrder of whatever is currently
-            // at the top. If there's only one goal that gets toggled consistently this
-            // number will just keep going up. It still functions correctly.
-            // Should we fix?
             prepend(toggledGoal);
         }
 
