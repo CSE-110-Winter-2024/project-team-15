@@ -7,4 +7,5 @@
     <string name="goal_text">Goal Text</string>
     <string name="goal_name">Goal Name</string>
     <string name="swap_views">Swap Views</string>
+    <string name="forward_day">Forward Day</string>
 </resources>

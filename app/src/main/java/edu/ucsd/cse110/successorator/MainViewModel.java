@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
+import edu.ucsd.cse110.successorator.lib.domain.MockDateTracker;
+import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
@@ -24,7 +26,7 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<List<Goal>> orderedGoals;
     private final MutableSubject<Boolean> noGoals;
 
-    private final DateTracker dateTracker;
+    private final MutableSubject<SimpleDateTracker> dateTracker;
 
 
     public static final ViewModelInitializer<MainViewModel> initializer =
@@ -33,13 +35,14 @@ public class MainViewModel extends ViewModel {
                     creationExtras -> {
                         var app = (SuccessoratorApplication) creationExtras.get(APPLICATION_KEY);
                         assert app != null;
-                        return new MainViewModel(app.getGoalRepository());
+                        return new MainViewModel(app.getGoalRepository(), app.getDateTracker());
                     });
 
-    public MainViewModel(GoalRepository goalRepository) {
+    // dateTracker is received here through the app. for usage in further methods.
+    public MainViewModel(GoalRepository goalRepository, MutableSubject<SimpleDateTracker> dateTracker) {
         this.goalRepository = goalRepository;
-        this.dateTracker = new DateTracker();
-        goalRepository.setLastUpdated(dateTracker.getDate());
+        this.dateTracker = dateTracker;
+        goalRepository.setLastUpdated(dateTracker.getValue().getDate());
 
         /* PLANS:
          * 1. Observe goalRepository so that when it changes, the updated list of goals
@@ -62,6 +65,19 @@ public class MainViewModel extends ViewModel {
                     .collect(Collectors.toList()));
 
             noGoals.setValue(goals.size() == 0);
+        });
+
+        this.dateTracker.observe(timeChange -> {
+            // when the date changes, one of two things have happened:
+            // 1. the date was manually changed with the arrow
+            // 2. the date was changed in the onResume() of GoalListFragment
+            // in case 1, this part makes sure the date reflects the desired date and removes
+            // completed goals
+            // in case 2, it's redundant but not harmful.
+            if(!goalRepository.getLastUpdated().equals(timeChange.getDate()) && timeChange.getHour()>=2) {
+                goalRepository.setLastUpdated(timeChange.getDate());
+                goalRepository.clearCompletedGoals();
+            }
         });
     }
     public MutableSubject<List<Goal>> getOrderedGoals(){
@@ -88,13 +104,14 @@ public class MainViewModel extends ViewModel {
         goalRepository.insertUnderIncompleteGoals(goal);
     }
 
-    public void clearCompletedGoals(){
-        dateTracker.update();
-        if(!goalRepository.getLastUpdated().equals(dateTracker.getDate()) && dateTracker.getHour()>=2) {
-            goalRepository.setLastUpdated(dateTracker.getDate());
+    public void clearCompletedGoals() {
+        // this method is used only once for the onResume() of GoalListFragment
+        var rawDateTracker = dateTracker.getValue();
+        if(!goalRepository.getLastUpdated().equals(rawDateTracker.getDate()) && rawDateTracker.getHour()>=2) {
+            goalRepository.setLastUpdated(rawDateTracker.getDate());
             goalRepository.clearCompletedGoals();
         }
+        rawDateTracker.update();
+        dateTracker.setValue(rawDateTracker);
     }
-
-
 }
