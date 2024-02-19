@@ -103,4 +103,10 @@ public class GoalListFragment extends Fragment {
             view.noGoalsView.setVisibility(isNoGoals ? View.VISIBLE : View.INVISIBLE);
         });
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        this.activityModel.clearCompletedGoals();
+    }
 }

@@ -29,4 +29,12 @@ public interface GoalRepository {
     void toggleCompleteGoal(Goal goal);
 
     void prepend(Goal goal);
+
+    void clearCompletedGoals();
+    void setLastUpdated(String lastUpdated);
+    String getLastUpdated();
+
+
+
+
 }
