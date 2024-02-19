@@ -98,9 +98,4 @@ public class MainViewModel extends ViewModel {
         }
     }
 
-    public void forwardGoalDay() {
-        dateTracker.forwardUpdate();
-    }
-
-
 }

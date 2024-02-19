@@ -39,7 +39,7 @@ public class MockDateTracker implements DateTracker{
     }
 
     @Override
-    public void forwardUpdate() {
+    public void setForwardBy(Integer forwardBy) {
 
     }
 

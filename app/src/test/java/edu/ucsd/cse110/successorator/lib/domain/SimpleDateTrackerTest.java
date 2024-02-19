@@ -24,8 +24,8 @@ public class SimpleDateTrackerTest {
         TimeZone timeZone = TimeZone.getDefault();
         SimpleDateTracker temp = new SimpleDateTracker();
         Calendar calendar =Calendar.getInstance(timeZone);
-        temp.forwardUpdate();
-        System.out.println(temp.getDate());
+        // temp.forwardUpdate();
+        // System.out.println(temp.getDate());
         assertEquals(temp.getHour(), calendar.get(Calendar.HOUR_OF_DAY));
     }
 

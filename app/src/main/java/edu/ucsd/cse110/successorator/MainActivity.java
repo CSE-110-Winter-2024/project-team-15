@@ -48,12 +48,9 @@ public class MainActivity extends AppCompatActivity {
             dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");
 
         } else if (item.getItemId() == R.id.action_bar_menu_forward_day){
-//            daysForwarded++;
-//            dateTracker = new MockDateTracker();
-//            for(int i = 0; i < daysForwarded; i++) {
-//                dateTracker.getDate();
-//            }
-            dateTracker.forwardUpdate();
+            daysForwarded++;
+            dateTracker.setForwardBy(daysForwarded);
+            dateTracker.update();
             onResume();
         }
 

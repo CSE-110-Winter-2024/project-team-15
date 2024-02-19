@@ -6,11 +6,13 @@ public class SimpleDateTracker implements DateTracker {
     private Calendar calendar;
     private TimeZone timeZone;
     private String currentDate;
+    private Integer forwardBy;
     public SimpleDateTracker(){
         this.timeZone = TimeZone.getDefault();
         this.calendar = Calendar.getInstance(this.timeZone);
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
         this.currentDate = dateFormat.format(calendar.getTime());
+        this.forwardBy = 0;
     }
 
     @Override
@@ -32,16 +34,23 @@ public class SimpleDateTracker implements DateTracker {
         this.timeZone = TimeZone.getDefault();
         this.calendar = Calendar.getInstance(this.timeZone);
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
+
+        if (forwardBy > 0) {
+            calendar.add(java.util.Calendar.DAY_OF_MONTH, forwardBy);
+        }
+
         this.currentDate = dateFormat.format(calendar.getTime());
+
     }
 
     @Override
-    public void forwardUpdate() {
-        // https://stackoverflow.com/questions/7691855/adding-days-with-java-util-calendar-gives-strange-results
-        // https://stackoverflow.com/questions/428918/how-can-i-increment-a-date-by-one-day-in-java
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
-        calendar.add(java.util.Calendar.DAY_OF_MONTH, 1);
-        this.currentDate = dateFormat.format(calendar.getTime());
+    public void setForwardBy(Integer forwardBy) {
+
+        if(forwardBy > 0) {
+            this.forwardBy = forwardBy;
+        }
+
     }
+
 
 }

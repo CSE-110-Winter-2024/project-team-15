@@ -7,5 +7,5 @@ public interface DateTracker {
 
     void update();
 
-    void forwardUpdate();
+    void setForwardBy(Integer forwardBy);
 }
