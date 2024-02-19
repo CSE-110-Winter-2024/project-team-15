@@ -9,6 +9,7 @@ import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
 
 public class MainViewModelTest {
@@ -25,7 +26,8 @@ public class MainViewModelTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        MainViewModel mvm = new MainViewModel(testRepo);
+        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         Boolean expected = true;
         Boolean actual= mvm.getNoGoals().getValue();
         assertEquals(expected, actual);
@@ -42,9 +44,10 @@ public class MainViewModelTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        MainViewModel main = new MainViewModel(testRepo);
+        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         Boolean expected = false;
-        Boolean actual= main.getNoGoals().getValue();
+        Boolean actual= mvm.getNoGoals().getValue();
         assertEquals(expected, actual);
     }
 }

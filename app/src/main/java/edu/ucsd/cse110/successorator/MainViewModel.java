@@ -26,6 +26,7 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<List<Goal>> orderedGoals;
     private final MutableSubject<Boolean> noGoals;
 
+    private final MutableSubject<Boolean> dateChanged;
     private final DateTracker dateTracker;
 
 
@@ -35,12 +36,12 @@ public class MainViewModel extends ViewModel {
                     creationExtras -> {
                         var app = (SuccessoratorApplication) creationExtras.get(APPLICATION_KEY);
                         assert app != null;
-                        return new MainViewModel(app.getGoalRepository());
+                        return new MainViewModel(app.getGoalRepository(), app.getDateTracker());
                     });
 
-    public MainViewModel(GoalRepository goalRepository) {
+    public MainViewModel(GoalRepository goalRepository, DateTracker dateTracker) {
         this.goalRepository = goalRepository;
-        this.dateTracker = new SimpleDateTracker();
+        this.dateTracker = dateTracker;
         goalRepository.setLastUpdated(dateTracker.getDate());
 
         /* PLANS:
@@ -55,6 +56,7 @@ public class MainViewModel extends ViewModel {
         // Create the observable subjects.
         this.orderedGoals = new SimpleSubject<>();
         this.noGoals = new SimpleSubject<>();
+        this.dateChanged = new SimpleSubject<>();
         this.noGoals.setValue(true);
 
         goalRepository.findAll().observe(goals -> {
@@ -65,6 +67,14 @@ public class MainViewModel extends ViewModel {
 
             noGoals.setValue(goals.size() == 0);
         });
+
+        // no idea what to do
+        dateChanged.observe(date -> {
+            dateChanged.setValue(!goalRepository.getLastUpdated().equals(dateTracker.getDate()) && dateTracker.getHour()>=2);
+        });
+
+
+
     }
     public MutableSubject<List<Goal>> getOrderedGoals(){
         return orderedGoals;
@@ -97,5 +107,11 @@ public class MainViewModel extends ViewModel {
             goalRepository.clearCompletedGoals();
         }
     }
+
+    // is this srp
+    public MutableSubject<Boolean> getDateChanged() {
+        return dateChanged;
+    }
+
 
 }

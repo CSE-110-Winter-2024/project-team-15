@@ -2,13 +2,16 @@ package edu.ucsd.cse110.successorator;
 
 import android.app.Application;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
+import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
+import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
 
 // default implementation from lab 4 -- uses default goals
 public class SuccessoratorApplication extends Application {
     private InMemoryDataSource dataSource;
     private GoalRepository goalRepository;
+    private DateTracker dateTracker;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -16,6 +19,7 @@ public class SuccessoratorApplication extends Application {
 //        this.dataSource = InMemoryDataSource.fromDefault();
         this.dataSource = InMemoryDataSource.fromDefaultEmpty(); // it works
         this.goalRepository = new SimpleGoalRepository(dataSource);
+        this.dateTracker = new SimpleDateTracker();
         // if we eventually go custom this is the way
         //this.dataSource = InMemoryDataSource.fromDefault();
 
@@ -23,5 +27,9 @@ public class SuccessoratorApplication extends Application {
     }
     public GoalRepository getGoalRepository() {
         return goalRepository;
+    }
+
+    public DateTracker getDateTracker() {
+        return dateTracker;
     }
 }

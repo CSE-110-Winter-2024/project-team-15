@@ -59,7 +59,8 @@ public class GoalTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        MainViewModel mvm = new MainViewModel(testRepo);
+        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(0));
         var actual = dataSource.getGoal(0).completed();
         var expected = true;
@@ -80,7 +81,8 @@ public class GoalTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        MainViewModel mvm = new MainViewModel(testRepo);
+        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(2));
         var actual = dataSource.getGoal(2).completed();
         mvm.toggleCompleted(dataSource.getGoal(3));
@@ -105,7 +107,8 @@ public class GoalTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        MainViewModel mvm = new MainViewModel(testRepo);
+        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(2));
         mvm.toggleCompleted(dataSource.getGoal(2));
         var actual = dataSource.getGoal(2).completed();
@@ -127,7 +130,8 @@ public class GoalTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        MainViewModel mvm = new MainViewModel(testRepo);
+        SimpleDateTracker dateTracker = new SimpleDateTracker();
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(3));
         var actual = dataSource.getGoal(3).completed();
         var expected = false;
