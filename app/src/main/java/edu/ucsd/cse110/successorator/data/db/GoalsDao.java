@@ -55,7 +55,7 @@ public interface GoalsDao {
     default int prepend(GoalEntity goal){
         shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
         var newGoal = new GoalEntity(
-                goal.contents, getMinSortOrder()-1, goal.completed
+                goal.contents, getMinSortOrder()-1, goal.completed, goal.listNum
         );
         return Math.toIntExact(insert(newGoal));
     }
@@ -73,7 +73,7 @@ public interface GoalsDao {
         }
 
         GoalEntity gol = new GoalEntity(
-                goal.contents, incomp, goal.completed
+                goal.contents, incomp, goal.completed, goal.listNum
         );
         insert(gol);
     }

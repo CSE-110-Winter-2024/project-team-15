@@ -13,12 +13,17 @@ public class Goal {
     private final @NonNull Boolean completed;
     private final @Nullable int sortOrder;
 
+    //will use this field for sorting in lists.
+    //0 = today, 1 = tomorrow, 2 = pending, 3 = recurring
+    private final int listNum;
+
     public Goal(@NonNull String contents, @Nullable Integer id,
-                @NonNull Boolean completed, int sortOrder) {
+                @NonNull Boolean completed, int sortOrder, int listNum) {
         this.contents = contents;
         this.id = id;
         this.completed = completed;
         this.sortOrder = sortOrder;
+        this.listNum = listNum;
     }
 
     public @NonNull String contents(){
@@ -31,14 +36,20 @@ public class Goal {
     public int sortOrder() {
         return this.sortOrder;
     }
+    public int listNum() {
+        return this.listNum;
+    }
     public @NonNull Goal withId(@NonNull Integer id){
-        return new Goal(this.contents, id, this.completed, this.sortOrder);
+        return new Goal(this.contents, id, this.completed, this.sortOrder, this.listNum);
     }
     public @NonNull Goal withSortOrder(int sortOrder){
-        return new Goal(this.contents, this.id, this.completed, sortOrder);
+        return new Goal(this.contents, this.id, this.completed, sortOrder, this.listNum);
     }
     public @NonNull Goal withComplete(@NonNull Boolean completed){
-        return new Goal(this.contents, this.id, completed, this.sortOrder);
+        return new Goal(this.contents, this.id, completed, this.sortOrder, this.listNum);
+    }
+    public @NonNull Goal withListNum(int listNum){
+        return new Goal(this.contents, this.id, completed, this.sortOrder, listNum);
     }
 
 //    public @NonNull Goal copiedGoal(){
