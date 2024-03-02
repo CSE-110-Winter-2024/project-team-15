@@ -21,7 +21,7 @@ import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 public class MainViewModel extends ViewModel {
     // Domain state (true "Model" state)
     private final GoalRepository goalRepository;
-    private int listShown = 0;
+    private int listShown;
 
     // UI state
     private final MutableSubject<List<Goal>> orderedGoals;
@@ -59,13 +59,15 @@ public class MainViewModel extends ViewModel {
         this.noGoals = new SimpleSubject<>();
         this.noGoals.setValue(true);
 
-        goalRepository.findAll(0).observe(goals -> {
+        goalRepository.findAll().observe(goals -> {
             if (goals == null) return;
             orderedGoals.setValue(goals.stream()
+                    //Yoav debugged and figured out this solution was necessary
+                    .filter(goal -> (goal.listNum() == listShown))
                     .sorted(Comparator.comparingInt(Goal::sortOrder))
                     .collect(Collectors.toList()));
 
-            noGoals.setValue(goals.size() == 0);
+            noGoals.setValue(orderedGoals.getValue().size() == 0);
         });
 
         this.dateTracker.observe(timeChange -> {
@@ -84,6 +86,7 @@ public class MainViewModel extends ViewModel {
     public MutableSubject<List<Goal>> getOrderedGoals(){
         return orderedGoals;
     }
+
 
     // for usage in fragment. to goal or not to goal?
     public MutableSubject<Boolean> getNoGoals() {
@@ -122,15 +125,13 @@ public class MainViewModel extends ViewModel {
 
     //idk if this works
     public void switchView(int listNum){
-        goalRepository.findAll(listNum).observe(goals -> {
-            if (goals == null) return;
-            orderedGoals.setValue(goals.stream()
-                    .sorted(Comparator.comparingInt(Goal::sortOrder))
-                    .collect(Collectors.toList()));
 
-            noGoals.setValue(goals.size() == 0);
-        });
         this.listShown = listNum;
+        //absolute degenerate behaviour
+        //I apologize
+        goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5));
+        goalRepository.remove(Integer.MAX_VALUE);
+
     }
 
 }
