@@ -24,6 +24,11 @@ public class SimpleGoalRepository implements GoalRepository {
         return dataSource.getAllGoalsSubject();
     }
 
+    public Subject<List<Goal>> findAll(int listNum) {
+        return dataSource.getViewGoalsSubject(listNum);
+    }
+
+
     @Override
     public void save(Goal goal) {
         dataSource.putGoal(goal);
@@ -95,6 +100,11 @@ public class SimpleGoalRepository implements GoalRepository {
                     }
                 });
     }
+    @Override
+    public void switchViewType(int listNum){
+
+    }
+
 
 
 }

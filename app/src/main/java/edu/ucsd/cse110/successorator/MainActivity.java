@@ -15,6 +15,7 @@ import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
+import edu.ucsd.cse110.successorator.ui.goallist.dialog.SwitchViewDialogFragment;
 
 // MAIN ACTIVITY does not know about date
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
             this.dateTracker.setValue(rawDateTracker);
             onResume(); // onResume nicely sets the title
 
+        }
+        else if  (item.getItemId() == R.id.action_bar_menu_swap_lists){
+            var dialogFragment = SwitchViewDialogFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(), "SwitchViewDialogFragment");
         }
 
         return super.onOptionsItemSelected(item);

@@ -54,6 +54,14 @@ public class InMemoryDataSource {
         return allGoalsSubject;
     }
 
+    public MutableSubject<List<Goal>> getViewGoalsSubject(int listNum) {
+        List<Goal> temp = allGoalsSubject.getValue();
+        temp.stream().filter((v) -> v.listNum() == listNum).collect(Collectors.toList());
+        MutableSubject<List<Goal>> out = new SimpleSubject<>();
+        out.setValue(temp);
+        return out;
+    }
+
     public void putGoal(Goal goal) {
         var fixedCard = preInsert(goal);
 

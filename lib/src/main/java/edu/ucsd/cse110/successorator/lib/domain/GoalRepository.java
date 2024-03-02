@@ -9,6 +9,8 @@ public interface GoalRepository {
 
     Subject<List<Goal>> findAll();
 
+    Subject<List<Goal>> findAll(int listNum);
+
     void save(Goal goal);
 
     void save(List<Goal> goals);
@@ -34,6 +36,8 @@ public interface GoalRepository {
     void clearCompletedGoals();
     void setLastUpdated(String lastUpdated);
     String getLastUpdated();
+
+    void switchViewType(int listNum);
 
 
 

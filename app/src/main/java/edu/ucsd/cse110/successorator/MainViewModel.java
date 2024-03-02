@@ -58,7 +58,7 @@ public class MainViewModel extends ViewModel {
         this.noGoals = new SimpleSubject<>();
         this.noGoals.setValue(true);
 
-        goalRepository.findAll().observe(goals -> {
+        goalRepository.findAll(0).observe(goals -> {
             if (goals == null) return;
             orderedGoals.setValue(goals.stream()
                     .sorted(Comparator.comparingInt(Goal::sortOrder))
@@ -114,4 +114,16 @@ public class MainViewModel extends ViewModel {
         rawDateTracker.update();
         dateTracker.setValue(rawDateTracker);
     }
+
+    public void switchView(int listNum){
+        goalRepository.findAll(listNum).observe(goals -> {
+            if (goals == null) return;
+            orderedGoals.setValue(goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::sortOrder))
+                    .collect(Collectors.toList()));
+
+            noGoals.setValue(goals.size() == 0);
+        });
+    }
+
 }
