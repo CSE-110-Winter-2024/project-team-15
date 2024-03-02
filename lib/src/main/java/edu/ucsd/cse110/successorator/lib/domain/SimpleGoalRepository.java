@@ -100,11 +100,13 @@ public class SimpleGoalRepository implements GoalRepository {
                     }
                 });
     }
+    /*
+    commenting out until I'm sure I either do or dont need this
     @Override
     public void switchViewType(int listNum){
 
     }
-
+    */
 
 
 }

@@ -85,7 +85,7 @@ public class SwitchViewDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_switch_view_dialog, container, false);
+        return inflater.inflate(R.layout.fragment_dialog_switch_view, container, false);
     }
 
     public static SwitchViewDialogFragment newInstance(){

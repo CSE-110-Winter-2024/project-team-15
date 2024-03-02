@@ -21,6 +21,7 @@ import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 public class MainViewModel extends ViewModel {
     // Domain state (true "Model" state)
     private final GoalRepository goalRepository;
+    private int listShown = 0;
 
     // UI state
     private final MutableSubject<List<Goal>> orderedGoals;
@@ -88,6 +89,9 @@ public class MainViewModel extends ViewModel {
     public MutableSubject<Boolean> getNoGoals() {
         return noGoals;
     }
+    public int getListShown(){
+        return listShown;
+    }
 
     public void toggleCompleted(Goal goal) {
         // SRP issue fixed by forward passing
@@ -115,6 +119,8 @@ public class MainViewModel extends ViewModel {
         dateTracker.setValue(rawDateTracker);
     }
 
+
+    //idk if this works
     public void switchView(int listNum){
         goalRepository.findAll(listNum).observe(goals -> {
             if (goals == null) return;
@@ -124,6 +130,7 @@ public class MainViewModel extends ViewModel {
 
             noGoals.setValue(goals.size() == 0);
         });
+        this.listShown = listNum;
     }
 
 }

@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         var rawDateTracker = dateTracker.getValue();
         if(rawDateTracker.getHour()>=2) {
-            setTitle(rawDateTracker.getDate());
+            setTitle("Today " + rawDateTracker.getDate());
         }
 
     }

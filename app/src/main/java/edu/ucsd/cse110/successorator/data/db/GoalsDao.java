@@ -30,6 +30,9 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals ORDER BY sort_order")
     LiveData<List<GoalEntity>> findAllAsLiveData();
 
+    @Query("SELECT * FROM goals WHERE list_num = :listNum ORDER BY sort_order")
+    LiveData<List<GoalEntity>> findAllAsLiveData(int listNum);
+
     @Query("SELECT Count(*) FROM goals")
     int count();
     @Query("SELECT Min(sort_order) FROM goals")

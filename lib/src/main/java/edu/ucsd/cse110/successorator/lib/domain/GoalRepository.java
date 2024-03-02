@@ -37,7 +37,11 @@ public interface GoalRepository {
     void setLastUpdated(String lastUpdated);
     String getLastUpdated();
 
+    /*
+    commenting out until I'm sure I either do or dont need this
     void switchViewType(int listNum);
+
+     */
 
 
 
