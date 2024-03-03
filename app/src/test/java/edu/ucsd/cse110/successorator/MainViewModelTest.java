@@ -141,4 +141,19 @@ public class MainViewModelTest {
         var expected = false;
         Assert.assertEquals(expected, actual);
     }
+
+
+    @Test
+    public void clearCompletedGoals() {
+
+    }
+
+
+    @Test
+    public void switchView(){
+
+
+    }
+
+
 }

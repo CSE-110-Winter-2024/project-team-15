@@ -12,8 +12,7 @@ public class ViewNumInfoTest {
     public void getInstance() {
         /* ************************************************************************************* */
         // Checking that we get a new instance if there's not one already..
-        // Given: Need an singleton instance of ViewNumInfo
-        // but there's not one existing before
+        // Given: No instances of ViewNumInfo
 
         // When: getInstance is called for the first time
         ViewNumInfo instance1 = ViewNumInfo.getInstance().getValue();
@@ -27,7 +26,7 @@ public class ViewNumInfoTest {
         // When: getInstance is called again
         ViewNumInfo instance2 = ViewNumInfo.getInstance().getValue();
 
-        // Then: They're the same instance
+        // Then: They're the same instance (singleton pattern ftw)
         assertEquals(instance1, instance2);
 
         /* ************************************************************************************* */

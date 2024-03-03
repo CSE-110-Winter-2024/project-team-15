@@ -25,6 +25,7 @@ public class MainViewModel extends ViewModel {
     // listShown holds the "index" of the view you're in
     // 0 == today, 1 == tmrw, 2 == pending, 3 == recurring
     // you can see this in MainActivity which observes ViewNumInfo
+    // this should definitely integrate ViewNumInfo, perhaps later, since we use it here
     private int listShown;
 
     // UI state
@@ -101,6 +102,8 @@ public class MainViewModel extends ViewModel {
     }
 
     // "index" of the view you're in
+    // BTW this should call viewnuminfo's get listShown instead of having a member variable
+    // fix later?
     public int getListShown(){
         return listShown;
     }
@@ -133,15 +136,17 @@ public class MainViewModel extends ViewModel {
 
 
     //idk if this works
+    //   it does but it should utilize observers and ViewNumInfo in a different way
     public void switchView(int listNum){
 
         this.listShown = listNum;
         ViewNumInfo.setInstance(listNum);
         //absolute degenerate behaviour
         //I apologize
-        //    as you should king .. i'm so incredibly confused why you do this
-        //    hm, per yoav it's to call the notify method
-        //    we can just.. observe the list number too can't we?
+        //    i'm so incredibly confused why you do this
+        //    answer: per yoav it's to call the notify method
+        //    to fix this, can't we just observe the list number too
+        //    \ '-' /
         goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5));
         goalRepository.remove(Integer.MAX_VALUE);
 
