@@ -62,6 +62,7 @@ public class SimpleDateTracker implements DateTracker {
 
     }
 
+    // :(
     public String getNextDate(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
         calendar.add(Calendar.DATE, (1));

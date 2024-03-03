@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // this violates OCP since we might want to change Today to something else
+    // i suggest we replace the strings in the if statement with numbers from ViewNumInfo
+    // today and tomorrow 
     @Override
     public void onResume(){
         super.onResume();

@@ -5,6 +5,9 @@ import android.view.View;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 
+// singleton pattern
+// use the same instance of VNI for everything
+// later this can be used to see what dialogs to display
 public class ViewNumInfo {
     private int listShown;
     private static MutableSubject<ViewNumInfo> globalListShown = null;

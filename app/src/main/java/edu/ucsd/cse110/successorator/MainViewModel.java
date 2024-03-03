@@ -21,6 +21,10 @@ import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 public class MainViewModel extends ViewModel {
     // Domain state (true "Model" state)
     private final GoalRepository goalRepository;
+
+    // listShown holds the "index" of the view you're in
+    // 0 == today, 1 == tmrw, 2 == pending, 3 == recurring
+    // you can see this in MainActivity which observes ViewNumInfo
     private int listShown;
 
     // UI state
