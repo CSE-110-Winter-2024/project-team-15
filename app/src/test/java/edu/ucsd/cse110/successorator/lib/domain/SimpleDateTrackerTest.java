@@ -29,4 +29,31 @@ public class SimpleDateTrackerTest {
         assertEquals(temp.getValue().getHour(), calendar.get(Calendar.HOUR_OF_DAY));
     }
 
+    @Test
+    public void getNextDate() {
+        /* ************************************************************************************* */
+        // Checking this method doesn't alter the date..
+        // Given: A simple date tracker on the current date and the current date
+        SimpleDateTracker myTracker = SimpleDateTracker.getInstance().getValue();
+        // current date stuff
+        TimeZone timeZone = TimeZone.getDefault();
+        Calendar calendar = Calendar.getInstance(timeZone);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
+        String currentDate = dateFormat.format(calendar.getTime());
+
+        // When: getNextDate is called to get the next date
+        var nextDate = myTracker.getNextDate();
+
+        // Then: The tracker still contains the current date
+        assertEquals(currentDate, myTracker.getDate());
+
+        // Checking this method actually gets the next date..
+        // And: It actually gets the next date
+        calendar.add(Calendar.DATE, (1));
+        String realNextDate = dateFormat.format(calendar.getTime());
+        assertEquals(nextDate, realNextDate);
+
+        /* ************************************************************************************* */
+    }
+
 }

@@ -11,7 +11,7 @@ public class ViewNumInfoTest {
     @Test
     public void getInstance() {
         /* ************************************************************************************* */
-        // Checking that we get a new instance if there's not one
+        // Checking that we get a new instance if there's not one already..
         // Given: Need an singleton instance of ViewNumInfo
         // but there's not one existing before
 
@@ -22,7 +22,7 @@ public class ViewNumInfoTest {
         assertNotNull(instance1);
 
         /* ************************************************************************************* */
-        // Checking that we always use the same instance
+        // Checking that we always use the same instance..
         // Given: Now there's an existing instance of ViewNumInfo
         // When: getInstance is called again
         ViewNumInfo instance2 = ViewNumInfo.getInstance().getValue();
@@ -36,7 +36,7 @@ public class ViewNumInfoTest {
     @Test
     public void setInstance() {
         /* ************************************************************************************* */
-        // Checking if we can set the instance
+        // Checking if we can set the instance..
         // Not sure if I can call getListShown here because we're still testing it
         // .. but I do it anyway
 
@@ -59,7 +59,7 @@ public class ViewNumInfoTest {
     @Test
     public void getListShown() {
         /* ************************************************************************************* */
-        // Checking default view
+        // Checking getting the default view..
         // Given: An instance of ViewNumInfo
         ViewNumInfo instance1 = ViewNumInfo.getInstance().getValue();
 
@@ -75,6 +75,7 @@ public class ViewNumInfoTest {
         // .. but I do it anyway
         // I can fix this if needed, it might violate unit testing laws ...
         // Tests can be combined, maybe?
+        // Checking getting a non-default view..
 
         // Given: An instance of ViewNumInfo with the default view (which is 0)
         // int oldView = ViewNumInfo.getInstance().getValue().getListShown();
