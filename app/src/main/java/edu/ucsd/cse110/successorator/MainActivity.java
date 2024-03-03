@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private MutableSubject<SimpleDateTracker> dateTracker;
     private Integer daysForwarded;
     private boolean isShowingList = true;
+    private String dayOfWeek;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +34,33 @@ public class MainActivity extends AppCompatActivity {
         view.placeholderText.setText(null);
 
         setContentView(view.getRoot());
+
+        ViewNumInfo.getInstance().observe(vni -> {
+            var rawDateTracker = dateTracker.getValue();
+            String dateString = rawDateTracker.getDate();
+            int listShown = vni.getListShown();
+            switch (listShown){
+                case 0:
+                    dayOfWeek = "Today, ";
+                    break;
+                case 1:
+                    dayOfWeek = "Tomorrow, ";
+                    dateString = rawDateTracker.getNextDate();
+                    break;
+                case 2:
+                    dayOfWeek = "Pending";
+                    dateString = "";
+                    break;
+                case 3:
+                    dayOfWeek = "Recurring";
+                    dateString = "";
+                    break;
+                default:
+                    dayOfWeek = "invalid";
+            }
+            setTitle(dayOfWeek + dateString);
+
+        });
     }
 
     // for the button
@@ -75,8 +103,16 @@ public class MainActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         var rawDateTracker = dateTracker.getValue();
+        int listNum = ViewNumInfo.getInstance().getValue().getListShown();
+
         if(rawDateTracker.getHour()>=2) {
-            setTitle("Today " + rawDateTracker.getDate());
+            if(dayOfWeek.equals("Today, ")){
+                setTitle(dayOfWeek + rawDateTracker.getDate());
+            } else if(dayOfWeek.equals("Tomorrow, ")){
+
+                setTitle(dayOfWeek + rawDateTracker.getNextDate());
+            }
+            else{setTitle(dayOfWeek);}
         }
 
     }

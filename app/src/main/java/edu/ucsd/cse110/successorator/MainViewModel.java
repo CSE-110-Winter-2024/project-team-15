@@ -26,6 +26,7 @@ public class MainViewModel extends ViewModel {
     // UI state
     private final MutableSubject<List<Goal>> orderedGoals;
     private final MutableSubject<Boolean> noGoals;
+    //private final MutableSubject<ViewNumInfo> numInfo;
 
     private final MutableSubject<SimpleDateTracker> dateTracker;
 
@@ -43,6 +44,8 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(GoalRepository goalRepository, MutableSubject<SimpleDateTracker> dateTracker) {
         this.goalRepository = goalRepository;
         this.dateTracker = dateTracker;
+//        this.numInfo = new SimpleSubject<ViewNumInfo>();
+ //       numInfo.setValue(ViewNumInfo.getInstance());
         goalRepository.setLastUpdated(dateTracker.getValue().getDate());
 
         /* PLANS:
@@ -127,6 +130,7 @@ public class MainViewModel extends ViewModel {
     public void switchView(int listNum){
 
         this.listShown = listNum;
+        ViewNumInfo.setInstance(listNum);
         //absolute degenerate behaviour
         //I apologize
         goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5));
