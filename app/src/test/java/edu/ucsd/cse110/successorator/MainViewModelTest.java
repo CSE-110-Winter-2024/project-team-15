@@ -145,14 +145,33 @@ public class MainViewModelTest {
 
     @Test
     public void clearCompletedGoals() {
-
+        // don't need to test this since it's goalRepository's responsibility
+        // can del
     }
 
 
     @Test
     public void switchView(){
+        /* ************************************************************************************* */
+        // Checking if we can actually switch to a different view..
+        // (I realized if we ever change the default view to 2, these tests might fail)
+        // (Is that fine?)
+        // Given: A MainViewModel instance that has a default view
+        var dataSource = new InMemoryDataSource(); // how do i use room
+        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
+        var dateTracker = SimpleDateTracker.getInstance();
 
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
+        int defaultView = mvm.getListShown();
 
+        // When: switchView is called to set a new view (2)
+        int newViewNum = 2;
+        mvm.switchView(newViewNum);
+
+        // Then: listShown should reflect the new view, it's not the default
+        assertEquals(newViewNum, mvm.getListShown());
+        assertNotEquals(defaultView, mvm.getListShown());
+        /* ************************************************************************************* */
     }
 
 

@@ -126,6 +126,9 @@ public class MainViewModel extends ViewModel {
     public void clearCompletedGoals() {
         // this method is used only once for the onResume() of GoalListFragment
         var rawDateTracker = dateTracker.getValue();
+
+        // violates SRP but fine for now (let's delete these comments if there isn't a simple fix)
+        // shouldn't check date tracker in a clearing goals method
         if(!goalRepository.getLastUpdated().equals(rawDateTracker.getDate()) && rawDateTracker.getHour()>=2) {
             goalRepository.setLastUpdated(rawDateTracker.getDate());
             goalRepository.clearCompletedGoals();
@@ -136,7 +139,9 @@ public class MainViewModel extends ViewModel {
 
 
     //idk if this works
-    //   it does but it should utilize observers and ViewNumInfo in a different way
+    //   it does but it should utilize observers and ViewNumInfo in a different way mb later
+    //   first in listShown just call getListShown from viewnuminfo
+    //   second use observers to notify instead of the hacky way
     public void switchView(int listNum){
 
         this.listShown = listNum;
