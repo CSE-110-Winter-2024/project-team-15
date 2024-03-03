@@ -143,21 +143,18 @@ public class MainViewModelTest {
     }
 
 
-    @Test
-    public void clearCompletedGoals() {
-        // don't need to test this since it's goalRepository's responsibility
-        // can del
-    }
-
 
     @Test
     public void switchView(){
         /* ************************************************************************************* */
         // Checking if we can actually switch to a different view..
-        // (I realized if we ever change the default view to 2, these tests might fail)
-        // (Is that fine?)
+        // (I realized if we ever change the default view to 2, these tests might fail
+        // ^ This can be fixed later, but for now we have iteration deadlines
+        // and I doubt we'll change it to a different default)
+        // another note: using inMemory rather than Room is because apparently we can't make an
+        // instance of the DB so we're going to use inMemory for now
         // Given: A MainViewModel instance that has a default view
-        var dataSource = new InMemoryDataSource(); // how do i use room
+        var dataSource = new InMemoryDataSource();
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
         var dateTracker = SimpleDateTracker.getInstance();
 

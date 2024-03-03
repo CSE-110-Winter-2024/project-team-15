@@ -14,6 +14,7 @@ public class ViewNumInfo {
     private ViewNumInfo(int ls){
         this.listShown = ls;
     }
+
     public static MutableSubject<ViewNumInfo> getInstance(){
 
         if(globalListShown == null){
@@ -30,4 +31,10 @@ public class ViewNumInfo {
     public int getListShown(){
         return listShown;
     }
+
+    // testing purposes, reset the instance
+    public static void resetInstance() {
+        globalListShown  = null;
+    }
+
 }

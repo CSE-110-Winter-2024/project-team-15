@@ -71,7 +71,7 @@ public class MainViewModel extends ViewModel {
             if (goals == null) return;
             orderedGoals.setValue(goals.stream()
                     //Yoav debugged and figured out this solution was necessary
-                    .filter(goal -> (goal.listNum() == listShown))
+                    .filter(goal -> (goal.listNum() == getListShown()))
                     .sorted(Comparator.comparingInt(Goal::sortOrder))
                     .collect(Collectors.toList()));
 

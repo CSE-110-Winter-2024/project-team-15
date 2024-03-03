@@ -10,6 +10,8 @@ public class ViewNumInfoTest {
     // it just separates the different tests
     @Test
     public void getInstance() {
+        ViewNumInfo.resetInstance();
+
         /* ************************************************************************************* */
         // Checking that we get a new instance if there's not one already..
         // Given: No instances of ViewNumInfo
@@ -34,6 +36,8 @@ public class ViewNumInfoTest {
 
     @Test
     public void setInstance() {
+        ViewNumInfo.resetInstance();
+
         /* ************************************************************************************* */
         // Checking if we can set the instance..
         // Not sure if I can call getListShown here because we're still testing it
@@ -57,6 +61,8 @@ public class ViewNumInfoTest {
 
     @Test
     public void getListShown() {
+        ViewNumInfo.resetInstance();
+
         /* ************************************************************************************* */
         // Checking getting the default view..
         // Given: An instance of ViewNumInfo
