@@ -26,7 +26,7 @@ public class MainViewModel extends ViewModel {
     // 0 == today, 1 == tmrw, 2 == pending, 3 == recurring
     // you can see this in MainActivity which observes ViewNumInfo
     // this should definitely integrate ViewNumInfo, perhaps later, since we use it here
-    private int listShown;
+    //private int listShown;
 
     // UI state
     private final MutableSubject<List<Goal>> orderedGoals;
@@ -103,11 +103,13 @@ public class MainViewModel extends ViewModel {
 
     // "index" of the view you're in
     // BTW this should call viewnuminfo's get listShown instead of having a member variable
-    // fix later?
     // i'm also confused what happens if this is called without an instance of ViewNumInfo
-    // (since its not initialized) .. crashes?
+    // (since its not initialized)
+    // (ans: ^ INTS are never null so itll just be 0, appropriately too)
+    // FIXED
     public int getListShown(){
-        return listShown;
+        //return listShown;
+        return ViewNumInfo.getInstance().getValue().getListShown();
     }
 
     public void toggleCompleted(Goal goal) {
@@ -146,13 +148,14 @@ public class MainViewModel extends ViewModel {
     //   second use observers to notify instead of the hacky way
     public void switchView(int listNum){
 
-        this.listShown = listNum;
+        //this.listShown = listNum;
         ViewNumInfo.setInstance(listNum);
         //absolute degenerate behaviour
         //I apologize
         //    i'm so incredibly confused why you do this
         //    answer: per yoav it's to call the notify method
-        //    to fix this, can't we just observe the list number too
+        //    to fix this, we can just observe the list number, but since this works and we
+        //    have deadlines it's fine to keep it this way. let's just review later
         //    \ '-' /
         goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5));
         goalRepository.remove(Integer.MAX_VALUE);
