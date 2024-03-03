@@ -100,21 +100,22 @@ public class MainActivity extends AppCompatActivity {
 
     // this violates OCP since we might want to change Today to something else
     // i suggest we replace the strings in the if statement with numbers from ViewNumInfo
-    // today and tomorrow
+    // today and tomorrow (0 and 1) (should make into enum later)
+    // OK i fixed. also truncated the day name in the original dateTracker
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         var rawDateTracker = dateTracker.getValue();
         int listNum = ViewNumInfo.getInstance().getValue().getListShown();
 
         if(rawDateTracker.getHour()>=2) {
-            if(dayOfWeek.equals("Today, ")){
+            if(listNum == 0){
                 setTitle(dayOfWeek + rawDateTracker.getDate());
-            } else if(dayOfWeek.equals("Tomorrow, ")){
-
+            } else if(listNum == 1){
                 setTitle(dayOfWeek + rawDateTracker.getNextDate());
             }
-            else{setTitle(dayOfWeek);}
+            else {
+                setTitle(dayOfWeek);}
         }
 
     }

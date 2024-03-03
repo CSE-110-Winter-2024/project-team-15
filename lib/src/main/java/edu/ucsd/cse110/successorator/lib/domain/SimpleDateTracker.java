@@ -19,7 +19,8 @@ public class SimpleDateTracker implements DateTracker {
     private SimpleDateTracker(){
         this.timeZone = TimeZone.getDefault();
         this.calendar = Calendar.getInstance(this.timeZone);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
+        // truncating day means EEEE is EEE
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd");
         this.currentDate = dateFormat.format(calendar.getTime());
         this.forwardBy = 0;
     }
@@ -52,7 +53,8 @@ public class SimpleDateTracker implements DateTracker {
     public void update(){
         this.timeZone = TimeZone.getDefault();
         this.calendar = Calendar.getInstance(this.timeZone);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
+        // truncating day means EEEE is EEE
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd");
 
         if (forwardBy > 0) {
             calendar.add(java.util.Calendar.DAY_OF_MONTH, forwardBy);
@@ -64,7 +66,8 @@ public class SimpleDateTracker implements DateTracker {
 
 
     public String getNextDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
+        // truncating day means EEEE is EEE
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd");
 
         // no need to alter the calendar's state, make a temp calendar
         Calendar tempCalendar = (Calendar) calendar.clone();

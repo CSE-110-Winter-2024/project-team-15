@@ -13,7 +13,7 @@ public class SimpleDateTrackerTest {
     public void getDateTest(){
         TimeZone timeZone = TimeZone.getDefault();
         Calendar calendar = Calendar.getInstance(timeZone);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd");
         String currentDate = dateFormat.format(calendar.getTime());
         var temp = SimpleDateTracker.getInstance();
         assertTrue(temp.getValue().getDate().equals(currentDate));
@@ -38,7 +38,7 @@ public class SimpleDateTrackerTest {
         // current date stuff
         TimeZone timeZone = TimeZone.getDefault();
         Calendar calendar = Calendar.getInstance(timeZone);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd");
         String currentDate = dateFormat.format(calendar.getTime());
 
         // When: getNextDate is called to get the next date
