@@ -104,6 +104,8 @@ public class MainViewModel extends ViewModel {
     // "index" of the view you're in
     // BTW this should call viewnuminfo's get listShown instead of having a member variable
     // fix later?
+    // i'm also confused what happens if this is called without an instance of ViewNumInfo
+    // (since its not initialized) .. crashes?
     public int getListShown(){
         return listShown;
     }
