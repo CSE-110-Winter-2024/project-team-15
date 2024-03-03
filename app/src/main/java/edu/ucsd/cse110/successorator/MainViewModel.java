@@ -99,6 +99,8 @@ public class MainViewModel extends ViewModel {
     public MutableSubject<Boolean> getNoGoals() {
         return noGoals;
     }
+
+    // "index" of the view you're in
     public int getListShown(){
         return listShown;
     }
@@ -137,6 +139,9 @@ public class MainViewModel extends ViewModel {
         ViewNumInfo.setInstance(listNum);
         //absolute degenerate behaviour
         //I apologize
+        //    as you should king .. i'm so incredibly confused why you do this
+        //    hm, per yoav it's to call the notify method
+        //    we can just.. observe the list number too can't we?
         goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5));
         goalRepository.remove(Integer.MAX_VALUE);
 

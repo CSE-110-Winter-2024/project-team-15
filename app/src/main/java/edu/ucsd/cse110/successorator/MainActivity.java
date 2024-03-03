@@ -17,7 +17,6 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.SwitchViewDialogFragment;
 
-// MAIN ACTIVITY does not know about date
 public class MainActivity extends AppCompatActivity {
     private MutableSubject<SimpleDateTracker> dateTracker;
     private Integer daysForwarded;
@@ -101,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
     // this violates OCP since we might want to change Today to something else
     // i suggest we replace the strings in the if statement with numbers from ViewNumInfo
-    // today and tomorrow 
+    // today and tomorrow
     @Override
     public void onResume(){
         super.onResume();
