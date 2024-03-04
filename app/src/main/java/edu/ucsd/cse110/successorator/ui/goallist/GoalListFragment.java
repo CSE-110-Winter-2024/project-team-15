@@ -100,7 +100,7 @@ public class GoalListFragment extends Fragment {
         view.goalList.setAdapter(adapter);
         activityModel.getNoGoals().observe(isNoGoals -> {
             if (isNoGoals == null) return;
-            view.noGoalsView.setVisibility(isNoGoals ? View.VISIBLE : View.INVISIBLE);
+            view.noGoalsView.setVisibility((isNoGoals && activityModel.getListShown() == 0) ? View.VISIBLE : View.INVISIBLE);
         });
     }
 

@@ -37,8 +37,8 @@ public class MainViewModelTest {
     @Test
     public void getNoGoalsFalse(){
         List<Goal> testGoals = List.of(
-                new Goal("get food",0, false, 0 ),
-                new Goal("get kids", 1, false, 1)
+                new Goal("get food",0, false, 0,0 ),
+                new Goal("get kids", 1, false, 1,0)
         );
         var dataSource = new InMemoryDataSource();
         for (Goal goal : testGoals) {
@@ -55,7 +55,7 @@ public class MainViewModelTest {
     @Test
     public void completedOne() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0)
+                new Goal("Prepare for the midterm", 0, false, 0,0)
 //             new Goal("This Massive Wall Of Text Goes On And On For All Eternity Or At Least Until It gets Off THe Screen In which Case You Will Stop Seeing It At All", 4)
         );
         var dataSource = new InMemoryDataSource();
@@ -74,10 +74,10 @@ public class MainViewModelTest {
     @Test
     public void completedMultiple() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0),
-                new Goal("Grocery shopping", 1, false, 1),
-                new Goal("Make dinner", 2, false, 2),
-                new Goal("Text Maria", 3, false, 3)
+                new Goal("Prepare for the midterm", 0, false, 0,0),
+                new Goal("Grocery shopping", 1, false, 1,0),
+                new Goal("Make dinner", 2, false, 2,0),
+                new Goal("Text Maria", 3, false, 3,0)
 //
         );
         var dataSource = new InMemoryDataSource();
@@ -100,10 +100,10 @@ public class MainViewModelTest {
     @Test
     public void uncompletedDoubleToggle() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0),
-                new Goal("Grocery shopping", 1, false, 1),
-                new Goal("Make dinner", 2, false, 2),
-                new Goal("Text Maria", 3, false, 3)
+                new Goal("Prepare for the midterm", 0, false, 0,0),
+                new Goal("Grocery shopping", 1, false, 1,0),
+                new Goal("Make dinner", 2, false, 2,0),
+                new Goal("Text Maria", 3, false, 3,0)
 //
         );
         var dataSource = new InMemoryDataSource();
@@ -123,10 +123,10 @@ public class MainViewModelTest {
     @Test
     public void uncompletedSingleToggle() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0),
-                new Goal("Grocery shopping", 1, false, 1),
-                new Goal("Make dinner", 2, false, 2),
-                new Goal("Text Maria", 3, true, 3)
+                new Goal("Prepare for the midterm", 0, false, 0,0),
+                new Goal("Grocery shopping", 1, false, 1,0),
+                new Goal("Make dinner", 2, false, 2,0),
+                new Goal("Text Maria", 3, true, 3,0)
 //
         );
         var dataSource = new InMemoryDataSource();
@@ -141,4 +141,35 @@ public class MainViewModelTest {
         var expected = false;
         Assert.assertEquals(expected, actual);
     }
+
+
+
+    @Test
+    public void switchView(){
+        /* ************************************************************************************* */
+        // Checking if we can actually switch to a different view..
+        // (I realized if we ever change the default view to 2, these tests might fail
+        // ^ This can be fixed later, but for now we have iteration deadlines
+        // and I doubt we'll change it to a different default)
+        // another note: using inMemory rather than Room is because apparently we can't make an
+        // instance of the DB so we're going to use inMemory for now
+        // Given: A MainViewModel instance that has a default view
+        var dataSource = new InMemoryDataSource();
+        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
+        var dateTracker = SimpleDateTracker.getInstance();
+
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
+        int defaultView = mvm.getListShown();
+
+        // When: switchView is called to set a new view (2)
+        int newViewNum = 2;
+        mvm.switchView(newViewNum);
+
+        // Then: listShown should reflect the new view, it's not the default
+        assertEquals(newViewNum, mvm.getListShown());
+        assertNotEquals(defaultView, mvm.getListShown());
+        /* ************************************************************************************* */
+    }
+
+
 }

@@ -57,7 +57,7 @@ public class CreateGoalDialogFragment extends DialogFragment {
         var goalText = view.goalNameEditText.getText().toString();
 
         if(!goalText.equals("")){
-            var goal = new Goal(goalText, null, false, -1);
+            var goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown());
 
             activityModel.insertIncompleteGoal(goal);
         }

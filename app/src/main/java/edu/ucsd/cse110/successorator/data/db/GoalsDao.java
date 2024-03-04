@@ -30,6 +30,9 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals ORDER BY sort_order")
     LiveData<List<GoalEntity>> findAllAsLiveData();
 
+    @Query("SELECT * FROM goals WHERE list_num = :listNum ORDER BY sort_order")
+    LiveData<List<GoalEntity>> findAllAsLiveData(int listNum);
+
     @Query("SELECT Count(*) FROM goals")
     int count();
     @Query("SELECT Min(sort_order) FROM goals")
@@ -55,7 +58,7 @@ public interface GoalsDao {
     default int prepend(GoalEntity goal){
         shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
         var newGoal = new GoalEntity(
-                goal.contents, getMinSortOrder()-1, goal.completed
+                goal.contents, getMinSortOrder()-1, goal.completed, goal.listNum
         );
         return Math.toIntExact(insert(newGoal));
     }
@@ -73,7 +76,7 @@ public interface GoalsDao {
         }
 
         GoalEntity gol = new GoalEntity(
-                goal.contents, incomp, goal.completed
+                goal.contents, incomp, goal.completed, goal.listNum
         );
         insert(gol);
     }

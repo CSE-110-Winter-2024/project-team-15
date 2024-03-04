@@ -34,6 +34,17 @@ public class RoomGoalRepository implements GoalRepository {
         });
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
+
+    public Subject<List<Goal>> findAll(int listNum){
+        var entitiesLiveData = goalsDao.findAllAsLiveData(listNum);
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities ->{
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
     public void save(Goal goal){
         goalsDao.insert(GoalEntity.fromGoal(goal));
     }
