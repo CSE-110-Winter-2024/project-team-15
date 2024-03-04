@@ -16,14 +16,19 @@ public class Goal {
     //will use this field for sorting in lists.
     //0 = today, 1 = tomorrow, 2 = pending, 3 = recurring
     private final int listNum;
+    private final String context;
 
     public Goal(@NonNull String contents, @Nullable Integer id,
-                @NonNull Boolean completed, int sortOrder, int listNum) {
+                @NonNull Boolean completed, int sortOrder, int listNum, String context) {
+
         this.contents = contents;
         this.id = id;
         this.completed = completed;
         this.sortOrder = sortOrder;
+
         this.listNum = listNum;
+        this.context = context;
+
     }
 
     public @NonNull String contents(){
@@ -40,16 +45,21 @@ public class Goal {
         return this.listNum;
     }
     public @NonNull Goal withId(@NonNull Integer id){
-        return new Goal(this.contents, id, this.completed, this.sortOrder, this.listNum);
+        return new Goal(this.contents, id, this.completed, this.sortOrder, this.listNum, this.context);
     }
     public @NonNull Goal withSortOrder(int sortOrder){
-        return new Goal(this.contents, this.id, this.completed, sortOrder, this.listNum);
+        return new Goal(this.contents, this.id, this.completed, sortOrder, this.listNum, this.context);
     }
     public @NonNull Goal withComplete(@NonNull Boolean completed){
-        return new Goal(this.contents, this.id, completed, this.sortOrder, this.listNum);
+        return new Goal(this.contents, this.id, completed, this.sortOrder, this.listNum, this.context);
     }
     public @NonNull Goal withListNum(int listNum){
-        return new Goal(this.contents, this.id, completed, this.sortOrder, listNum);
+        return new Goal(this.contents, this.id, completed, this.sortOrder, listNum, this.context);
+    }
+
+    public @NonNull Goal withContext(String context){
+        return new Goal(this.contents, this.id, this.completed, this.sortOrder,this.listNum, context);
+
     }
 
 //    public @NonNull Goal copiedGoal(){

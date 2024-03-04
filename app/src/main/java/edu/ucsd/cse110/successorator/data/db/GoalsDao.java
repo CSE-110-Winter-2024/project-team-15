@@ -58,7 +58,11 @@ public interface GoalsDao {
     default int prepend(GoalEntity goal){
         shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
         var newGoal = new GoalEntity(
+<<<<<<< HEAD
                 goal.contents, getMinSortOrder()-1, goal.completed, goal.listNum
+=======
+                goal.contents, getMinSortOrder()-1, goal.completed, goal.context
+>>>>>>> 11039fe (US5-task 2)
         );
         return Math.toIntExact(insert(newGoal));
     }
@@ -76,7 +80,11 @@ public interface GoalsDao {
         }
 
         GoalEntity gol = new GoalEntity(
+<<<<<<< HEAD
                 goal.contents, incomp, goal.completed, goal.listNum
+=======
+                goal.contents, incomp, goal.completed, goal.context
+>>>>>>> 11039fe (US5-task 2)
         );
         insert(gol);
     }
@@ -97,4 +105,8 @@ public interface GoalsDao {
     void delete(int id);
     @Query("DELETE FROM goals WHERE completed = true")
     void clearCompletedGoals();
+
+    @Query("SELECT context FROM goal WHERE id = :id")
+    String getContext(int id);
+
 }
