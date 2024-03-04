@@ -2,6 +2,8 @@ package edu.ucsd.cse110.successorator.lib.domain;
 
 import static junit.framework.TestCase.assertEquals;
 
+import static org.junit.Assert.assertNotEquals;
+
 import org.junit.Test;
 
 import java.util.List;
@@ -456,5 +458,40 @@ public class SimpleGoalRepositoryTest {
         assertEquals(expected4, actual4);
 
     }
+
+
+    @Test
+    public void findAllViewTest() {
+        // Given a repository
+        InMemoryDataSource testMemoryDataSource = new InMemoryDataSource();
+        SimpleGoalRepository testRepository = new SimpleGoalRepository(testMemoryDataSource);
+        int listNum;
+
+        // When goals are added to two different views
+        listNum = 0; // For example, and goals for "today"
+        List<Goal> expectedGoals0 = List.of(new Goal("Today Goal 1", 3, false, 3, listNum),
+                new Goal("Today Goal 2", 4, true, 4, listNum));
+
+        listNum = 1; // For example, goals for "tomorrow"
+        List<Goal> expectedGoals1 = List.of(new Goal("Tomorrow Goal 1", 3, false, 3, listNum),
+                new Goal("Tomorrow Goal 2", 4, true, 4, listNum));
+
+        testRepository.save(expectedGoals0);
+        testRepository.save(expectedGoals1);
+
+
+        // When I get all the goals for the tomorrow view
+        List<Goal> actualGoals = testRepository.findAll(listNum).getValue();
+
+
+        // Then all goals in the tomorrow view should show up
+        assertEquals(expectedGoals1, actualGoals);
+
+        // And no goals from the today view
+        assertNotEquals(expectedGoals0, actualGoals);
+
+    }
+
+
 
 }
