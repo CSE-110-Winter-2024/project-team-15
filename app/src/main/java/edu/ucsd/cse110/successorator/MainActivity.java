@@ -15,6 +15,7 @@ import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
+import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateRecurringGoalDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.SwitchViewDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -75,8 +76,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         if (item.getItemId() == R.id.action_bar_menu_swap_views) {
 
-            var dialogFragment = CreateGoalDialogFragment.newInstance();
-            dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");
+            if (ViewNumInfo.getInstance().getValue().getListShown() == 3) {
+                var dialogFragment = CreateRecurringGoalDialogFragment.newInstance();
+                dialogFragment.show(getSupportFragmentManager(), "idk yet");
+            } else {var dialogFragment = CreateGoalDialogFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");}
 
         } else if (item.getItemId() == R.id.action_bar_menu_forward_day){
             // 1. update the DateTracker object within the subject
