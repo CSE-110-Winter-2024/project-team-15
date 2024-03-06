@@ -85,7 +85,9 @@ public class SimpleDateTracker implements DateTracker {
         Calendar tempCalendar = (Calendar) calendar.clone();
         tempCalendar.add(Calendar.DATE, 1);
 
-        return tempCalendar.getTime().getDate();
+        //return tempCalendar.getTime().getDate();
+        int date = tempCalendar.get(Calendar.DATE);
+        return date;
     }
 
     public int getNextDateMonthOfYear() {
@@ -93,21 +95,28 @@ public class SimpleDateTracker implements DateTracker {
         Calendar tempCalendar = (Calendar) calendar.clone();
         tempCalendar.add(Calendar.DATE, 1);
 
-        return tempCalendar.getTime().getMonth();
+        //return tempCalendar.getTime().getMonth();
+        int month = tempCalendar.get(Calendar.MONTH);
+        // months start at 0
+        return month +1;
     }
     public int getNextDateYear() {
 
         Calendar tempCalendar = (Calendar) calendar.clone();
         tempCalendar.add(Calendar.DATE, 1);
 
-        return tempCalendar.getTime().getYear();
+        //return tempCalendar.getTime().getYear();
+        int year = tempCalendar.get(Calendar.YEAR);
+        return year;
     }
     public int getNextDateDayOfWeek() {
 
         Calendar tempCalendar = (Calendar) calendar.clone();
         tempCalendar.add(Calendar.DATE, 1);
 
-        return tempCalendar.getTime().getDay();
+        //return tempCalendar.getTime().getDay();
+        int day = tempCalendar.get(Calendar.DAY_OF_MONTH);
+        return day;
     }
 
     @Override

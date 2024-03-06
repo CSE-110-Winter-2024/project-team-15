@@ -57,10 +57,14 @@ public class Goal {
         this.completed = completed;
         this.sortOrder = sortOrder;
         this.listNum = listNum;
+
         this.recurrenceType = recurrenceType;
+
+        // do we really need starting though
         this.dayStarting = dayStarting;
         this.monthStarting = monthStarting;
         this.yearStarting = yearStarting;
+
         this.dayOfWeekToRecur = dayOfWeekToRecur;
         this.weekOfMonthToRecur = weekOfMonthToRecur;
         this.overflowFlag = overflowFlag;
@@ -80,9 +84,11 @@ public class Goal {
     public int listNum() {
         return this.listNum;
     }
+
     public int recurrenceType() {
         return this.recurrenceType;
     }
+
     public int dayStarting() {
         return this.dayStarting;
     }
@@ -90,6 +96,7 @@ public class Goal {
     public int yearStarting() {
         return this.yearStarting;
     }
+
     public int dayOfWeekToRecur() {
         return this.dayOfWeekToRecur;
     }

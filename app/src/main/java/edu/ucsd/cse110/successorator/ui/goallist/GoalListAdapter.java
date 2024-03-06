@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import edu.ucsd.cse110.successorator.ViewNumInfo;
 import edu.ucsd.cse110.successorator.databinding.ListItemGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 //import edu.ucsd.cse110.successorator.R;
@@ -53,7 +54,11 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         }
 
         // populate view with goal data
-        binding.goalText.setText(goal.contents());
+        if(ViewNumInfo.getInstance().getValue().getListShown() == 3) {
+            binding.goalText.setText(goal.contents()  + ", ");
+        } else {
+            binding.goalText.setText(goal.contents());
+        }
 
         if (goal.completed()) {//US7 adding strikethrough
             var drawable = strikethroughSupplier.get();

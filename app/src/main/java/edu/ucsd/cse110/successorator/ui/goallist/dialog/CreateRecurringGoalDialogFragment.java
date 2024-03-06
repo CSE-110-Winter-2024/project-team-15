@@ -80,13 +80,16 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
         //four digits
         var yearCreated = view.datePicker.getYear();
 
+        // needs fixing but i do later
         int weekOfMonthToRecur = ((int)dayCreated / 7) + 1;
 
+        // needs review
         Date selectedDate = new Date(yearCreated, monthCreated, dayCreated);
         Calendar dayOfWeekFinder = Calendar.getInstance();
         dayOfWeekFinder.setTime(selectedDate);
         int dayOfWeekToRecur = dayOfWeekFinder.get(Calendar.DAY_OF_WEEK);
         //need to use calender here to get dayOfWeekToRecur
+
 
         if(!goalText.equals("")){
             //recurrenceType unused as goals do not have that field yet
