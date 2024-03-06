@@ -44,6 +44,9 @@ public class Goal {
     public int listNum() {
         return this.listNum;
     }
+    public String context() {
+        return this.context;
+    }
     public @NonNull Goal withId(@NonNull Integer id){
         return new Goal(this.contents, id, this.completed, this.sortOrder, this.listNum, this.context);
     }

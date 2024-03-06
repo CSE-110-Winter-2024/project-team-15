@@ -107,6 +107,4 @@ public class SimpleGoalRepository implements GoalRepository {
 
     }
     */
-
-
 }

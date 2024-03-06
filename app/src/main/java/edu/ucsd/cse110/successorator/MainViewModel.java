@@ -157,7 +157,7 @@ public class MainViewModel extends ViewModel {
         //    to fix this, we can just observe the list number, but since this works and we
         //    have deadlines it's fine to keep it this way. let's just review later
         //    \ '-' /
-        goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5));
+        goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5, "Home"));
         goalRepository.remove(Integer.MAX_VALUE);
 
     }

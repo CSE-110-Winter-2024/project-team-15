@@ -74,4 +74,5 @@ public class RoomGoalRepository implements GoalRepository {
     public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
 
     public String getContext(int id){ return goalsDao.getContext(id); }
+
 }

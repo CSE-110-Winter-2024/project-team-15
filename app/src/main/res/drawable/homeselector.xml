@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:state_checked="true"
+        android:drawable="@drawable/hometrue"/>
+    <!--        android:backgroundTint="#56AEF4"-->
+
+
+    <item
+        android:state_checked="false"
+        android:drawable="@drawable/homefalse"/>
+    <!--        android:backgroundTint="#EDDB35"-->
+
+
+
+</selector>
+    <!--How to let the user know the button is clicked when we set button to null-->
+    <!--    https://stackoverflow.com/questions/3576507/is-it-possible-to-change-the-radio-button-icon-in-an-android-radio-button-group-->
+    <!--    https://stackoverflow.com/questions/12432553/how-to-use-apply-a-custom-drawable-to-radiobutton-->

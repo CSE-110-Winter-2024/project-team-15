@@ -55,9 +55,25 @@ public class CreateGoalDialogFragment extends DialogFragment {
     private void onPositiveButtonClick(DialogInterface dialog, int i) {
 
         var goalText = view.goalNameEditText.getText().toString();
-
         if(!goalText.equals("")){
-            var goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown());
+            String contextToAdd = "";
+            if (view.homeContextButton.isChecked()){
+                contextToAdd = "Home";
+            }else if (view.workContextButton.isChecked()) {
+                contextToAdd = "Work";
+            }else if (view.schoolContextButton.isChecked()) {
+                contextToAdd = "School";
+            }else if(view.errandContextButton.isChecked()){
+                contextToAdd = "Errand";
+
+            }else{
+                throw new IllegalStateException("No radio button is checked");
+            }
+
+
+
+                //if(buttonName = whatever context -> chnage contexttoAdd to that context;
+            var goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown(), contextToAdd);
 
             activityModel.insertIncompleteGoal(goal);
         }
