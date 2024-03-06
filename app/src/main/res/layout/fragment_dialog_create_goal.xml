@@ -31,7 +31,8 @@
             android:id="@+id/homeContextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/homeselector"
+            android:background="@drawable/circle"
+            android:backgroundTint="@drawable/homebackground"
             android:button="@null"
             android:foreground="@drawable/homecontext" />
 <!--            android:backgroundTint="@drawable/styles"-->
@@ -42,9 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/circle"
-            android:backgroundTint="#56AEF4"
+            android:backgroundTint="@drawable/workbackground"
             android:button="@null"
-            android:buttonTint="#FFE500"
             android:foreground="@drawable/workcontext" />
 
         <RadioButton
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/circle"
-            android:backgroundTint="#956AE1"
+            android:backgroundTint="@drawable/schoolbackground"
             android:button="@null"
             android:foreground="@drawable/schoolcontext" />
 
@@ -61,9 +61,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/circle"
-            android:backgroundTint="#6AE46F"
+            android:backgroundTint="@drawable/errandsbackground"
             android:button="@null"
-            android:buttonTint="#FFE500"
             android:foreground="@drawable/errandscontext" />
     </RadioGroup>
 
