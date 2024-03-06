@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateRecurringGoalBinding;
@@ -70,20 +73,26 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
 
         //characteristics of data commented after testing
         //selected value
+        //something strange going on
         var dayCreated = view.datePicker.getDayOfMonth();
         //january = 0
         var monthCreated  = view.datePicker.getMonth();
         //four digits
         var yearCreated = view.datePicker.getYear();
 
+        int weekOfMonthToRecur = ((int)dayCreated / 7) + 1;
 
-        //need to use calender here to get dayOfWeek and then math for weekOfMonth
+        Date selectedDate = new Date(yearCreated, monthCreated, dayCreated);
+        Calendar dayOfWeekFinder = Calendar.getInstance();
+        dayOfWeekFinder.setTime(selectedDate);
+        int dayOfWeekToRecur = dayOfWeekFinder.get(Calendar.DAY_OF_WEEK);
+        //need to use calender here to get dayOfWeekToRecur
 
         if(!goalText.equals("")){
-            //momentarily using datetext to know how to parse
             //recurrenceType unused as goals do not have that field yet
             var goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown());
-
+            goal = goal.withRecurrenceData(recurrenceType, dayCreated, monthCreated, yearCreated,
+                    dayOfWeekToRecur, weekOfMonthToRecur, false);
 
 
             activityModel.insertIncompleteGoal(goal);

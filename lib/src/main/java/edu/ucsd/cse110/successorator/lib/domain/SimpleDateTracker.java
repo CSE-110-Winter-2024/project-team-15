@@ -80,6 +80,36 @@ public class SimpleDateTracker implements DateTracker {
         return hold;
     }
 
+    public int getNextDateDayOfMonth() {
+
+        Calendar tempCalendar = (Calendar) calendar.clone();
+        tempCalendar.add(Calendar.DATE, 1);
+
+        return tempCalendar.getTime().getDate();
+    }
+
+    public int getNextDateMonthOfYear() {
+
+        Calendar tempCalendar = (Calendar) calendar.clone();
+        tempCalendar.add(Calendar.DATE, 1);
+
+        return tempCalendar.getTime().getMonth();
+    }
+    public int getNextDateYear() {
+
+        Calendar tempCalendar = (Calendar) calendar.clone();
+        tempCalendar.add(Calendar.DATE, 1);
+
+        return tempCalendar.getTime().getYear();
+    }
+    public int getNextDateDayOfWeek() {
+
+        Calendar tempCalendar = (Calendar) calendar.clone();
+        tempCalendar.add(Calendar.DATE, 1);
+
+        return tempCalendar.getTime().getDay();
+    }
+
     @Override
     public void setForwardBy(Integer forwardBy) {
 

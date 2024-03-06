@@ -48,8 +48,17 @@ public interface GoalsDao {
     Integer getMaxIncompleteSortOrder();
 
 
-    //I don't know if query update happens before or after method body, definitely need to test
-    //also unsure if it matters as long as both happen now
+    @Query("SELECT contents FROM goals WHERE recurrence_type = 1 AND " +
+            "(((372 * :year)+(31 * :month)+(:day)) >= " +
+            "((372 * year_starting)+(31 * month_starting)+(day_starting)))")
+    List<String> getStartedDailyGoals(int day, int month, int year);
+
+    @Query("SELECT contents FROM goals WHERE recurrence_type = 2 AND " +
+            "(((372 * :year)+(31 * :month)+(:day)) >= " +
+            "((372 * year_starting)+(31 * month_starting)+(day_starting)))" +
+            "AND (day_of_week_to_recur == :todayOfWeek)")
+    List<String> getStartedWeeklyGoalsForToday(int day, int month, int year, int todayOfWeek);
+
     @Query("UPDATE goals SET sort_order = sort_order + 1 " +
             "WHERE completed = true")
     void shiftCompletedSortOrders();
@@ -58,7 +67,9 @@ public interface GoalsDao {
     default int prepend(GoalEntity goal){
         shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
         var newGoal = new GoalEntity(
-                goal.contents, getMinSortOrder()-1, goal.completed, goal.listNum
+                goal.contents, getMinSortOrder()-1, goal.completed, goal.listNum,
+                goal.recurrenceType, goal.dayStarting, goal.monthStarting, goal.yearStarting,
+                goal.dayOfWeekToRecur, goal.weekOfMonthToRecur, goal.overflowFlag
         );
         return Math.toIntExact(insert(newGoal));
     }
@@ -76,7 +87,9 @@ public interface GoalsDao {
         }
 
         GoalEntity gol = new GoalEntity(
-                goal.contents, incomp, goal.completed, goal.listNum
+                goal.contents, incomp, goal.completed, goal.listNum,
+                goal.recurrenceType, goal.dayStarting, goal.monthStarting, goal.yearStarting,
+                goal.dayOfWeekToRecur, goal.weekOfMonthToRecur, goal.overflowFlag
         );
         insert(gol);
     }

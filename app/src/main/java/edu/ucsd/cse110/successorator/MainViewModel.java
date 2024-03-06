@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
 
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -88,6 +89,16 @@ public class MainViewModel extends ViewModel {
             if(!goalRepository.getLastUpdated().equals(timeChange.getDate()) && timeChange.getHour()>=2) {
                 goalRepository.setLastUpdated(timeChange.getDate());
                 goalRepository.clearCompletedGoals();
+
+                int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
+                int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
+                int year = dateTracker.getValue().getNextDateYear();
+
+                //Saturday=1, Fri=7
+                int dayOfWeek = dateTracker.getValue().getNextDateDayOfWeek();
+                int weekOfMonth = (dayOfMonth / 7) + 1;
+
+                goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year, dayOfWeek, weekOfMonth);
             }
         });
     }
@@ -135,6 +146,7 @@ public class MainViewModel extends ViewModel {
         // shouldn't check date tracker in a clearing goals method
         if(!goalRepository.getLastUpdated().equals(rawDateTracker.getDate()) && rawDateTracker.getHour()>=2) {
             goalRepository.setLastUpdated(rawDateTracker.getDate());
+
             goalRepository.clearCompletedGoals();
         }
         rawDateTracker.update();

@@ -60,6 +60,26 @@ public class RoomGoalRepository implements GoalRepository {
     public void insertUnderIncompleteGoals(Goal goal){
         goalsDao.insertUnderIncompleteGoals(GoalEntity.fromGoal(goal));
     }
+    public void addDaylies(int day, int month, int year){
+        var goalContents = goalsDao.getStartedDailyGoals(day, month, year);
+        for(String title: goalContents){
+            Goal toAdd = new Goal(title, null, false, -1, 1);
+            this.insertUnderIncompleteGoals(toAdd);
+
+        }
+    }
+    public void addWeeklies(int day, int month, int year, int dayOfWeek){
+        var goalContents = goalsDao.getStartedWeeklyGoalsForToday(day, month, year, dayOfWeek);
+        for(String title: goalContents){
+            Goal toAdd = new Goal(title, null, false, -1, 1);
+            this.insertUnderIncompleteGoals(toAdd);
+
+        }
+    }
+    public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek, int weekOfMonth){
+        addDaylies(day, month, year);
+        addWeeklies(day, month, year, dayOfWeek);
+    }
     public void toggleCompleteGoal(Goal goal){
         goalsDao.toggleCompleteGoal(goal);
     }

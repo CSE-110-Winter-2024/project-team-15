@@ -100,6 +100,19 @@ public class SimpleGoalRepository implements GoalRepository {
                     }
                 });
     }
+
+
+    //don't know if these should even be implemented
+    public void addDaylies(int day, int month, int year){
+
+    }
+    public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek, int weekOfMonth){
+
+    }
+    public void addWeeklies(int day, int month, int year, int dayOfWeek){
+
+    }
+
     /*
     commenting out until I'm sure I either do or dont need this
     @Override
