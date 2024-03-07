@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.GoalBuilder;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
+import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.util.LiveDataSubjectAdapter;
 
@@ -105,5 +107,36 @@ public class RoomGoalRepository implements GoalRepository {
 
     public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
 
-
+    public void refreshRecurrence(){
+        var entitiesLiveData = goalsDao.findAllWithRecurrenceLiveData();
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .filter(goal -> {
+                        Goal incrGoal = increment(goal);
+                        return SimpleDateTracker.getInstance().getValue().compareGoalToToday(goal);
+                    })
+//                    .peek(goal -> {
+//                        Goal toAdd = new GoalBuilder()
+//                        prepend(goal);
+//
+//                    })
+                    .collect(Collectors.toList());
+        });
+    }
+    private Goal increment(Goal goal){
+        GoalBuilder builder = new GoalBuilder().withDefault(goal);
+        switch(goal.recurrenceType()){
+            case 1: builder.addDays(1);  break;
+            case 2: builder.addWeeks(1); break;
+            case 3: builder.addMonths(1); break;
+            case 4: builder.addYear(1); break;
+            // this shouldn't happen but if it does...
+            default: throw new IllegalArgumentException();
+        }
+        return builder.build();
+    }
+//    private boolean compareDates(Goal goal1, Goal goal2){
+//
+//    }
 }

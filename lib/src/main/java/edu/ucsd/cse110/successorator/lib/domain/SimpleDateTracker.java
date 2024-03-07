@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 
@@ -126,5 +127,34 @@ public class SimpleDateTracker implements DateTracker {
             this.forwardBy = forwardBy;
         }
 
+    }
+    public static Calendar goalRepresentation(Goal goal){
+        Calendar ins = (Calendar) Calendar.getInstance().clone();
+        ins.set(Calendar.MONTH, goal.monthStarting());
+        ins.set(Calendar.YEAR, goal.yearStarting());
+        ins.set(Calendar.DAY_OF_MONTH, 1);
+        ins.set(Calendar.DAY_OF_WEEK, goalToCalDay(goal.dayOfWeekToRecur()));
+        ins.add(Calendar.WEEK_OF_MONTH, goal.weekOfMonthToRecur() - 1);
+        return ins;
+    }
+    // TRUE iff goal1 comes after goal2 or they are the same time
+    public static boolean compareGoals(Goal goal1, Goal goal2){
+        return goalRepresentation(goal1).compareTo(goalRepresentation(goal2)) >= 0;
+    }
+    // TRUE iff goal comes after today or is today
+    public boolean compareGoalToToday(Goal goal){
+        return goalRepresentation(goal).compareTo(this.calendar) >= 0;
+    }
+    private static int goalToCalDay(int day){
+        switch(day){
+            case 0: return Calendar.SUNDAY;
+            case 1: return Calendar.MONDAY;
+            case 2: return Calendar.TUESDAY;
+            case 3: return Calendar.WEDNESDAY;
+            case 4: return Calendar.THURSDAY;
+            case 5: return Calendar.FRIDAY;
+            case 6: return Calendar.SATURDAY;
+            default: throw new IllegalArgumentException();
+        }
     }
 }
