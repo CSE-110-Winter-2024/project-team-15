@@ -90,15 +90,22 @@ public class MainViewModel extends ViewModel {
                 goalRepository.setLastUpdated(timeChange.getDate());
                 goalRepository.clearCompletedGoals();
 
-                int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
-                int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
-                int year = dateTracker.getValue().getNextDateYear();
+//                int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
+//                int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
+//                int year = dateTracker.getValue().getNextDateYear();
+//
+//                //Saturday=1, Fri=7
+//                int dayOfWeek = dateTracker.getValue().getNextDateDayOfWeek();
+//                int weekOfMonth = (dayOfMonth / 7) + 1;
 
-                //Saturday=1, Fri=7
-                int dayOfWeek = dateTracker.getValue().getNextDateDayOfWeek();
-                int weekOfMonth = (dayOfMonth / 7) + 1;
+                //goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year, dayOfWeek, weekOfMonth);
 
-                goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year, dayOfWeek, weekOfMonth);
+                //get list of recurring goals
+                //filter out all the ones that aren't supposed to be refreshed
+                //add copies of the remaining recurring goals to the tomorrow view (without recurrence)
+                //update the remaining recurring goals with the next date of recurrence
+                goalRepository.refreshRecurrence();
+
             }
         });
     }

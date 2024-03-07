@@ -107,6 +107,10 @@ public class RoomGoalRepository implements GoalRepository {
 
     public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
 
+    //get list of recurring goals
+    //filter out all the ones that aren't supposed to be refreshed
+    //add copies of the remaining recurring goals to the tomorrow view (without recurrence)
+    //update the remaining recurring goals with the next date of recurrence
     public void refreshRecurrence(){
         var entitiesLiveData = goalsDao.findAllWithRecurrenceLiveData();
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
@@ -134,6 +138,7 @@ public class RoomGoalRepository implements GoalRepository {
         // update newRecurringGoals
         save(newRecurringGoals);
     }
+
     private Goal increment(Goal goal){
         GoalBuilder builder = new GoalBuilder().withDefault(goal);
         switch(goal.recurrenceType()){

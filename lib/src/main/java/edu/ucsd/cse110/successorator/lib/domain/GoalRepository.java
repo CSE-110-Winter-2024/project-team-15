@@ -36,9 +36,11 @@ public interface GoalRepository {
     void clearCompletedGoals();
     void setLastUpdated(String lastUpdated);
 
-    public void addDaylies(int day, int month, int year);
-    public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek, int weekOfMonth);
-    public void addWeeklies(int day, int month, int year, int dayOfWeek);
+    void refreshRecurrence();
+
+    void addDaylies(int day, int month, int year);
+    void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek, int weekOfMonth);
+    void addWeeklies(int day, int month, int year, int dayOfWeek);
 
     String getLastUpdated();
 
