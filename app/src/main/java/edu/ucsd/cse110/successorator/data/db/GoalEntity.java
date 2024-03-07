@@ -24,14 +24,14 @@ public class GoalEntity {
     public boolean completed;
 
     @ColumnInfo(name = "context")
-    public String context;
+    public int context;
 
     @ColumnInfo(name = "list_num")
     public int listNum;
 
 
 
-    GoalEntity(@NonNull String contents, int sortOrder, boolean completed, int listNum, String context){
+    GoalEntity(@NonNull String contents, int sortOrder, boolean completed, int listNum, int context){
         this.contents = contents;
         this.sortOrder = sortOrder;
         this.completed = completed;
@@ -44,6 +44,7 @@ public class GoalEntity {
         return gol;
     }
     public @NonNull Goal toGoal(){
+
         return new Goal(contents, id, completed, sortOrder, listNum, context);
     }
 }

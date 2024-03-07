@@ -37,8 +37,8 @@ public class MainViewModelTest {
     @Test
     public void getNoGoalsFalse(){
         List<Goal> testGoals = List.of(
-                new Goal("get food",0, false, 0,0 , "Errand"),
-                new Goal("get kids", 1, false, 1,0, "Errand")
+                new Goal("get food",0, false, 0,0 , 3),
+                new Goal("get kids", 1, false, 1,0, 3)
         );
         var dataSource = new InMemoryDataSource();
         for (Goal goal : testGoals) {
@@ -55,7 +55,7 @@ public class MainViewModelTest {
     @Test
     public void completedOne() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0,0, "School")
+                new Goal("Prepare for the midterm", 0, false, 0,0, 2)
 //             new Goal("This Massive Wall Of Text Goes On And On For All Eternity Or At Least Until It gets Off THe Screen In which Case You Will Stop Seeing It At All", 4)
         );
         var dataSource = new InMemoryDataSource();
@@ -74,10 +74,10 @@ public class MainViewModelTest {
     @Test
     public void completedMultiple() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0,0, "School"),
-                new Goal("Grocery shopping", 1, false, 1,0, "Errand"),
-                new Goal("Make dinner", 2, false, 2,0, "Home"),
-                new Goal("Text Maria", 3, false, 3,0, "Errand")
+                new Goal("Prepare for the midterm", 0, false, 0,0, 2),
+                new Goal("Grocery shopping", 1, false, 1,0, 3),
+                new Goal("Make dinner", 2, false, 2,0, 0),
+                new Goal("Text Maria", 3, false, 3,0, 3)
 //
         );
         var dataSource = new InMemoryDataSource();
@@ -100,10 +100,10 @@ public class MainViewModelTest {
     @Test
     public void uncompletedDoubleToggle() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0,0, "School"),
-                new Goal("Grocery shopping", 1, false, 1,0, "Errand"),
-                new Goal("Make dinner", 2, false, 2,0, "Home"),
-                new Goal("Text Maria", 3, false, 3,0, "Errand")
+                new Goal("Prepare for the midterm", 0, false, 0,0, 2),
+                new Goal("Grocery shopping", 1, false, 1,0, 3),
+                new Goal("Make dinner", 2, false, 2,0, 0),
+                new Goal("Text Maria", 3, false, 3,0, 3)
 //
         );
         var dataSource = new InMemoryDataSource();
@@ -120,13 +120,15 @@ public class MainViewModelTest {
         Assert.assertEquals(expected, actual);
     }
 
+
+    //why broken?
     @Test
     public void uncompletedSingleToggle() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0,0, "School"),
-                new Goal("Grocery shopping", 1, false, 1,0, "Errand"),
-                new Goal("Make dinner", 2, false, 2,0, "Home"),
-                new Goal("Text Maria", 3, false, 3,0, "Errand")
+                new Goal("Prepare for the midterm", 0, false, 0,0, 0),
+                new Goal("Grocery shopping", 1, false, 1,0, 3),
+                new Goal("Make dinner", 2, false, 2,0, 0),
+                new Goal("Text Maria", 3, false, 3,0, 3)
 //
         );
         var dataSource = new InMemoryDataSource();

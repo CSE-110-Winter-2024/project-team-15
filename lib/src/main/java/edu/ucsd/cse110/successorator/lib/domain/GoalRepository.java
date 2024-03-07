@@ -22,6 +22,8 @@ public interface GoalRepository {
 
     void insertUnderIncompleteGoals(Goal goal);
 
+    public void insertUnderIncompleteGoalsWithContext(Goal goal);
+
 // Keeping these just in case it's necessary for me to separate toggleCompleteGoal into them
 // The code for them is in a previous commit around 6pm 2/15, titled "in progress tests part 1"
 // They were merged into toggleCompleteGoal

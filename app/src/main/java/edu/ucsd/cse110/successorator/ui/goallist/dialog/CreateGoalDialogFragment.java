@@ -56,15 +56,15 @@ public class CreateGoalDialogFragment extends DialogFragment {
 
         var goalText = view.goalNameEditText.getText().toString();
         if(!goalText.equals("")){
-            String contextToAdd = "";
+            int contextToAdd = 0;
             if (view.homeContextButton.isChecked()){
-                contextToAdd = "Home";
+                contextToAdd = 0;
             }else if (view.workContextButton.isChecked()) {
-                contextToAdd = "Work";
+                contextToAdd = 1;
             }else if (view.schoolContextButton.isChecked()) {
-                contextToAdd = "School";
+                contextToAdd = 2;
             }else if(view.errandContextButton.isChecked()){
-                contextToAdd = "Errand";
+                contextToAdd = 3;
 
             }else{
                 throw new IllegalStateException("No radio button is checked");

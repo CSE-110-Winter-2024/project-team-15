@@ -57,8 +57,14 @@ public class RoomGoalRepository implements GoalRepository {
     public void prepend(Goal goal){
         goalsDao.prepend(GoalEntity.fromGoal(goal));
     }
+
+    //method should probably be deprecated
     public void insertUnderIncompleteGoals(Goal goal){
         goalsDao.insertUnderIncompleteGoals(GoalEntity.fromGoal(goal));
+    }
+
+    public void insertUnderIncompleteGoalsWithContext(Goal goal){
+        goalsDao.insertUnderIncompleteGoalsWithContext(GoalEntity.fromGoal(goal));
     }
     public void toggleCompleteGoal(Goal goal){
         goalsDao.toggleCompleteGoal(goal);
@@ -73,6 +79,6 @@ public class RoomGoalRepository implements GoalRepository {
 
     public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
 
-    public String getContext(int id){ return goalsDao.getContext(id); }
+    public int getContext(int id){ return goalsDao.getContext(id); }
 
 }

@@ -196,10 +196,10 @@ public class InMemoryDataSource {
     }
     //edited to have list 0
     public final static List<Goal> DEFAULT_GOALS = List.of(
-            new Goal("Prepare for the midterm", 0, false, 0, 0, "School"),
-            new Goal("Grocery shopping", 1, false, 1, 0, "Errand"),
-            new Goal("Make dinner", 2, false, 2, 0, "Home"),
-            new Goal("Text Maria", 3, false, 3, 0, "Errand")
+            new Goal("Prepare for the midterm", 0, false, 0, 0, 2),
+            new Goal("Grocery shopping", 1, false, 1, 0, 3),
+            new Goal("Make dinner", 2, false, 2, 0, 0),
+            new Goal("Text Maria", 3, false, 3, 0, 3)
 //             new Goal("This Massive Wall Of Text Goes On And On For All Eternity Or At Least Until It gets Off THe Screen In which Case You Will Stop Seeing It At All", 4)
     );
 

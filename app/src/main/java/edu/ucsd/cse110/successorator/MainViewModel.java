@@ -124,7 +124,9 @@ public class MainViewModel extends ViewModel {
     //Ethan blurb
     // we're also going to need to add this to a viewModelTest - Keren
     public void insertIncompleteGoal(Goal goal) {
-        goalRepository.insertUnderIncompleteGoals(goal);
+        //changed this method rather than making a new one since this is now always the desired
+        //behaviour of inserting an Incomplete Goal to my knowledge
+        goalRepository.insertUnderIncompleteGoalsWithContext(goal);
     }
 
     public void clearCompletedGoals() {
@@ -157,7 +159,7 @@ public class MainViewModel extends ViewModel {
         //    to fix this, we can just observe the list number, but since this works and we
         //    have deadlines it's fine to keep it this way. let's just review later
         //    \ '-' /
-        goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5, "Home"));
+        goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5, 0));
         goalRepository.remove(Integer.MAX_VALUE);
 
     }

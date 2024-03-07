@@ -16,10 +16,12 @@ public class Goal {
     //will use this field for sorting in lists.
     //0 = today, 1 = tomorrow, 2 = pending, 3 = recurring
     private final int listNum;
-    private final String context;
+
+    //0 = Home, 1 = Work, 2 = School, 3 = Errand
+    private final int context;
 
     public Goal(@NonNull String contents, @Nullable Integer id,
-                @NonNull Boolean completed, int sortOrder, int listNum, String context) {
+                @NonNull Boolean completed, int sortOrder, int listNum, int context) {
 
         this.contents = contents;
         this.id = id;
@@ -44,7 +46,7 @@ public class Goal {
     public int listNum() {
         return this.listNum;
     }
-    public String context() {
+    public int context() {
         return this.context;
     }
     public @NonNull Goal withId(@NonNull Integer id){
@@ -60,7 +62,7 @@ public class Goal {
         return new Goal(this.contents, this.id, completed, this.sortOrder, listNum, this.context);
     }
 
-    public @NonNull Goal withContext(String context){
+    public @NonNull Goal withContext(int context){
         return new Goal(this.contents, this.id, this.completed, this.sortOrder,this.listNum, context);
 
     }

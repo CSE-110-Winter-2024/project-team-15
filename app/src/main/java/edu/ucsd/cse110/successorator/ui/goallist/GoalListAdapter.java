@@ -77,19 +77,19 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         // populate view with goal data
         binding.goalText.setText(goal.contents());
 
-        if(goal.context().equals("Home")){
+        if(goal.context() == 0){
             binding.contextIcon.setImageDrawable(circleSupplier.get());
             binding.contextIcon.setForeground(homeContextSupplier.get());
             binding.contextIcon.setColorFilter(Color.parseColor("#EDDB35"));
-        }else if(goal.context().equals("Work")){
+        }else if(goal.context() == 1){
             binding.contextIcon.setImageDrawable(circleSupplier.get());
             binding.contextIcon.setForeground(workContextSupplier.get());
             binding.contextIcon.setColorFilter(Color.parseColor("#56AEF4"));
-        }else if(goal.context().equals("School")){
+        }else if(goal.context() == 2){
             binding.contextIcon.setImageDrawable(circleSupplier.get());
             binding.contextIcon.setForeground(schoolContextSupplier.get());
             binding.contextIcon.setColorFilter(Color.parseColor("#956AE1"));
-        }else if(goal.context().equals("Errand")){
+        }else if(goal.context() == 3){
             binding.contextIcon.setImageDrawable(circleSupplier.get());
             binding.contextIcon.setForeground(errandsContextSupplier.get());
             binding.contextIcon.setColorFilter(Color.parseColor("#6AE46F"));
