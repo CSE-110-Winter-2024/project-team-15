@@ -33,6 +33,10 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE list_num = :listNum ORDER BY sort_order")
     LiveData<List<GoalEntity>> findAllAsLiveData(int listNum);
 
+    // livedata since the used findall is livedata ... basically a subject right
+    @Query("SELECT * FROM goals WHERE recurrence_type != 0 AND list_num == 3")
+    LiveData<List<GoalEntity>> findAllWithRecurrenceLiveData();
+
     @Query("SELECT Count(*) FROM goals")
     int count();
     @Query("SELECT Min(sort_order) FROM goals")
@@ -110,4 +114,5 @@ public interface GoalsDao {
     void delete(int id);
     @Query("DELETE FROM goals WHERE completed = true")
     void clearCompletedGoals();
+
 }
