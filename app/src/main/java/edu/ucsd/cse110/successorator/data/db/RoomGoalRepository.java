@@ -76,9 +76,25 @@ public class RoomGoalRepository implements GoalRepository {
 
         }
     }
+    public void addMonthlies(int day, int month, int year, int dayOfWeek, int weekOfMonth){
+        var goalContents = goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, weekOfMonth);
+        //currently flags are never set.  will implement if this is how it stays
+        var flaggedGoalContents = goalsDao.getFlaggedMonthlyGoalsForToday(dayOfWeek);
+        for(String title: goalContents){
+            Goal toAdd = new Goal(title, null, false, -1, 1);
+            this.insertUnderIncompleteGoals(toAdd);
+        }
+        //dry violation
+        for(String title: flaggedGoalContents){
+            Goal toAdd = new Goal(title, null, false, -1, 1);
+            this.insertUnderIncompleteGoals(toAdd);
+        }
+        goalsDao.resetMonthlyOverflowFlagForToday(dayOfWeek);
+    }
     public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek, int weekOfMonth){
         addDaylies(day, month, year);
         addWeeklies(day, month, year, dayOfWeek);
+        addMonthlies(day, month, year, dayOfWeek, weekOfMonth);
     }
     public void toggleCompleteGoal(Goal goal){
         goalsDao.toggleCompleteGoal(goal);

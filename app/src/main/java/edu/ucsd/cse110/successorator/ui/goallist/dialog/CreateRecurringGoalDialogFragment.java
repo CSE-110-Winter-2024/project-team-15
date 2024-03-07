@@ -87,8 +87,11 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
         Date selectedDate = new Date(yearCreated, monthCreated, dayCreated);
         Calendar dayOfWeekFinder = Calendar.getInstance();
         dayOfWeekFinder.setTime(selectedDate);
+
+        //behaving incorrectly.  Thursday = 6 here and 7 in dateTracker's method.  no fix for now
         int dayOfWeekToRecur = dayOfWeekFinder.get(Calendar.DAY_OF_WEEK);
-        //need to use calender here to get dayOfWeekToRecur
+
+
 
 
         if(!goalText.equals("")){

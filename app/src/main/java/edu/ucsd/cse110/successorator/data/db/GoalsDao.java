@@ -59,9 +59,23 @@ public interface GoalsDao {
             "AND (day_of_week_to_recur == :todayOfWeek)")
     List<String> getStartedWeeklyGoalsForToday(int day, int month, int year, int todayOfWeek);
 
+    @Query("SELECT contents FROM goals WHERE recurrence_type = 3 AND " +
+            "(((372 * :year)+(31 * :month)+(:day)) >= " +
+            "((372 * year_starting)+(31 * month_starting)+(day_starting)))" +
+            "AND (day_of_week_to_recur == :todayOfWeek) AND week_of_month_to_recur ==:weekOfMonth")
+    List<String> getStartedMonthlyGoalsForToday(int day, int month, int year, int todayOfWeek, int weekOfMonth);
+
+    @Query("SELECT contents FROM goals WHERE recurrence_type = 3 AND overflow_flag " +
+            "AND day_of_week_to_recur == :todayOfWeek")
+    List<String> getFlaggedMonthlyGoalsForToday(int todayOfWeek);
+
     @Query("UPDATE goals SET sort_order = sort_order + 1 " +
             "WHERE completed = true")
     void shiftCompletedSortOrders();
+
+    @Query("UPDATE goals SET overflow_flag = false WHERE recurrence_type = 3 AND overflow_flag " +
+            "AND day_of_week_to_recur == :todayOfWeek")
+    void resetMonthlyOverflowFlagForToday(int todayOfWeek);
 
     @Transaction
     default int prepend(GoalEntity goal){

@@ -96,6 +96,9 @@ public class MainViewModel extends ViewModel {
 
                 //Saturday=1, Fri=7
                 int dayOfWeek = dateTracker.getValue().getNextDateDayOfWeek();
+
+
+
                 int weekOfMonth = (dayOfMonth / 7) + 1;
 
                 goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year, dayOfWeek, weekOfMonth);

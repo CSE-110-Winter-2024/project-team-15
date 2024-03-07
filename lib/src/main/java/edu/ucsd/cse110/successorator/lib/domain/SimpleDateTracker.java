@@ -98,7 +98,7 @@ public class SimpleDateTracker implements DateTracker {
         //return tempCalendar.getTime().getMonth();
         int month = tempCalendar.get(Calendar.MONTH);
         // months start at 0
-        return month +1;
+        return month;
     }
     public int getNextDateYear() {
 
@@ -115,7 +115,7 @@ public class SimpleDateTracker implements DateTracker {
         tempCalendar.add(Calendar.DATE, 1);
 
         //return tempCalendar.getTime().getDay();
-        int day = tempCalendar.get(Calendar.DAY_OF_MONTH);
+        int day = tempCalendar.get(Calendar.DAY_OF_WEEK);
         return day;
     }
 
