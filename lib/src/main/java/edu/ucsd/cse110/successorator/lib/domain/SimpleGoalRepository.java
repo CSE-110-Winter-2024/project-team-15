@@ -113,6 +113,7 @@ public class SimpleGoalRepository implements GoalRepository {
 
     }
 
+    public void refreshRecurrence(){}
     /*
     commenting out until I'm sure I either do or dont need this
     @Override
