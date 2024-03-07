@@ -55,7 +55,38 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         // populate view with goal data
         if(ViewNumInfo.getInstance().getValue().getListShown() == 3) {
-            binding.goalText.setText(goal.contents()  + ", ");
+            // not exactly OCP ...
+            // i apologize too. maybe ill make function later
+            int recurrenceForTitle = goal.recurrenceType();
+            String monthDay = goal.monthStarting() + "/" + goal.dayStarting();
+
+            //  TODO: FIX THIS INTO A FUNCTION OR SOMETHING
+            String dayStr = goal.dayOfWeekToRecurStr();          //sun, mon, etc
+            String weekStr = goal.weekOfMonthToRecurStrSuffix(); //1st 4th 8th etc
+            String recurType = goal.recurrenceTypeStr();         // daily weekly monthly yearly
+
+            switch (recurrenceForTitle) {
+                case 1:
+                    //recurType = "daily";
+                    binding.goalText.setText(goal.contents() + recurType);
+                    break;
+                case 2:
+                    //recurType = "weekly";
+                    binding.goalText.setText(goal.contents() + recurType + dayStr);
+                    break;
+                case 3:
+                    //recurType = "monthly";
+                    binding.goalText.setText(goal.contents() + recurType + weekStr + dayStr);
+                    break;
+                case 4:
+                    //recurType = "yearly";
+                    binding.goalText.setText(goal.contents() + ", yearly on " + monthDay);
+                    break;
+                default:
+                    binding.goalText.setText(goal.contents());
+                    break;
+            }
+
         } else {
             binding.goalText.setText(goal.contents());
         }

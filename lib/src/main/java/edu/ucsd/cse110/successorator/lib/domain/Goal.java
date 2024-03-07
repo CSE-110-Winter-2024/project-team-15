@@ -65,7 +65,7 @@ public class Goal {
         this.monthStarting = monthStarting;
         this.yearStarting = yearStarting;
 
-        this.dayOfWeekToRecur = dayOfWeekToRecur;
+        this.dayOfWeekToRecur = dayOfWeekToRecur; // Friday is 7, Saturday is 1
         this.weekOfMonthToRecur = weekOfMonthToRecur;
         this.overflowFlag = overflowFlag;
 
@@ -89,6 +89,29 @@ public class Goal {
         return this.recurrenceType;
     }
 
+    // frown all you want im not Not willing to change this
+    public String recurrenceTypeStr() {
+        String recurType;
+        switch (this.recurrenceType) {
+            case 1:
+                recurType = ", daily";
+                break;
+            case 2:
+                recurType = ", weekly on";
+                break;
+            case 3:
+                recurType = ", monthly ";
+                break;
+            case 4:
+                recurType = ", yearly on";
+                break;
+            default:
+                recurType = "";
+                break;
+        }
+        return recurType;
+    }
+
     public int dayStarting() {
         return this.dayStarting;
     }
@@ -100,9 +123,54 @@ public class Goal {
     public int dayOfWeekToRecur() {
         return this.dayOfWeekToRecur;
     }
+
+    // disgusting i know, sue me (dont really)
+    public String dayOfWeekToRecurStr() {
+        String dayStr;
+        // Convert dayNum to dayStr
+        switch (this.dayOfWeekToRecur) {
+            case 1:
+                dayStr = " Sat";
+                break;
+            case 2:
+                dayStr = " Sun";
+                break;
+            case 3:
+                dayStr = " Mon";
+                break;
+            case 4:
+                dayStr = " Tue";
+                break;
+            case 5:
+                dayStr = " Wed";
+                break;
+            case 6:
+                dayStr = " Thu";
+                break;
+            case 7:
+                dayStr = " Fri";
+                break;
+            default:
+                dayStr = "";
+                break;
+        }
+        return dayStr;
+    }
+
     public int weekOfMonthToRecur() {
         return this.weekOfMonthToRecur;
     }
+
+    // i've heard it all before
+    public String weekOfMonthToRecurStrSuffix() {
+        int weekNum = this.weekOfMonthToRecur;
+        String suffix = (weekNum == 1 || weekNum == 21 || weekNum == 31) ? "st" :
+                (weekNum == 2 || weekNum == 22) ? "nd" :
+                        (weekNum == 3 || weekNum == 23) ? "rd" : "th";
+
+        return (weekNum + suffix);
+    }
+
     public boolean overflowFlag() { return this.overflowFlag; }
 
     public @NonNull Goal withId(@NonNull Integer id){
