@@ -137,9 +137,9 @@ public class SimpleDateTracker implements DateTracker {
         ins.add(Calendar.WEEK_OF_MONTH, goal.weekOfMonthToRecur() - 1);
         return ins;
     }
-    // TRUE iff goal1 comes after goal2 or they are the same time
-    public static boolean compareGoals(Goal goal1, Goal goal2){
-        return goalRepresentation(goal1).compareTo(goalRepresentation(goal2)) >= 0;
+    // 1 iff goal1 comes after goal2 or they are the same time
+    public static int compareGoals(Goal goal1, Goal goal2){
+        return goalRepresentation(goal1).compareTo(goalRepresentation(goal2));
     }
     // TRUE iff goal comes after today or is today
     public boolean compareGoalToToday(Goal goal){

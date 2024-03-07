@@ -113,16 +113,26 @@ public class RoomGoalRepository implements GoalRepository {
             return entities.stream()
                     .map(GoalEntity::toGoal)
                     .filter(goal -> {
+                        // this compares to today
+                        // need to make it tomorrow
                         Goal incrGoal = increment(goal);
-                        return SimpleDateTracker.getInstance().getValue().compareGoalToToday(goal);
+                        return SimpleDateTracker.getInstance().getValue().
+                                compareGoalToToday(incrGoal);
                     })
-//                    .peek(goal -> {
-//                        Goal toAdd = new GoalBuilder()
-//                        prepend(goal);
-//
-//                    })
                     .collect(Collectors.toList());
         });
+        var toAdd = goalsLiveData.getValue().stream()
+                .map(goal -> goal.withoutRecurrence().withListNum(0))
+                .collect(Collectors.toList());
+        var newRecurringGoals = goalsLiveData.getValue().stream()
+                .map(this::increment)
+                .collect(Collectors.toList());
+        // add toAdd goals
+        toAdd.stream()
+                .sorted(SimpleDateTracker::compareGoals)
+                .peek(this::insertUnderIncompleteGoals);
+        // update newRecurringGoals
+        save(newRecurringGoals);
     }
     private Goal increment(Goal goal){
         GoalBuilder builder = new GoalBuilder().withDefault(goal);
