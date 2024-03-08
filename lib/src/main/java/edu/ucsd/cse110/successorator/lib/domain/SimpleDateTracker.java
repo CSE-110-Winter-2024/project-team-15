@@ -134,9 +134,39 @@ public class SimpleDateTracker implements DateTracker {
         ins.set(Calendar.YEAR, goal.yearStarting());
         ins.set(Calendar.DAY_OF_MONTH, 1);
         ins.set(Calendar.DAY_OF_WEEK, goalToCalDay(goal.dayOfWeekToRecur()));
-        ins.add(Calendar.WEEK_OF_MONTH, goal.weekOfMonthToRecur() - 1);
+        ins.add(Calendar.WEEK_OF_MONTH, goal.weekOfMonthToRecur());
         return ins;
     }
+
+//    // TEST CODE BEGIN UNSURE IF BETTER
+//    public static Calendar goalRepresentation(Goal goal) {
+//        Calendar ins = (Calendar) Calendar.getInstance().clone();
+//        ins.set(Calendar.YEAR, goal.yearStarting());
+//        ins.set(Calendar.MONTH, goal.monthStarting());
+//        ins.set(Calendar.DAY_OF_MONTH, 1);
+//
+//
+//        int occurrenceCount = 0;
+//        int targetOccurrence = goal.weekOfMonthToRecur();
+//        int targetDayOfWeek = goalToCalDay(goal.dayOfWeekToRecur());
+//
+//        while (occurrenceCount < targetOccurrence) {
+//            if (ins.get(Calendar.DAY_OF_WEEK) == targetDayOfWeek) {
+//                occurrenceCount++;
+//                if (occurrenceCount == targetOccurrence) {
+//
+//                    break;
+//                }
+//            }
+//            ins.add(Calendar.DAY_OF_MONTH, 1);
+//        }
+//
+//
+//        return ins;
+//    }
+//    // TEST CODE END
+
+
     // 1 iff goal1 comes after goal2 or they are the same time
     public static int compareGoals(Goal goal1, Goal goal2){
         return goalRepresentation(goal1).compareTo(goalRepresentation(goal2));
@@ -150,7 +180,7 @@ public class SimpleDateTracker implements DateTracker {
     public boolean compareGoalToTomorrow(Goal goal){
         Calendar ins = (Calendar) Calendar.getInstance().clone();
         ins.add(Calendar.DAY_OF_MONTH, 1);
-        return goalRepresentation(goal).compareTo(this.calendar) >= 0;
+        return goalRepresentation(goal).compareTo(ins) >= 0;
     }
 
     // may be slightly unnecessary

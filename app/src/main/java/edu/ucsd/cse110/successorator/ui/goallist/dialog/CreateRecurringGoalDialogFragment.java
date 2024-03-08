@@ -100,6 +100,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
         // now we can easily extract the day
         int dayOfWeekToRecur = ins.get(Calendar.DAY_OF_WEEK); // 1 is sat.
 
+
         // Now we need to extract the amount of times this dayOfWeek has appeared
         // since we want something like "3rd Tuesday" ..
         //
@@ -112,10 +113,25 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
         // amount of days between them
         //
         // dividing that by 7 gives us the amount of weeks between them
-        // Me when we r genius
         ins.set(Calendar.DAY_OF_MONTH, 1);
         ins.set(Calendar.DAY_OF_WEEK, dayOfWeekToRecur);
         int weekOfMonthToRecur = ((dayCreated - ins.get(Calendar.DAY_OF_MONTH)) / 7);
+
+
+//        // TEST CODE UNSURE IF BETTER
+//        ins.set(Calendar.DAY_OF_MONTH, 1);
+//
+//        int occurrenceCount = 0;
+//        while (ins.get(Calendar.DAY_OF_MONTH) <= dayCreated) {
+//            if (ins.get(Calendar.DAY_OF_WEEK) == dayOfWeekToRecur) {
+//                occurrenceCount++;
+//            }
+//
+//            ins.add(Calendar.DAY_OF_MONTH, 1);
+//        }
+//
+//        int weekOfMonthToRecur = occurrenceCount;
+//        // TEST CODE ENDS HERE
 
 
         if(!goalText.equals("")){
