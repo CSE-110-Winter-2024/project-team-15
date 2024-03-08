@@ -109,36 +109,48 @@ public class RoomGoalRepository implements GoalRepository {
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
 
-    //get list of recurring goals
-    //filter out all the ones that aren't supposed to be refreshed
-    //add copies of the remaining recurring goals to the tomorrow view (without recurrence)
-    //update the remaining recurring goals with the next date of recurrence
+    // get list of recurring goals
+    // filter out all the ones that aren't supposed to be refreshed
+    // add copies of the remaining recurring goals to the tomorrow view (without recurrence)
+    // update the remaining recurring goals with the next date of recurrence
     public void refreshRecurrence(){
+        var goalsLiveData = findAllRecurringTomorrow();
+
+        // the goals we want to add to tomorrow's view
+        var toAdd = goalsLiveData.getValue().stream()
+                .map(goal -> goal.withoutRecurrence().withListNum(1))
+                .collect(Collectors.toList());
+
+        // since we're going to add our recurring goals to tomorrow
+        // the next time they should recur needs to be adjusted
+        // to its next recurrence
+        var recurringDateAdjusted = goalsLiveData.getValue().stream()
+                .map(this::increment)
+                .collect(Collectors.toList());
+
+        // here we add the goals
+        toAdd.stream()
+                .sorted(SimpleDateTracker::compareGoals)
+                .peek(this::insertUnderIncompleteGoals);
+
+        // here we update the recurring goals
+        save(recurringDateAdjusted);
+    }
+
+
+    private LiveData<List<Goal>> findAllRecurringTomorrow() {
         var entitiesLiveData = goalsDao.findAllWithRecurrenceLiveData();
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(GoalEntity::toGoal)
                     .filter(goal -> {
-                        // this compares to today
-                        // need to make it tomorrow
                         Goal incrGoal = increment(goal);
                         return SimpleDateTracker.getInstance().getValue().
                                 compareGoalToTomorrow(incrGoal);
                     })
                     .collect(Collectors.toList());
         });
-        var toAdd = goalsLiveData.getValue().stream()
-                .map(goal -> goal.withoutRecurrence().withListNum(0))
-                .collect(Collectors.toList());
-        var newRecurringGoals = goalsLiveData.getValue().stream()
-                .map(this::increment)
-                .collect(Collectors.toList());
-        // add toAdd goals
-        toAdd.stream()
-                .sorted(SimpleDateTracker::compareGoals)
-                .peek(this::insertUnderIncompleteGoals);
-        // update newRecurringGoals
-        save(newRecurringGoals);
+        return goalsLiveData;
     }
 
     private Goal increment(Goal goal){
