@@ -96,6 +96,9 @@ public class RoomGoalRepository implements GoalRepository {
 
     public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
 
+    // need method to move goals from tomorrow to today
+
+
 
     // let's get recurring goals (from the recurring goals view of course)(see goalsdao)
     // transformation stuff stolen from findall of course
@@ -116,6 +119,11 @@ public class RoomGoalRepository implements GoalRepository {
     public void refreshRecurrence(){
         var goalsLiveData = findAllRecurringTomorrow();
 
+        // to avoid null exception
+        if (goalsLiveData.getValue() == null || goalsLiveData == null) {
+            return;
+        }
+
         // the goals we want to add to tomorrow's view
         var toAdd = goalsLiveData.getValue().stream()
                 .map(goal -> goal.withoutRecurrence().withListNum(1))
@@ -131,7 +139,7 @@ public class RoomGoalRepository implements GoalRepository {
         // here we add the goals
         toAdd.stream()
                 .sorted(SimpleDateTracker::compareGoals)
-                .peek(this::insertUnderIncompleteGoals);
+                .forEach(this::insertUnderIncompleteGoals);
 
         // here we update the recurring goals
         save(recurringDateAdjusted);
@@ -140,6 +148,10 @@ public class RoomGoalRepository implements GoalRepository {
 
     private LiveData<List<Goal>> findAllRecurringTomorrow() {
         var entitiesLiveData = goalsDao.findAllWithRecurrenceLiveData();
+
+        // to avoid null exception
+        if (entitiesLiveData == null) return null;
+
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(GoalEntity::toGoal)

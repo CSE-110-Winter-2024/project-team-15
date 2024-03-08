@@ -87,8 +87,11 @@ public class MainViewModel extends ViewModel {
             // completed goals
             // in case 2, it's redundant but not harmful.
             if(!goalRepository.getLastUpdated().equals(timeChange.getDate()) && timeChange.getHour()>=2) {
+                // get with the times old man
                 goalRepository.setLastUpdated(timeChange.getDate());
                 goalRepository.clearCompletedGoals();
+
+                // we need to do rollover here too
 
 //                int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
 //                int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
@@ -104,9 +107,12 @@ public class MainViewModel extends ViewModel {
                 //filter out all the ones that aren't supposed to be refreshed
                 //add copies of the remaining recurring goals to the tomorrow view (without recurrence)
                 //update the remaining recurring goals with the next date of recurrence
+
+                // adding recurrence to tmrw
                 goalRepository.refreshRecurrence();
 
             }
+
         });
     }
     public MutableSubject<List<Goal>> getOrderedGoals(){
