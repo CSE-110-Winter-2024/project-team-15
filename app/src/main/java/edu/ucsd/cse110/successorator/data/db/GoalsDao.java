@@ -34,8 +34,10 @@ public interface GoalsDao {
     LiveData<List<GoalEntity>> findAllAsLiveData(int listNum);
 
     // livedata since the used findall is livedata ... basically a subject right
-    @Query("SELECT * FROM goals WHERE recurrence_type != 0 AND list_num == 3")
+    @Query("SELECT * FROM goals WHERE recurrence_type > 0")
     LiveData<List<GoalEntity>> findAllWithRecurrenceLiveData();
+    @Query("SELECT * FROM goals WHERE recurrence_type > 0 AND list_num = 3")
+    List<GoalEntity> findAllWithRecurrence();
 
     @Query("SELECT Count(*) FROM goals")
     int count();

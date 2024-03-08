@@ -117,22 +117,20 @@ public class RoomGoalRepository implements GoalRepository {
     // add copies of the remaining recurring goals to the tomorrow view (without recurrence)
     // update the remaining recurring goals with the next date of recurrence
     public void refreshRecurrence(){
-        var goalsLiveData = findAllRecurringTomorrow();
+        var goals = getAllRecurringTomorrow();
 
         // to avoid null exception
-        if (goalsLiveData.getValue() == null || goalsLiveData == null) {
-            return;
-        }
+        if (goals == null) return;
 
         // the goals we want to add to tomorrow's view
-        var toAdd = goalsLiveData.getValue().stream()
+        var toAdd = goals.stream()
                 .map(goal -> goal.withoutRecurrence().withListNum(1))
                 .collect(Collectors.toList());
 
         // since we're going to add our recurring goals to tomorrow
         // the next time they should recur needs to be adjusted
         // to its next recurrence
-        var recurringDateAdjusted = goalsLiveData.getValue().stream()
+        var recurringDateAdjusted = goals.stream()
                 .map(this::increment)
                 .collect(Collectors.toList());
 
@@ -146,9 +144,18 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
 
+    private List<Goal> getAllRecurringTomorrow(){
+        return goalsDao.findAllWithRecurrence().stream()
+                .map(GoalEntity::toGoal)
+                .filter(goal -> {
+                    Goal incrGoal = increment(goal);
+                    return SimpleDateTracker.getInstance().getValue().
+                            compareGoalToTomorrow(incrGoal);
+                })
+                .collect(Collectors.toList());
+    }
     private LiveData<List<Goal>> findAllRecurringTomorrow() {
         var entitiesLiveData = goalsDao.findAllWithRecurrenceLiveData();
-
         // to avoid null exception
         if (entitiesLiveData == null) return null;
 
@@ -177,7 +184,4 @@ public class RoomGoalRepository implements GoalRepository {
         }
         return builder.build();
     }
-//    private boolean compareDates(Goal goal1, Goal goal2){
-//
-//    }
 }
