@@ -117,14 +117,10 @@ public class RoomGoalRepository implements GoalRepository {
     // add copies of the remaining recurring goals to the tomorrow view (without recurrence)
     // update the remaining recurring goals with the next date of recurrence
     public void refreshRecurrence(){
-//        var goalsLiveData = findAllRecurringTomorrow();
         var goals = getAllRecurringTomorrow();
-        var test = goalsDao.findAllWithRecurrence();
 
         // to avoid null exception
-//        if (goalsLiveData.getValue() == null || goalsLiveData == null) {
-//            return;
-//        }
+        if (goals == null) return;
 
         // the goals we want to add to tomorrow's view
         var toAdd = goals.stream()
@@ -188,7 +184,4 @@ public class RoomGoalRepository implements GoalRepository {
         }
         return builder.build();
     }
-//    private boolean compareDates(Goal goal1, Goal goal2){
-//
-//    }
 }
