@@ -169,6 +169,8 @@ public class SimpleDateTracker implements DateTracker {
 
     // 1 iff goal1 comes after goal2 or they are the same time
     public static int compareGoals(Goal goal1, Goal goal2){
+        //toAdd goals are getting loaded in here aka, non-recurring
+        //fixed
         return goalRepresentation(goal1).compareTo(goalRepresentation(goal2));
     }
     // TRUE iff goal comes after today or is today
@@ -180,7 +182,11 @@ public class SimpleDateTracker implements DateTracker {
     public boolean compareGoalToTomorrow(Goal goal){
         Calendar ins = (Calendar) Calendar.getInstance().clone();
         ins.add(Calendar.DAY_OF_MONTH, 1);
-        return goalRepresentation(goal).compareTo(ins) >= 0;
+//<<<<<<< HEAD
+//        return goalRepresentation(goal).compareTo(ins) >= 0;
+//=======
+        return goalRepresentation(goal).compareTo(this.calendar) <= 0;
+//>>>>>>> 59eb704e691707dc8d8b6e2ce744e8fbc1efe4b9
     }
 
     // may be slightly unnecessary

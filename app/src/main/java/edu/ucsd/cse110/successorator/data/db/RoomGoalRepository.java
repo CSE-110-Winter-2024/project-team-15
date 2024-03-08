@@ -136,7 +136,9 @@ public class RoomGoalRepository implements GoalRepository {
 
         // here we add the goals
         toAdd.stream()
-                .sorted(SimpleDateTracker::compareGoals)
+                //you are calling compare on added goals here which have no recurrence data.
+                //I'm guessing sorting by sortOrder would do all you need here,
+//                .sorted(SimpleDateTracker::compareGoals)
                 .forEach(this::insertUnderIncompleteGoals);
 
         // here we update the recurring goals
@@ -148,9 +150,11 @@ public class RoomGoalRepository implements GoalRepository {
         return goalsDao.findAllWithRecurrence().stream()
                 .map(GoalEntity::toGoal)
                 .filter(goal -> {
-                    Goal incrGoal = increment(goal);
+                    //compare returns true if the goal comes after tomorrow, so you actually don't
+                    //want it to recur if this is true, but you do if equal, so I will switch the sign in
+                    //dateTracker and update method behaviour comment
                     return SimpleDateTracker.getInstance().getValue().
-                            compareGoalToTomorrow(incrGoal);
+                            compareGoalToTomorrow(goal);
                 })
                 .collect(Collectors.toList());
     }

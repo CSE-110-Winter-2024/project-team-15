@@ -32,7 +32,6 @@ public class GoalEntity {
     @ColumnInfo(name = "day_starting")
     public int dayStarting;
 
-    //breaking name cvntion to hopefully fix a bug
     @ColumnInfo(name = "month_starting")
     public int monthStarting;
 

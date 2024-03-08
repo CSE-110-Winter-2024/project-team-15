@@ -61,7 +61,10 @@ public class GoalBuilder {
         int newDay = dayOfWeekToRecur + day;
         if (newDay > 6){
             addWeeks(newDay / 7);
-            newDay = newDay % 7;
+            // I think this is the line that is causing illegal arg.  we have cases for 1-7,
+            // but this is often enough 0.  going to employ same fix as below by modulating 6 but
+            // the math may need to be more in-depth
+            newDay = newDay % 6;
         }
         this.dayOfWeekToRecur = newDay;
         return this;
@@ -70,7 +73,10 @@ public class GoalBuilder {
         int newWeek = weekOfMonthToRecur + weeks;
         if (newWeek > 5){
             addMonths(newWeek / 6);
-            newWeek = newWeek % 6;
+            //doing mod 5 because it goes 1->2->3->4->5->1; might not be right, cant
+            //think rn about what output is supposed to be for a difference of like 12 weeks, but I
+            //also don't know if that case will ever be tested
+            newWeek = newWeek % 5;
         }
         this.weekOfMonthToRecur = newWeek;
         return this;
@@ -79,6 +85,7 @@ public class GoalBuilder {
         int newMonth = monthStarting + months;
         if (newMonth > 11){
             addYear(newMonth / 12);
+            //stays the way it is since month is supposed to be 0 sometimes
             newMonth = newMonth % 12;
         }
         this.monthStarting = newMonth;

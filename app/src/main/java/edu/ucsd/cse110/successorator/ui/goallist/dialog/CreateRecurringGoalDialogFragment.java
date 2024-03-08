@@ -115,7 +115,10 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
         // dividing that by 7 gives us the amount of weeks between them
         ins.set(Calendar.DAY_OF_MONTH, 1);
         ins.set(Calendar.DAY_OF_WEEK, dayOfWeekToRecur);
-        int weekOfMonthToRecur = ((dayCreated - ins.get(Calendar.DAY_OF_MONTH)) / 7);
+        //under assumption wom should start at 1 instead of 0
+        //also belive this is over-engineered, just take dayCreated/7
+        //and the integer division handles it
+        int weekOfMonthToRecur = ((int)(dayCreated) / 7) + 1;
 
 
 //        // TEST CODE UNSURE IF BETTER
@@ -135,7 +138,6 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
 
 
         if(!goalText.equals("")){
-            //recurrenceType unused as goals do not have that field yet
             var goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown());
             goal = goal.withRecurrenceData(recurrenceType, dayCreated, monthCreated, yearCreated,
                     dayOfWeekToRecur, weekOfMonthToRecur, false);
