@@ -47,17 +47,6 @@ public class RoomGoalRepository implements GoalRepository {
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
 
-    // let's get recurring goals (from the recurring goals view of course)(see goalsdao)
-    // transformation stuff stolen from findall of course
-    public Subject<List<Goal>> findAllWithRecurrence() {
-        var entitiesLiveData = goalsDao.findAllWithRecurrenceLiveData();
-        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
-            return entities.stream()
-                    .map(GoalEntity::toGoal)
-                    .collect(Collectors.toList());
-        });
-        return new LiveDataSubjectAdapter<>(goalsLiveData);
-    }
 
     public void save(Goal goal){
         goalsDao.insert(GoalEntity.fromGoal(goal));
@@ -107,6 +96,19 @@ public class RoomGoalRepository implements GoalRepository {
 
     public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
 
+
+    // let's get recurring goals (from the recurring goals view of course)(see goalsdao)
+    // transformation stuff stolen from findall of course
+    public Subject<List<Goal>> findAllWithRecurrence() {
+        var entitiesLiveData = goalsDao.findAllWithRecurrenceLiveData();
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
     //get list of recurring goals
     //filter out all the ones that aren't supposed to be refreshed
     //add copies of the remaining recurring goals to the tomorrow view (without recurrence)
@@ -121,7 +123,7 @@ public class RoomGoalRepository implements GoalRepository {
                         // need to make it tomorrow
                         Goal incrGoal = increment(goal);
                         return SimpleDateTracker.getInstance().getValue().
-                                compareGoalToToday(incrGoal);
+                                compareGoalToTomorrow(incrGoal);
                     })
                     .collect(Collectors.toList());
         });

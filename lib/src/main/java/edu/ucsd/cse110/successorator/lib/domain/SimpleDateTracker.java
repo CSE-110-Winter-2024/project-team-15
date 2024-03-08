@@ -145,15 +145,24 @@ public class SimpleDateTracker implements DateTracker {
     public boolean compareGoalToToday(Goal goal){
         return goalRepresentation(goal).compareTo(this.calendar) >= 0;
     }
+
+    // TRUE iff goal comes after tomorrow or is tomorrow
+    public boolean compareGoalToTomorrow(Goal goal){
+        Calendar ins = (Calendar) Calendar.getInstance().clone();
+        ins.add(Calendar.DAY_OF_MONTH, 1);
+        return goalRepresentation(goal).compareTo(this.calendar) >= 0;
+    }
+
+    // may be slightly unnecessary
     private static int goalToCalDay(int day){
         switch(day){
-            case 0: return Calendar.SUNDAY;
-            case 1: return Calendar.MONDAY;
-            case 2: return Calendar.TUESDAY;
-            case 3: return Calendar.WEDNESDAY;
-            case 4: return Calendar.THURSDAY;
-            case 5: return Calendar.FRIDAY;
-            case 6: return Calendar.SATURDAY;
+            case 1: return Calendar.SATURDAY;
+            case 2: return Calendar.SUNDAY;
+            case 3: return Calendar.MONDAY;
+            case 4: return Calendar.TUESDAY;
+            case 5: return Calendar.WEDNESDAY;
+            case 6: return Calendar.THURSDAY;
+            case 7: return Calendar.FRIDAY;
             default: throw new IllegalArgumentException();
         }
     }

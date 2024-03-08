@@ -74,21 +74,48 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
         //characteristics of data commented after testing
         //selected value
         //something strange going on
-        var dayCreated = view.datePicker.getDayOfMonth();
-        //january = 0
-        var monthCreated  = view.datePicker.getMonth();
-        //four digits
-        var yearCreated = view.datePicker.getYear();
+        // math should nt be done here
+        // date picked from datepicker
+        var dayCreated = view.datePicker.getDayOfMonth(); // actual day not Sunday (ie the 7th)
+        var monthCreated  = view.datePicker.getMonth(); // month but jan is 0 and dec is 11
+        var yearCreated = view.datePicker.getYear(); // 2024
 
-        // needs fixing but i do later
-        int weekOfMonthToRecur = ((int)dayCreated / 7) + 1;
+        // "weeks SINCE this day"
+        //int weekOfMonthToRecur = ((int)dayCreated / 7);
 
         // needs review
-        Date selectedDate = new Date(yearCreated, monthCreated, dayCreated);
-        Calendar dayOfWeekFinder = Calendar.getInstance();
-        dayOfWeekFinder.setTime(selectedDate);
-        int dayOfWeekToRecur = dayOfWeekFinder.get(Calendar.DAY_OF_WEEK);
+//        Date selectedDate = new Date(yearCreated, monthCreated, dayCreated);
+//        Calendar dayOfWeekFinder = Calendar.getInstance();
+//        dayOfWeekFinder.setTime(selectedDate);
+//        int dayOfWeekToRecur = dayOfWeekFinder.get(Calendar.DAY_OF_WEEK);
         //need to use calender here to get dayOfWeekToRecur
+
+        // for easy usage why dont we just use a calendar
+        // convert datepicker to calendar
+        Calendar ins = (Calendar) Calendar.getInstance().clone();
+        ins.set(Calendar.YEAR, yearCreated);
+        ins.set(Calendar.MONTH, monthCreated);
+        ins.set(Calendar.DAY_OF_MONTH, dayCreated);
+
+        // now we can easily extract the day
+        int dayOfWeekToRecur = ins.get(Calendar.DAY_OF_WEEK); // 1 is sat.
+
+        // Now we need to extract the amount of times this dayOfWeek has appeared
+        // since we want something like "3rd Tuesday" ..
+        //
+        // we do this as seen below:
+        //
+        // if we go to the first day of the month
+        // and then go to the first time our desired dayOfWeek appeared
+        //
+        // then subtracting our day of month by the first time day of week appears gives us the
+        // amount of days between them
+        //
+        // dividing that by 7 gives us the amount of weeks between them
+        // Me when we r genius
+        ins.set(Calendar.DAY_OF_MONTH, 1);
+        ins.set(Calendar.DAY_OF_WEEK, dayOfWeekToRecur);
+        int weekOfMonthToRecur = ((dayCreated - ins.get(Calendar.DAY_OF_MONTH)) / 7);
 
 
         if(!goalText.equals("")){
