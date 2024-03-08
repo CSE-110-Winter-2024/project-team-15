@@ -122,13 +122,15 @@ public class MainViewModelTest {
 
 
     //why broken?
+    //this was supposed to test uncompleting a completed goal but the goal that was supposed to be completed was written as false
+    //we have fixed this and changed it back to true. The error should be fixed now.
     @Test
     public void uncompletedSingleToggle() {
         List<Goal> testGoals = List.of(
                 new Goal("Prepare for the midterm", 0, false, 0,0, 0),
                 new Goal("Grocery shopping", 1, false, 1,0, 3),
                 new Goal("Make dinner", 2, false, 2,0, 0),
-                new Goal("Text Maria", 3, false, 3,0, 3)
+                new Goal("Text Maria", 3, true, 3,0, 3)
 //
         );
         var dataSource = new InMemoryDataSource();
