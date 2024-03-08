@@ -73,7 +73,13 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             binding.goalText.setForeground(null);
         }
 
-        binding.goalText.setOnClickListener(v -> onGoalClicked.accept(goal));
+        // recurring and pending should not be able to be marked as complete
+        // let me know if this should be moved directly into toggleComplete
+        binding.goalText.setOnClickListener(v -> {
+            if ((goal.listNum() != 2) && (goal.listNum() != 3)){
+                onGoalClicked.accept(goal);
+            }
+        });
 
         return binding.getRoot();
     }

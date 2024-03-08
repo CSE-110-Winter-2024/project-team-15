@@ -30,13 +30,13 @@ public class RecurrenceTitleAssembler {
 
         switch (recurrenceType) {
             case 1: // daily
-                return goal.contents() + recurType;
+                return goal.contents() + ", " + recurType;
             case 2: // weekly
                 return goal.contents() + recurType + " on " + dayStr;
             case 3: // monthly
                 return goal.contents() + recurType + " on the " + weekStr + " " + dayStr;
             case 4: // yearly
-                return goal.contents() + ", yearly on " + monthDay;
+                return goal.contents() + ", " + recurType + " on " + monthDay;
             default: // one time ...
                 return goal.contents();
         }
