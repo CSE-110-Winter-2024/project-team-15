@@ -151,6 +151,11 @@ public class ComplexDateTracker implements DateTracker {
                 .withSecond(0).withNano(0);
     }
 
+    public static LocalDateTime goalToLocalDateTime(Goal goal) {
+        return LocalDateTime.of(goal.yearStarting(), goal.monthStarting(), goal.dayStarting(), 0, 0)
+                .withSecond(0).withNano(0);
+    }
+
 
     // this is like what we were doing with calendar but with local time instead
     public static int getWeekOfMonth(LocalDateTime dateTime) {
@@ -212,9 +217,22 @@ public class ComplexDateTracker implements DateTracker {
         return goalDate.isEqual(tomorrowStart);
     }
 
+    // yoav made a good case for this one .. like adding recurring goals TODAY too ...
+    public boolean compareGoalToToday(Goal goal){
+        // Tomorrow's date .. at time 0 (not sure if the "with" stuff is necessary)
+        LocalDateTime todayStart = LocalDateTime.now()
+                .withHour(0).withMinute(0).withSecond(0).withNano(0);
+
+        // goal's LocalDateTime representation
+        LocalDateTime goalDate = goalRepresentation(goal);
+
+        // I want to add to tomorrow so I'm comparing it to tomorrow's date
+        return goalDate.isEqual(todayStart);
+    }
+
 
     // a method for finding the amount of time
-    public static LocalDateTime calculateNextOccurrence(Goal goal, LocalDateTime currentDateTime) {
+    public static LocalDateTime getNextOccurrence(Goal goal, LocalDateTime currentDateTime) {
         switch (goal.recurrenceType()) {
 
             case 0: // once

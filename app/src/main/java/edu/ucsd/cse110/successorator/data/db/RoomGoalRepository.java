@@ -3,6 +3,7 @@ package edu.ucsd.cse110.successorator.data.db;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalBuilder;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
+import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.util.LiveDataSubjectAdapter;
 
@@ -153,11 +155,26 @@ public class RoomGoalRepository implements GoalRepository {
                     //compare returns true if the goal comes after tomorrow, so you actually don't
                     //want it to recur if this is true, but you do if equal, so I will switch the sign in
                     //dateTracker and update method behaviour comment
-                    return SimpleDateTracker.getInstance().getValue().
+                    return ComplexDateTracker.getInstance().getValue().
                             compareGoalToTomorrow(goal);
                 })
                 .collect(Collectors.toList());
     }
+
+    private List<Goal> getAllRecurringToday(){
+        return goalsDao.findAllWithRecurrence().stream()
+                .map(GoalEntity::toGoal)
+                .filter(goal -> {
+                    //compare returns true if the goal comes after tomorrow, so you actually don't
+                    //want it to recur if this is true, but you do if equal, so I will switch the sign in
+                    //dateTracker and update method behaviour comment
+                    return ComplexDateTracker.getInstance().getValue().
+                            compareGoalToToday(goal);
+                })
+                .collect(Collectors.toList());
+    }
+
+
     private LiveData<List<Goal>> findAllRecurringTomorrow() {
         var entitiesLiveData = goalsDao.findAllWithRecurrenceLiveData();
         // to avoid null exception
@@ -168,7 +185,7 @@ public class RoomGoalRepository implements GoalRepository {
                     .map(GoalEntity::toGoal)
                     .filter(goal -> {
                         Goal incrGoal = increment(goal);
-                        return SimpleDateTracker.getInstance().getValue().
+                        return ComplexDateTracker.getInstance().getValue().
                                 compareGoalToTomorrow(incrGoal);
                     })
                     .collect(Collectors.toList());
@@ -177,16 +194,24 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     // this method needs to increment the "starting" fields
+    // since we're making copies...
     private Goal increment(Goal goal){
-        GoalBuilder builder = new GoalBuilder().withDefault(goal);
-        switch(goal.recurrenceType()){
-            case 1: builder.addDays(1);  break;
-            case 2: builder.addWeeks(1); break;
-            case 3: builder.addMonths(1); break;
-            case 4: builder.addYear(1); break;
-            // this shouldn't happen but if it does...
-            default: throw new IllegalArgumentException();
-        }
-        return builder.build();
+        // our tracker handles the new date finding
+        ComplexDateTracker myTracker = ComplexDateTracker.getInstance().getValue();
+        LocalDateTime goalAsTime = myTracker.goalToLocalDateTime(goal);
+
+        LocalDateTime nextOccurrence = myTracker.getNextOccurrence(goal, goalAsTime);
+        int newDayStarting = nextOccurrence.getDayOfMonth();
+        int newMonthStarting = nextOccurrence.getMonthValue();
+        int newYearStarting = nextOccurrence.getYear();
+        int newDayOfWeekToRecur = nextOccurrence.getDayOfWeek().getValue();
+        int newWeekOfMonthToRecur = myTracker.getWeekOfMonth(nextOccurrence);
+
+        // if anyone wants to make this use builder instead FEEL FREE
+        Goal newGoal = goal.withRecurrenceData(
+                0, newDayStarting, newMonthStarting, newYearStarting,
+                newDayOfWeekToRecur, newWeekOfMonthToRecur, false);
+
+        return newGoal;
     }
 }

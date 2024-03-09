@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
+import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
@@ -27,7 +28,7 @@ public class MainViewModelTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         Boolean expected = true;
         Boolean actual= mvm.getNoGoals().getValue();
@@ -45,7 +46,7 @@ public class MainViewModelTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         Boolean expected = false;
         Boolean actual= mvm.getNoGoals().getValue();
@@ -63,7 +64,7 @@ public class MainViewModelTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(0));
         var actual = dataSource.getGoal(0).completed();
@@ -85,7 +86,7 @@ public class MainViewModelTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(2));
         var actual = dataSource.getGoal(2).completed();
@@ -111,7 +112,7 @@ public class MainViewModelTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(2));
         mvm.toggleCompleted(dataSource.getGoal(2));
@@ -134,7 +135,7 @@ public class MainViewModelTest {
             dataSource.putGoal(goal);
         }
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         mvm.toggleCompleted(dataSource.getGoal(3));
         var actual = dataSource.getGoal(3).completed();
@@ -156,7 +157,7 @@ public class MainViewModelTest {
         // Given: A MainViewModel instance that has a default view
         var dataSource = new InMemoryDataSource();
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
 
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         int defaultView = mvm.getListShown();

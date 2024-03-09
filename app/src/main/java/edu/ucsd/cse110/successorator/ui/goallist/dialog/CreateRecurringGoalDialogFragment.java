@@ -11,13 +11,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.Calendar;
-import java.util.Date;
+// allowed to use this import and be SRP as long as we don't modify it here
+import java.time.LocalDateTime;
+import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateRecurringGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
+
 public class CreateRecurringGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
     private FragmentDialogCreateRecurringGoalBinding view;
@@ -71,63 +74,27 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
         else if(recurrenceId == R.id.yearly_button){
                 recurrenceType = 4;}
 
-        //characteristics of data commented after testing
-        //selected value
-        //something strange going on
-        // math should nt be done here
         // date picked from datepicker
         var dayCreated = view.datePicker.getDayOfMonth(); // actual day not Sunday (ie the 7th)
         var monthCreated  = view.datePicker.getMonth(); // month but jan is 0 and dec is 11
         var yearCreated = view.datePicker.getYear(); // 2024
 
-        // "weeks SINCE this day"
-        //int weekOfMonthToRecur = ((int)dayCreated / 7);
 
-        // needs review
-//        Date selectedDate = new Date(yearCreated, monthCreated, dayCreated);
-//        Calendar dayOfWeekFinder = Calendar.getInstance();
-//        dayOfWeekFinder.setTime(selectedDate);
-//        int dayOfWeekToRecur = dayOfWeekFinder.get(Calendar.DAY_OF_WEEK);
-        //need to use calender here to get dayOfWeekToRecur
-
-        // for easy usage why dont we just use a calendar
-        // convert datepicker to calendar
-        // move to datetracker
-        Calendar ins = (Calendar) Calendar.getInstance().clone();
-        ins.set(Calendar.YEAR, yearCreated);
-        ins.set(Calendar.MONTH, monthCreated);
-        ins.set(Calendar.DAY_OF_MONTH, dayCreated);
+        // let's see its representation as a LocalDateTime object
+        ComplexDateTracker myTracker = ComplexDateTracker.getInstance().getValue();
+        LocalDateTime representation = myTracker.datePickerToLocalDateTime(yearCreated, monthCreated, dayCreated);
 
         // now we can easily extract the day
-        int dayOfWeekToRecur = ins.get(Calendar.DAY_OF_WEEK); // 1 is sat.
+        int dayOfWeekToRecur = representation.getDayOfWeek().getValue(); // 1 is monday.
 
+        // and the week of month (woohoo)
+        int weekOfMonthToRecur = myTracker.getWeekOfMonth(representation);
 
-        // Now we need to extract the amount of times this dayOfWeek has appeared
-        // since we want something like "3rd Tuesday" ..
-        //
-        // we do this as seen below:
-        //
-        // if we go to the first day of the month
-        // and then go to the first time our desired dayOfWeek appeared
-        //
-        // then subtracting our day of month by the first time day of week appears gives us the
-        // amount of days between them
-        //
-        // dividing that by 7 gives us the amount of weeks between them
-        ins.set(Calendar.DAY_OF_MONTH, 1);
-        ins.set(Calendar.DAY_OF_WEEK, dayOfWeekToRecur);
-        //under assumption wom should start at 1 instead of 0
-        //also belive this is over-engineered, just take dayCreated/7
-        //and the integer division handles it
-        int weekOfMonthToRecur = ((int)(dayCreated) / 7) + 1;
-
-
-
+        // and make a new goal
         if(!goalText.equals("")){
             var goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown());
             goal = goal.withRecurrenceData(recurrenceType, dayCreated, monthCreated, yearCreated,
                     dayOfWeekToRecur, weekOfMonthToRecur, false);
-
 
             activityModel.insertIncompleteGoal(goal);
         }

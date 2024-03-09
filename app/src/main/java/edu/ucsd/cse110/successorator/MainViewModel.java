@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
+import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
@@ -31,8 +32,8 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<Boolean> noGoals;
     //private final MutableSubject<ViewNumInfo> numInfo;
 
-    private final MutableSubject<SimpleDateTracker> dateTracker;
-
+    //private final MutableSubject<SimpleDateTracker> dateTracker;
+    private final MutableSubject<ComplexDateTracker> dateTracker;
 
     public static final ViewModelInitializer<MainViewModel> initializer =
             new ViewModelInitializer<>(
@@ -44,7 +45,7 @@ public class MainViewModel extends ViewModel {
                     });
 
     // dateTracker is received here through the app. for usage in further methods.
-    public MainViewModel(GoalRepository goalRepository, MutableSubject<SimpleDateTracker> dateTracker) {
+    public MainViewModel(GoalRepository goalRepository, MutableSubject<ComplexDateTracker> dateTracker) {
         this.goalRepository = goalRepository;
         this.dateTracker = dateTracker;
 //        this.numInfo = new SimpleSubject<ViewNumInfo>();

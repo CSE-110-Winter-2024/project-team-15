@@ -10,13 +10,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
+import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateRecurringGoalDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.SwitchViewDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private MutableSubject<SimpleDateTracker> dateTracker;
+    //private MutableSubject<SimpleDateTracker> dateTracker;
+
+    private MutableSubject<ComplexDateTracker> dateTracker;
     private Integer daysForwarded;
     private boolean isShowingList = true;
     private String dayOfWeek;
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // this.dateTracker = SimpleDateTracker.getInstance();
-        this.dateTracker = SimpleDateTracker.getInstance();
+        this.dateTracker = ComplexDateTracker.getInstance();
         this.daysForwarded = 0;
         var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
         view.placeholderText.setText(null);
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             var rawDateTracker = dateTracker.getValue();
             String dateString = rawDateTracker.getDate();
             int listShown = vni.getListShown();
+
             switch (listShown){
                 case 0:
                     dayOfWeek = "Today, ";
@@ -55,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     dayOfWeek = "invalid";
             }
+
             setTitle(dayOfWeek + dateString);
 
         });
     }
 
-    // for the button
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -71,13 +75,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
-        if (item.getItemId() == R.id.action_bar_menu_swap_views) {
 
+        if (item.getItemId() == R.id.action_bar_menu_swap_views) {
+            // for adding goals
             if (ViewNumInfo.getInstance().getValue().getListShown() == 3) {
                 var dialogFragment = CreateRecurringGoalDialogFragment.newInstance();
                 dialogFragment.show(getSupportFragmentManager(), "idk yet");
-            } else {var dialogFragment = CreateGoalDialogFragment.newInstance();
-            dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");}
+            } else {
+                var dialogFragment = CreateGoalDialogFragment.newInstance();
+                dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");
+            }
 
         } else if (item.getItemId() == R.id.action_bar_menu_forward_day){
             // 1. update the DateTracker object within the subject
@@ -90,13 +97,14 @@ public class MainActivity extends AppCompatActivity {
             this.dateTracker.setValue(rawDateTracker);
             onResume(); // onResume nicely sets the title
 
-        }
-        else if  (item.getItemId() == R.id.action_bar_menu_swap_lists){
+        } else if (item.getItemId() == R.id.action_bar_menu_swap_lists){
+            // for swapping views
             var dialogFragment = SwitchViewDialogFragment.newInstance();
             dialogFragment.show(getSupportFragmentManager(), "SwitchViewDialogFragment");
-        }
 
+        }
         return super.onOptionsItemSelected(item);
+
     }
 
     // this violates OCP since we might want to change Today to something else
@@ -114,9 +122,9 @@ public class MainActivity extends AppCompatActivity {
                 setTitle(dayOfWeek + rawDateTracker.getDate());
             } else if(listNum == 1){
                 setTitle(dayOfWeek + rawDateTracker.getNextDate());
+            } else {
+                setTitle(dayOfWeek);
             }
-            else {
-                setTitle(dayOfWeek);}
         }
 
     }
