@@ -57,6 +57,8 @@ public class GoalBuilder {
         this.monthStarting = month;
         return this;
     }
+
+    //  we don't need these, there's a much easier method to do this using the actual time
     public GoalBuilder addDays(int day){
         int newDay = dayOfWeekToRecur + day;
         if (newDay > 6){
@@ -64,11 +66,13 @@ public class GoalBuilder {
             // I think this is the line that is causing illegal arg.  we have cases for 1-7,
             // but this is often enough 0.  going to employ same fix as below by modulating 6 but
             // the math may need to be more in-depth
+            // should be mod 7
             newDay = newDay % 6;
         }
         this.dayOfWeekToRecur = newDay;
         return this;
     }
+
     public GoalBuilder addWeeks(int weeks){
         int newWeek = weekOfMonthToRecur + weeks;
         if (newWeek > 5){
@@ -91,13 +95,16 @@ public class GoalBuilder {
         this.monthStarting = newMonth;
         return this;
     }
+
     public GoalBuilder addYear(int years){
         this.yearStarting += years;
         return this;
     }
+
     public Goal build(){
         return new Goal(contents, id, completed, sortOrder, listNum, recurrenceType,
                 dayStarting, monthStarting, yearStarting, dayOfWeekToRecur, weekOfMonthToRecur,
                 overflowFlag);
     }
+
 }

@@ -1,12 +1,10 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
-import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class SimpleDateTracker implements DateTracker {
     // the singleton design pattern is used here in a special way to accomplish the following:
@@ -138,34 +136,6 @@ public class SimpleDateTracker implements DateTracker {
         return ins;
     }
 
-//    // TEST CODE BEGIN UNSURE IF BETTER
-//    public static Calendar goalRepresentation(Goal goal) {
-//        Calendar ins = (Calendar) Calendar.getInstance().clone();
-//        ins.set(Calendar.YEAR, goal.yearStarting());
-//        ins.set(Calendar.MONTH, goal.monthStarting());
-//        ins.set(Calendar.DAY_OF_MONTH, 1);
-//
-//
-//        int occurrenceCount = 0;
-//        int targetOccurrence = goal.weekOfMonthToRecur();
-//        int targetDayOfWeek = goalToCalDay(goal.dayOfWeekToRecur());
-//
-//        while (occurrenceCount < targetOccurrence) {
-//            if (ins.get(Calendar.DAY_OF_WEEK) == targetDayOfWeek) {
-//                occurrenceCount++;
-//                if (occurrenceCount == targetOccurrence) {
-//
-//                    break;
-//                }
-//            }
-//            ins.add(Calendar.DAY_OF_MONTH, 1);
-//        }
-//
-//
-//        return ins;
-//    }
-//    // TEST CODE END
-
 
     // 1 iff goal1 comes after goal2 or they are the same time
     public static int compareGoals(Goal goal1, Goal goal2){
@@ -182,11 +152,9 @@ public class SimpleDateTracker implements DateTracker {
     public boolean compareGoalToTomorrow(Goal goal){
         Calendar ins = (Calendar) Calendar.getInstance().clone();
         ins.add(Calendar.DAY_OF_MONTH, 1);
-//<<<<<<< HEAD
-//        return goalRepresentation(goal).compareTo(ins) >= 0;
-//=======
+
         return goalRepresentation(goal).compareTo(this.calendar) <= 0;
-//>>>>>>> 59eb704e691707dc8d8b6e2ce744e8fbc1efe4b9
+
     }
 
     // may be slightly unnecessary

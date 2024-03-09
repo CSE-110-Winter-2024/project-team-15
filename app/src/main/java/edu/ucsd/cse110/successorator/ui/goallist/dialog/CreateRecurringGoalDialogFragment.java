@@ -92,6 +92,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
 
         // for easy usage why dont we just use a calendar
         // convert datepicker to calendar
+        // move to datetracker
         Calendar ins = (Calendar) Calendar.getInstance().clone();
         ins.set(Calendar.YEAR, yearCreated);
         ins.set(Calendar.MONTH, monthCreated);
@@ -120,21 +121,6 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
         //and the integer division handles it
         int weekOfMonthToRecur = ((int)(dayCreated) / 7) + 1;
 
-
-//        // TEST CODE UNSURE IF BETTER
-//        ins.set(Calendar.DAY_OF_MONTH, 1);
-//
-//        int occurrenceCount = 0;
-//        while (ins.get(Calendar.DAY_OF_MONTH) <= dayCreated) {
-//            if (ins.get(Calendar.DAY_OF_WEEK) == dayOfWeekToRecur) {
-//                occurrenceCount++;
-//            }
-//
-//            ins.add(Calendar.DAY_OF_MONTH, 1);
-//        }
-//
-//        int weekOfMonthToRecur = occurrenceCount;
-//        // TEST CODE ENDS HERE
 
 
         if(!goalText.equals("")){

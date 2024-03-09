@@ -176,6 +176,7 @@ public class RoomGoalRepository implements GoalRepository {
         return goalsLiveData;
     }
 
+    // this method needs to increment the "starting" fields
     private Goal increment(Goal goal){
         GoalBuilder builder = new GoalBuilder().withDefault(goal);
         switch(goal.recurrenceType()){
