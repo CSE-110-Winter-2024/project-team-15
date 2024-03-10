@@ -39,7 +39,8 @@ public interface GoalRepository {
     void refreshRecurrence();
 
     void addDaylies(int day, int month, int year);
-    void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek, int weekOfMonth);
+    void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek,
+                                         int weekOfMonth, boolean isLeapYear);
     void addWeeklies(int day, int month, int year, int dayOfWeek);
 
     String getLastUpdated();

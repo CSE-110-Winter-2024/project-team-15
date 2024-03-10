@@ -59,11 +59,23 @@ public interface GoalsDao {
             "((372 * year_starting)+(31 * month_starting)+(day_starting)))")
     List<String> getStartedDailyGoals(int day, int month, int year);
 
+    @Query("SELECT contents FROM goals WHERE recurrence_type = 1 AND year_starting >= :year " +
+            "AND month_starting = :month AND day_starting = :day")
+    List<String> getStartedYearlyGoalsForToday(int day, int month, int year);
+
     @Query("SELECT contents FROM goals WHERE recurrence_type = 2 AND " +
             "(((372 * :year)+(31 * :month)+(:day)) >= " +
             "((372 * year_starting)+(31 * month_starting)+(day_starting)))" +
             "AND (day_of_week_to_recur == :todayOfWeek)")
     List<String> getStartedWeeklyGoalsForToday(int day, int month, int year, int todayOfWeek);
+
+    @Query("SELECT contents FROM goals WHERE recurrence_type = 3 AND " +
+            "(((372 * :year)+(31 * :month)+(:day)) >= " +
+            "((372 * year_starting)+(31 * month_starting)+(day_starting)))" +
+            "AND (day_of_week_to_recur == :todayOfWeek) " +
+            "AND (week_of_month_to_recur == :weekOfMonth)")
+    List<String> getStartedMonthlyGoalsForToday(int day, int month, int year, int todayOfWeek, int weekOfMonth);
+
 
     @Query("UPDATE goals SET sort_order = sort_order + 1 " +
             "WHERE completed = true")

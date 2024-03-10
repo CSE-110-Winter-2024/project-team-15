@@ -139,7 +139,7 @@ public class Goal {
     }
     //returns a version of this goal with any recurrence data cleared
     public @NonNull Goal withoutRecurrence(){
-        return new Goal(this.contents, this.id, this.completed, this.sortOrder, this.listNum);
+        return new Goal(this.contents, null, this.completed, this.sortOrder, this.listNum);
     }
     public @NonNull Goal withOverflowFlag(boolean overflowFlag){
         return new Goal(this.contents, this.id, completed, this.sortOrder, this.listNum, this.recurrenceType,

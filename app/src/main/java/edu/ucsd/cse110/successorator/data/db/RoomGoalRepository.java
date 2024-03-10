@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,7 @@ public class RoomGoalRepository implements GoalRepository {
 
         }
     }
+
     public void addWeeklies(int day, int month, int year, int dayOfWeek){
         var goalContents = goalsDao.getStartedWeeklyGoalsForToday(day, month, year, dayOfWeek);
         for(String title: goalContents){
@@ -81,9 +83,40 @@ public class RoomGoalRepository implements GoalRepository {
 
         }
     }
-    public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek, int weekOfMonth){
+
+    public void addMonthlies(int day, int month, int year, int dayOfWeek, int weekOfMonth){
+        //6 is used to mean that this is a day for both 1st and 5th week of month
+        List<String> goalContents;
+        if(weekOfMonth == 6) {
+            goalContents = goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, 1);
+            goalContents.addAll(goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, 5));
+        }
+        else {
+            goalContents = goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek,
+                    weekOfMonth);
+        }
+        for(String title: goalContents){
+            Goal toAdd = new Goal(title, null, false, -1, 1);
+            this.insertUnderIncompleteGoals(toAdd);
+
+        }
+    }
+
+    public void addYearlies(int day, int month, int year, boolean isLeapYear){
+        var goalContents = goalsDao.getStartedYearlyGoalsForToday(day, month, year);
+        //on March 1st of non-leap year also add goals for Feb29th
+        if(!isLeapYear && (day == 1 && month == 3)){
+            goalContents.addAll(goalsDao.getStartedYearlyGoalsForToday(29, 2, year));
+        }
+
+    }
+
+    public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek,
+                                                int weekOfMonth, boolean isLeapYear){
         addDaylies(day, month, year);
         addWeeklies(day, month, year, dayOfWeek);
+        addMonthlies(day, month, year, dayOfWeek, weekOfMonth);
+        addYearlies(day, month, year, isLeapYear);
     }
     public void toggleCompleteGoal(Goal goal){
         goalsDao.toggleCompleteGoal(goal);
@@ -197,6 +230,9 @@ public class RoomGoalRepository implements GoalRepository {
 
     // this method needs to increment the "starting" fields
     // since we're making copies...
+
+    //after hours of toil, abandoning this idea.  it was beautiful, but requires more knowledge
+    //than we have time to acrew
     private Goal increment(Goal goal){
         // our tracker handles the new date finding
         ComplexDateTracker myTracker = ComplexDateTracker.getInstance().getValue();
@@ -211,7 +247,7 @@ public class RoomGoalRepository implements GoalRepository {
 
         // if anyone wants to make this use builder instead FEEL FREE
         Goal newGoal = goal.withRecurrenceData(
-                0, newDayStarting, newMonthStarting, newYearStarting,
+                goal.recurrenceType(), newDayStarting, newMonthStarting, newYearStarting,
                 newDayOfWeekToRecur, newWeekOfMonthToRecur, false);
 
         return newGoal;

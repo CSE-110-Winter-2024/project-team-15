@@ -106,10 +106,11 @@ public class SimpleGoalRepository implements GoalRepository {
     public void addDaylies(int day, int month, int year){
 
     }
-    public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek, int weekOfMonth){
+    public void addWeeklies(int day, int month, int year, int dayOfWeek){
 
     }
-    public void addWeeklies(int day, int month, int year, int dayOfWeek){
+    @Override
+    public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek, int weekOfMonth, boolean isLeapYear) {
 
     }
 

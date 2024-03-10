@@ -96,6 +96,15 @@ public class ComplexDateTracker implements DateTracker {
         LocalDateTime tempDateTime = this.dateTime.plusDays(1);
         return tempDateTime.format(dateFormat);
     }
+    public boolean getNextDateIsLeapYear() {
+        LocalDateTime tempDateTime = this.dateTime.plusDays(1);
+        return tempDateTime.toLocalDate().isLeapYear();
+    }
+
+    public int getNextDateLastMonthNumDays(){
+        LocalDateTime tempDateTime = this.dateTime.plusDays(1).minusMonths(1);
+        return tempDateTime.toLocalDate().lengthOfMonth();
+    }
 
     public int getNextDateDayOfMonth() {
         LocalDateTime tempDateTime = this.dateTime.plusDays(1);
@@ -250,8 +259,22 @@ public class ComplexDateTracker implements DateTracker {
                 if (goal.dayOfWeekToRecur() > 0 && goal.weekOfMonthToRecur() > 0) {
                     // there's a much easier way to do all this using temporal adjusters
                     // fml
-                    LocalDateTime firstDayOfNextMonth = currentDateTime.plusMonths(1)
-                            .with(TemporalAdjusters.firstDayOfMonth());
+
+                    LocalDateTime firstDayOfNextMonth;
+
+                    // if it occurs on the 5th week of a month sometimes there's bugs
+                    if(goal.weekOfMonthToRecur() == 5) {
+                        // basically if today is not the 5th that means the previous month
+                        // didn't have a 5th.. so we stay in this month
+
+                        // there's a much easier way to do all this using temporal adjusters
+                        // fml
+                        firstDayOfNextMonth = currentDateTime
+                                .with(TemporalAdjusters.firstDayOfMonth());
+                    } else {
+                        firstDayOfNextMonth = currentDateTime.plusMonths(1)
+                                .with(TemporalAdjusters.firstDayOfMonth());
+                    }
 
                     // monday is 1, thats why ordinal is 1 (We want this date structure)
                     LocalDateTime firstOccurrence = firstDayOfNextMonth

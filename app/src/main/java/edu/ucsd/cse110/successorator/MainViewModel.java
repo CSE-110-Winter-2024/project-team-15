@@ -6,6 +6,8 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
 
+import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,15 +93,22 @@ public class MainViewModel extends ViewModel {
 
                 // we need to do rollover here too
 
-//                int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
-//                int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
-//                int year = dateTracker.getValue().getNextDateYear();
-//
-//                //Saturday=1, Fri=7
-//                int dayOfWeek = dateTracker.getValue().getNextDateDayOfWeek();
-//                int weekOfMonth = (dayOfMonth / 7) + 1;
+                int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
+                int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
+                int year = dateTracker.getValue().getNextDateYear();
+                int dayOfWeek = dateTracker.getValue().getNextDateDayOfWeek();
 
-                //goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year, dayOfWeek, weekOfMonth);
+                //this one is going to look strange
+                int weekOfMonth = (dayOfMonth / 7) + 1;
+                int numDaysInLastMonth = dateTracker.getValue().getNextDateLastMonthNumDays();
+                //
+                if(dayOfMonth <= (35 - numDaysInLastMonth)  ){
+                    weekOfMonth = 6;
+                }
+                boolean isLeapYear = dateTracker.getValue().getNextDateIsLeapYear();
+
+                goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year,
+                        dayOfWeek, weekOfMonth, isLeapYear);
 
                 //get list of recurring goals
                 //filter out all the ones that aren't supposed to be refreshed
@@ -107,7 +116,9 @@ public class MainViewModel extends ViewModel {
                 //update the remaining recurring goals with the next date of recurrence
 
                 // adding recurrence to tmrw
-                goalRepository.refreshRecurrence();
+
+                //other method that functions quite well should be intact if I don't get it right
+                //goalRepository.refreshRecurrence();
 
             }
 
