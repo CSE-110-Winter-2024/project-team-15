@@ -76,7 +76,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
 
         // date picked from datepicker
         var dayCreated = view.datePicker.getDayOfMonth(); // actual day not Sunday (ie the 7th)
-        var monthCreated  = view.datePicker.getMonth(); // month but jan is 0 and dec is 11
+        var monthCreated  = view.datePicker.getMonth()+1; // month but jan is 0, so add 1
         var yearCreated = view.datePicker.getYear(); // 2024
 
 

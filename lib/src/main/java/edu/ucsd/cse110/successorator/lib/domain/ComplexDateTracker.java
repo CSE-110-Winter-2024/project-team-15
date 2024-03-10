@@ -146,7 +146,7 @@ public class ComplexDateTracker implements DateTracker {
     // can't just divide by 7 and add 1 because of when the first day of the week can appear
 
     public static LocalDateTime datePickerToLocalDateTime(int year, int monthOriginal, int day) {
-        int month = monthOriginal + 1; // Date picker
+        int month = monthOriginal; // Date picker
         return LocalDateTime.of(year, month, day, 0, 0)
                 .withSecond(0).withNano(0);
     }
@@ -208,7 +208,7 @@ public class ComplexDateTracker implements DateTracker {
     public boolean compareGoalToTomorrow(Goal goal){
         // Tomorrow's date .. at time 0 (not sure if the "with" stuff is necessary)
         LocalDateTime tomorrowStart = LocalDateTime.now()
-                .plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+                .plusDays(1).plusDays(forwardBy).withHour(0).withMinute(0).withSecond(0).withNano(0);
 
         // goal's LocalDateTime representation
         LocalDateTime goalDate = goalRepresentation(goal);

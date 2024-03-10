@@ -129,6 +129,8 @@ public class RoomGoalRepository implements GoalRepository {
                 .map(goal -> goal.withoutRecurrence().withListNum(1))
                 .collect(Collectors.toList());
 
+        //toAdd.add(new Goal("hi", 1, false, 1, 1));
+
         // since we're going to add our recurring goals to tomorrow
         // the next time they should recur needs to be adjusted
         // to its next recurrence
