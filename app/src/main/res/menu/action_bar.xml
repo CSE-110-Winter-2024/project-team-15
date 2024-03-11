@@ -29,5 +29,13 @@
         android:title="@string/swap_lists"
         app:iconTint="@color/white"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/hamburger_icon"
+        android:title="@string/swap_lists"
+        app:iconTint="@color/white"
+        app:showAsAction="always"></item>
 
 </menu>
