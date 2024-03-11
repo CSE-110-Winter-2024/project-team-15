@@ -26,19 +26,15 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
     private final Supplier<Drawable> strikethroughSupplier;
     private final Consumer<Goal> onGoalClicked;
 
-    private final Consumer<Goal> onRecurringGoalLongClicked;
-
     public GoalListAdapter(
             Context context,
             List<Goal> goals,
             Supplier<Drawable> strikethroughSupplier,
-            Consumer<Goal> onGoalClicked,
-            Consumer<Goal> onRecurringGoalLongClicked
+            Consumer<Goal> onGoalClicked
     ){
         super(context, 0, new ArrayList<>(goals));
         this.strikethroughSupplier = strikethroughSupplier;
         this.onGoalClicked = onGoalClicked;
-        this.onRecurringGoalLongClicked = onRecurringGoalLongClicked;
     }
 
     @NonNull
@@ -83,13 +79,6 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             if ((goal.listNum() != 2) && (goal.listNum() != 3)){
                 onGoalClicked.accept(goal);
             }
-        });
-
-        binding.goalText.setOnLongClickListener(v -> {
-            if (ViewNumInfo.getInstance().getValue().getListShown() == 3){
-                onRecurringGoalLongClicked.accept(goal);
-            }
-            return true;
         });
 
         return binding.getRoot();
