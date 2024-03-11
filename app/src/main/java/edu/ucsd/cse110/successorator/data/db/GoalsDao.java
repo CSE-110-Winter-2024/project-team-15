@@ -59,7 +59,7 @@ public interface GoalsDao {
             "((372 * year_starting)+(31 * month_starting)+(day_starting)))")
     List<String> getStartedDailyGoals(int day, int month, int year);
 
-    @Query("SELECT contents FROM goals WHERE recurrence_type = 1 AND year_starting >= :year " +
+    @Query("SELECT contents FROM goals WHERE recurrence_type = 4 AND year_starting >= :year " +
             "AND month_starting = :month AND day_starting = :day")
     List<String> getStartedYearlyGoalsForToday(int day, int month, int year);
 

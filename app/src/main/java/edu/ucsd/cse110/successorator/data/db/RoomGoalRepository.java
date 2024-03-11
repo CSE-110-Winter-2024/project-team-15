@@ -108,7 +108,10 @@ public class RoomGoalRepository implements GoalRepository {
         if(!isLeapYear && (day == 1 && month == 3)){
             goalContents.addAll(goalsDao.getStartedYearlyGoalsForToday(29, 2, year));
         }
-
+        for(String title: goalContents){
+            Goal toAdd = new Goal(title, null, false, -1, 1);
+            this.insertUnderIncompleteGoals(toAdd);
+        }
     }
 
     public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek,
