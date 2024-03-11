@@ -108,5 +108,8 @@ public class SimpleGoalRepository implements GoalRepository {
     }
     */
 
+    public void insertUnderIncompleteGoalsWithContext(Goal goal){
+
+    }
 
 }
