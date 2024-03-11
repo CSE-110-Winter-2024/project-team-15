@@ -157,6 +157,10 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    public void recurringRemove(Goal goal){
+        goalRepository.remove(goal.id());
+    }
+
     //lab makes dialogFragment call a method that is only
     //in goalRepository using a mainViewModel.  This method is here bc
     //I don't think I can call that method without this being here

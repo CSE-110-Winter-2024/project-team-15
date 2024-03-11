@@ -69,7 +69,8 @@ public class GoalListFragment extends Fragment {
                 requireContext(),
                 List.of(),
                 () -> ResourcesCompat.getDrawable(getResources(), R.drawable.line, null),
-                activityModel::toggleCompleted
+                activityModel::toggleCompleted,
+                activityModel::recurringRemove
         );
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;
