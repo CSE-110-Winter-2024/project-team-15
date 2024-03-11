@@ -96,21 +96,26 @@ public class ComplexDateTracker implements DateTracker {
         LocalDateTime tempDateTime = this.dateTime.plusDays(1);
         return tempDateTime.format(dateFormat);
     }
+
+    //returns true iff the year of tomorrow's date is a leap year
     public boolean getNextDateIsLeapYear() {
         LocalDateTime tempDateTime = this.dateTime.plusDays(1);
         return tempDateTime.toLocalDate().isLeapYear();
     }
 
+    //returns number of days in the month before the month of tomorrow's date
     public int getNextDateLastMonthNumDays(){
         LocalDateTime tempDateTime = this.dateTime.plusDays(1).minusMonths(1);
         return tempDateTime.toLocalDate().lengthOfMonth();
     }
 
+    //returns the day of month of the next date
     public int getNextDateDayOfMonth() {
         LocalDateTime tempDateTime = this.dateTime.plusDays(1);
         return tempDateTime.getDayOfMonth();
     }
 
+    //returns the month value (Jan = 1) of the month of tomorrow's date
     public int getNextDateMonthOfYear() {
         LocalDateTime tempDateTime = this.dateTime.plusDays(1);
         return tempDateTime.getMonthValue(); // ayo this is from 1 to 12

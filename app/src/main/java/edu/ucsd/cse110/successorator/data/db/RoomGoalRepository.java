@@ -66,9 +66,19 @@ public class RoomGoalRepository implements GoalRepository {
     public void insertUnderIncompleteGoals(Goal goal){
         goalsDao.insertUnderIncompleteGoals(GoalEntity.fromGoal(goal));
     }
+
+    //adds daily goals that should be added for month/day/year
     public void addDaylies(int day, int month, int year){
+        //query daily goals that have started
         var goalContents = goalsDao.getStartedDailyGoals(day, month, year);
+
+        //the following lines are present in all add___lies methods and would probably do well in a
+        //separate method for DRY purposes
         for(String title: goalContents){
+            //query returns only the contents string from the goal, so for each goal, create a new
+            //one without recurrence for Tomorrow list and add it (if we had time I would change
+            //the queries to return a list of goals instead and run
+            //title.withoutRecurrence().withListNum(1) instead which would be much better)
             Goal toAdd = new Goal(title, null, false, -1, 1);
             this.insertUnderIncompleteGoals(toAdd);
 
@@ -76,7 +86,10 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     public void addWeeklies(int day, int month, int year, int dayOfWeek){
+        //query weekly goals that recur on dayOfWeek and that have started
         var goalContents = goalsDao.getStartedWeeklyGoalsForToday(day, month, year, dayOfWeek);
+
+        //add queried goals to repository
         for(String title: goalContents){
             Goal toAdd = new Goal(title, null, false, -1, 1);
             this.insertUnderIncompleteGoals(toAdd);
@@ -88,14 +101,18 @@ public class RoomGoalRepository implements GoalRepository {
         //6 is used to mean that this is a day for both 1st and 5th week of month
         List<String> goalContents;
         if(weekOfMonth == 6) {
-            //on
+            //when weekOfMonth is 6, we want to load in goals recurring on both the 1st
+            //and 5th ocurrence of the dayOfWeek
             goalContents = goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, 1);
             goalContents.addAll(goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, 5));
         }
         else {
+            //for normal values, just query started monthly goals for the specified weekOfMonth
+            //occurrence of dayOfWeek
             goalContents = goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek,
                     weekOfMonth);
         }
+        //add queried goals to repository
         for(String title: goalContents){
             Goal toAdd = new Goal(title, null, false, -1, 1);
             this.insertUnderIncompleteGoals(toAdd);
@@ -103,17 +120,20 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     public void addYearlies(int day, int month, int year, boolean isLeapYear){
+        //queries yearly goals for month/day that start on or before year
         var goalContents = goalsDao.getStartedYearlyGoalsForToday(day, month, year);
-        //on March 1st of non-leap year also add goals for Feb29th
+        //on March 1st of non-leap year also add yearly goals for Feb29th
         if(!isLeapYear && (day == 1 && month == 3)){
             goalContents.addAll(goalsDao.getStartedYearlyGoalsForToday(29, 2, year));
         }
+        //add queried goals to repository
         for(String title: goalContents){
             Goal toAdd = new Goal(title, null, false, -1, 1);
             this.insertUnderIncompleteGoals(toAdd);
         }
     }
 
+    //adds goals that should recur on the passed date to the repository
     public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek,
                                                 int weekOfMonth, boolean isLeapYear){
         addDaylies(day, month, year);

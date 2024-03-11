@@ -53,22 +53,29 @@ public interface GoalsDao {
     @Query("SELECT Max(sort_order) FROM goals WHERE completed = false")
     Integer getMaxIncompleteSortOrder();
 
-
+    //queries daily goals (recurrence_type = 1) that have a starting date at or before the date of
+    //the argument
     @Query("SELECT contents FROM goals WHERE recurrence_type = 1 AND " +
             "(((372 * :year)+(31 * :month)+(:day)) >= " +
             "((372 * year_starting)+(31 * month_starting)+(day_starting)))")
     List<String> getStartedDailyGoals(int day, int month, int year);
 
+    //queries yearly goals (recurrence_type = 4) that have the specified day and month and are set
+    //to start at or before the specified year
     @Query("SELECT contents FROM goals WHERE recurrence_type = 4 AND year_starting <= :year " +
             "AND month_starting = :month AND day_starting = :day")
     List<String> getStartedYearlyGoalsForToday(int day, int month, int year);
 
+    //queries weekly goals (recurrence_type = 2) that have a starting date at or before the date of
+    //the argument and are set to recur on the passed dayOfWeek
     @Query("SELECT contents FROM goals WHERE recurrence_type = 2 AND " +
             "(((372 * :year)+(31 * :month)+(:day)) >= " +
             "((372 * year_starting)+(31 * month_starting)+(day_starting)))" +
             "AND (day_of_week_to_recur == :todayOfWeek)")
     List<String> getStartedWeeklyGoalsForToday(int day, int month, int year, int todayOfWeek);
 
+    //queries monthly goals (recurrence_type = 3) that have a starting date at or before the date of
+    //the argument and are set to recur on the passed dayOfWeek as well as the passed weekOfMonth
     @Query("SELECT contents FROM goals WHERE recurrence_type = 3 AND " +
             "(((372 * :year)+(31 * :month)+(:day)) >= " +
             "((372 * year_starting)+(31 * month_starting)+(day_starting)))" +
