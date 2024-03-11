@@ -23,23 +23,31 @@ public class RecurrenceTitleAssembler {
     }
 
     public String makeTitle() {
-        String recurType = recurrenceTypeStr();
         String dayStr = dayOfWeekToRecurStr();
         String weekStr = weekOfMonthToRecurStrSuffix();
         String monthDay = monthDayDate();
 
         switch (recurrenceType) {
             case 1: // daily
-                return goal.contents() + ", " + recurType;
+                return baseInfo();
             case 2: // weekly
-                return goal.contents() + recurType + " on " + dayStr;
+                return baseInfo() + " on " + dayStr;
             case 3: // monthly
-                return goal.contents() + recurType + " on the " + weekStr + " " + dayStr;
+                return baseInfo() + " on the " + weekStr + " " + dayStr;
             case 4: // yearly
-                return goal.contents() + ", " + recurType + " on " + monthDay;
+                return baseInfo() + " on " + monthDay;
             default: // one time ...
                 return goal.contents();
         }
+    }
+
+    // the recur type and goal contents show in all goals
+    // let's not repeat ourselves
+    // this function would return something like
+    // "Contents, weekly"
+    private String baseInfo() {
+        String recurType = recurrenceTypeStr();
+        return goal.contents() + ", " + recurType;
     }
 
     private String recurrenceTypeStr() {
@@ -54,13 +62,13 @@ public class RecurrenceTitleAssembler {
 
     private String dayOfWeekToRecurStr() {
         switch (this.dayOfWeekToRecur) {
-            case 1: return "Sat";
-            case 2: return "Sun";
-            case 3: return "Mon";
-            case 4: return "Tue";
-            case 5: return "Wed";
-            case 6: return "Thu";
-            case 7: return "Fri";
+            case 1: return "Mon";
+            case 2: return "Tue";
+            case 3: return "Wed";
+            case 4: return "Thu";
+            case 5: return "Fri";
+            case 6: return "Sat";
+            case 7: return "Sun";
             default: return "";
         }
     }
