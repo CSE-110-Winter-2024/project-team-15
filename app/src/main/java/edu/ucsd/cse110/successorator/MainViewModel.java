@@ -151,6 +151,10 @@ public class MainViewModel extends ViewModel {
         return ViewNumInfo.getInstance().getValue().getListShown();
     }
 
+    public void removeRecurring(Goal goal){
+        goalRepository.remove(goal.id());
+    }
+
     public void toggleCompleted(Goal goal) {
         // SRP issue fixed by forward passing
         goalRepository.toggleCompleteGoal(goal);
