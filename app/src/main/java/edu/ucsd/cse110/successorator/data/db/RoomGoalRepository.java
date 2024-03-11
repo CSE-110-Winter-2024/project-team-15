@@ -88,6 +88,7 @@ public class RoomGoalRepository implements GoalRepository {
         //6 is used to mean that this is a day for both 1st and 5th week of month
         List<String> goalContents;
         if(weekOfMonth == 6) {
+            //on
             goalContents = goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, 1);
             goalContents.addAll(goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, 5));
         }
@@ -98,7 +99,6 @@ public class RoomGoalRepository implements GoalRepository {
         for(String title: goalContents){
             Goal toAdd = new Goal(title, null, false, -1, 1);
             this.insertUnderIncompleteGoals(toAdd);
-
         }
     }
 
