@@ -74,15 +74,7 @@ public class RoomGoalRepository implements GoalRepository {
 
         //the following lines are present in all add___lies methods and would probably do well in a
         //separate method for DRY purposes
-        for(String title: goalContents){
-            //query returns only the contents string from the goal, so for each goal, create a new
-            //one without recurrence for Tomorrow list and add it (if we had time I would change
-            //the queries to return a list of goals instead and run
-            //title.withoutRecurrence().withListNum(1) instead which would be much better)
-            Goal toAdd = new Goal(title, null, false, -1, 1);
-            this.insertUnderIncompleteGoals(toAdd);
-
-        }
+        insertAllUnderIncomplete(stringToGoal(goalContents));
     }
 
     public void addWeeklies(int day, int month, int year, int dayOfWeek){
@@ -90,12 +82,11 @@ public class RoomGoalRepository implements GoalRepository {
         var goalContents = goalsDao.getStartedWeeklyGoalsForToday(day, month, year, dayOfWeek);
 
         //add queried goals to repository
-        for(String title: goalContents){
-            Goal toAdd = new Goal(title, null, false, -1, 1);
-            this.insertUnderIncompleteGoals(toAdd);
-
-        }
+        insertAllUnderIncomplete(stringToGoal(goalContents));
     }
+    /*
+
+     */
 
     public void addMonthlies(int day, int month, int year, int dayOfWeek, int weekOfMonth){
         //6 is used to mean that this is a day for both 1st and 5th week of month
@@ -103,8 +94,10 @@ public class RoomGoalRepository implements GoalRepository {
         if(weekOfMonth == 6) {
             //when weekOfMonth is 6, we want to load in goals recurring on both the 1st
             //and 5th ocurrence of the dayOfWeek
-            goalContents = goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, 1);
-            goalContents.addAll(goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, 5));
+            goalContents = goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek,
+                    1);
+            goalContents.addAll(goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek,
+                    5));
         }
         else {
             //for normal values, just query started monthly goals for the specified weekOfMonth
@@ -113,10 +106,7 @@ public class RoomGoalRepository implements GoalRepository {
                     weekOfMonth);
         }
         //add queried goals to repository
-        for(String title: goalContents){
-            Goal toAdd = new Goal(title, null, false, -1, 1);
-            this.insertUnderIncompleteGoals(toAdd);
-        }
+        insertAllUnderIncomplete(stringToGoal(goalContents));
     }
 
     public void addYearlies(int day, int month, int year, boolean isLeapYear){
@@ -127,11 +117,20 @@ public class RoomGoalRepository implements GoalRepository {
             goalContents.addAll(goalsDao.getStartedYearlyGoalsForToday(29, 2, year));
         }
         //add queried goals to repository
-        for(String title: goalContents){
-            Goal toAdd = new Goal(title, null, false, -1, 1);
-            this.insertUnderIncompleteGoals(toAdd);
-        }
+        insertAllUnderIncomplete(stringToGoal(goalContents));
     }
+    /*
+    x = getAllRecurrence()
+    x.stream()
+        .filter(goal -> {
+            switch(goal.recurrenceType()){
+                case 1:
+                case 2:
+                case 3:
+                case 4: return (goal.) && (!isLeapYear && (day == 1 && month == 3))
+            }
+        })
+     */
 
     //adds goals that should recur on the passed date to the repository
     public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek,
@@ -205,6 +204,14 @@ public class RoomGoalRepository implements GoalRepository {
         save(recurringDateAdjusted);
     }
 
+    private List<Goal> stringToGoal(List<String> titles){
+        return titles.stream()
+                .map(title -> new Goal(title, null, false, -1, 1))
+                .collect(Collectors.toList());
+    }
+    private void insertAllUnderIncomplete(List<Goal> all){
+        all.forEach(this::insertUnderIncompleteGoals);
+    }
 
     private List<Goal> getAllRecurringTomorrow(){
         return goalsDao.findAllWithRecurrence().stream()
