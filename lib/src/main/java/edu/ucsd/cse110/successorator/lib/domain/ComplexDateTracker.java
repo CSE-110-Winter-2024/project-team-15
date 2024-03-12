@@ -307,7 +307,7 @@ public class ComplexDateTracker implements DateTracker {
 
     }
     // Returns the next date after $L that $goal is supposed to recur
-    private static LocalDate whenHappen(Goal goal, LocalDate L) throws Exception {
+    public static LocalDate whenHappen(Goal goal, LocalDate L) throws Exception {
         LocalDate startOf = goalRepresentation(goal).toLocalDate();
         if (startOf.isAfter(L)) return startOf;
         switch(goal.recurrenceType()){
