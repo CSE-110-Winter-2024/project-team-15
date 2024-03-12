@@ -306,6 +306,7 @@ public class ComplexDateTracker implements DateTracker {
         }
 
     }
+    // Returns the next date after $L that $goal is supposed to recur
     private static LocalDate whenHappen(Goal goal, LocalDate L) throws Exception {
         LocalDate startOf = goalRepresentation(goal).toLocalDate();
         if (startOf.isAfter(L)) return startOf;
@@ -326,12 +327,13 @@ public class ComplexDateTracker implements DateTracker {
                 return monthStart;
             case 4:
                 return startOf.plusYears(1);
-            default: throw new Exception("ok");
+            default: throw new Exception("Invalid recurrence type.");
         }
     }
     private static LocalDate whenHappen(Goal goal, LocalDateTime L) throws Exception {
         return whenHappen(goal, L.toLocalDate());
     }
+    // converts integer day to DayOfWeek enum
     private static DayOfWeek dayToEnum(int day){
         switch(day){
             case 1: return DayOfWeek.MONDAY;
@@ -344,6 +346,7 @@ public class ComplexDateTracker implements DateTracker {
             default: throw new IllegalArgumentException();
         }
     }
+    // TRUE iff $goal recurs between $start and $current
     public static boolean shouldHappen(Goal goal, LocalDate start, LocalDate current)
             throws Exception {
         return whenHappen(goal, start).isBefore(current);
