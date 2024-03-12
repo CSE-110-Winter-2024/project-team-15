@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 
 // new imports to use local time instead
@@ -305,5 +306,48 @@ public class ComplexDateTracker implements DateTracker {
         }
 
     }
+    private static LocalDate whenHappen(Goal goal, LocalDate L) throws Exception {
+        LocalDate startOf = goalRepresentation(goal).toLocalDate();
+        if (startOf.isAfter(L)) return startOf;
+        switch(goal.recurrenceType()){
+            case 1:
+                return L.plusDays(1);
+            case 2:
+                return L.with(TemporalAdjusters.next(dayToEnum(goal.dayOfWeekToRecur())));
+            case 3:
+                LocalDate monthStart = L.with(TemporalAdjusters.firstDayOfMonth());
+                int thisDayOfWeek = L.getDayOfWeek().getValue()+1;
+                if(thisDayOfWeek != goal.dayOfWeekToRecur()){
+                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
+                }
+                for(int i = 1; i < goal.weekOfMonthToRecur(); i++){
+                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
+                }
+                return monthStart;
+            case 4:
+                return startOf.plusYears(1);
+            default: throw new Exception("ok");
+        }
+    }
+    private static LocalDate whenHappen(Goal goal, LocalDateTime L) throws Exception {
+        return whenHappen(goal, L.toLocalDate());
+    }
+    private static DayOfWeek dayToEnum(int day){
+        switch(day){
+            case 1: return DayOfWeek.MONDAY;
+            case 2: return DayOfWeek.TUESDAY;
+            case 3: return DayOfWeek.WEDNESDAY;
+            case 4: return DayOfWeek.THURSDAY;
+            case 5: return DayOfWeek.FRIDAY;
+            case 6: return DayOfWeek.SATURDAY;
+            case 7: return DayOfWeek.SUNDAY;
+            default: throw new IllegalArgumentException();
+        }
+    }
+    public static boolean shouldHappen(Goal goal, LocalDate start, LocalDate current)
+            throws Exception {
+        return whenHappen(goal, start).isBefore(current);
+    }
+
 
 }
