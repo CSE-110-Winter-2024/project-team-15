@@ -3,7 +3,9 @@ package edu.ucsd.cse110.successorator.data.db;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -139,6 +141,35 @@ public class RoomGoalRepository implements GoalRepository {
         addWeeklies(day, month, year, dayOfWeek);
         addMonthlies(day, month, year, dayOfWeek, weekOfMonth);
         addYearlies(day, month, year, isLeapYear);
+        try {
+            LocalDate T = LocalDate.of(year, month, day);
+            addRecurrencesBeforeDate(T, 0);
+            // might be possible to do something like
+            // addRecurrencesInRange(T.plusDays(-1), T.plusDays(1), 1)
+            // this could replace the four method calls above
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void addRecurrencesInRange(LocalDate L, LocalDate T, int view) {
+        var range = goalsDao.findAllWithRecurrence();
+        range.stream()
+                .map(GoalEntity::toGoal)
+                .filter(goal -> {
+                    try {
+                        return ComplexDateTracker.shouldHappen(goal, L, T);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .map(goal -> goal.withoutRecurrence().withListNum(view))
+                // change this if necessary
+                .forEach(this::insertUnderIncompleteGoals);
+    }
+    public void addRecurrencesBeforeDate(LocalDate T, int view) throws Exception {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("EEE, MMM dd");
+        var L = LocalDate.parse(lastUpdated, dateFormat);
+        addRecurrencesInRange(L, T, view);
     }
     public void toggleCompleteGoal(Goal goal){
         goalsDao.toggleCompleteGoal(goal);
