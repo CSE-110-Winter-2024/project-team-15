@@ -122,6 +122,7 @@ public class SimpleGoalRepository implements GoalRepository {
 
     }
     */
+    public void moveTomorrowToToday() {}
 
 
 }

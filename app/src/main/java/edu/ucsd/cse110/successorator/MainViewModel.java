@@ -6,13 +6,10 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
 
-import java.time.LocalDateTime;
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
@@ -91,8 +88,13 @@ public class MainViewModel extends ViewModel {
                 goalRepository.setLastUpdated(timeChange.getDate());
                 goalRepository.clearCompletedGoals();
 
-                // we need to do rollover here too
+                // MS2 US2 functionality :)
+                // moving goals from tomorrow to today ...
+                // gotta do this before we add recurrences, otherwise it'll add them too
+                goalRepository.moveTomorrowToToday();
 
+                // information needed for recurrence below.
+                // would do good to make this stuff into a method if there's time later
                 int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
                 int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
                 int year = dateTracker.getValue().getNextDateYear();

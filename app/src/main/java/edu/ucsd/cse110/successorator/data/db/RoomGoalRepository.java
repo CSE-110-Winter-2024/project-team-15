@@ -256,6 +256,7 @@ public class RoomGoalRepository implements GoalRepository {
 
     //after hours of toil, abandoning this idea.  it was beautiful, but requires more knowledge
     //than we have time to acrew
+    // uwhahahah thank you
     private Goal increment(Goal goal){
         // our tracker handles the new date finding
         ComplexDateTracker myTracker = ComplexDateTracker.getInstance().getValue();
@@ -275,4 +276,25 @@ public class RoomGoalRepository implements GoalRepository {
 
         return newGoal;
     }
+
+    public void moveTomorrowToToday() {
+        //Executors.newSingleThreadExecutor().execute(() -> {
+        // Fetch goals set for tomorrow (listNum = 1)
+        List<GoalEntity> tomorrowGoals = goalsDao.findAllWithListNum(1);
+
+        // Modify each goal's listNum to 0 (today) and re-insert
+        tomorrowGoals.stream()
+                .map(GoalEntity::toGoal)
+                .forEach(goal -> {
+                    Goal newGoal = goal.withListNum(0);
+                    // // This re-inserts the goal with the new listNum, replacing the existing row thanks to OnConflictStrategy.REPLACE
+                    // alight, apparently this just makes a copy, eugh .. that shouldn't happen
+                    // since I don't want to ruin anything.. i'll just delete
+                    goalsDao.delete(newGoal.id());
+                    goalsDao.insertUnderIncompleteGoals(GoalEntity.fromGoal(newGoal));
+                });
+        //});
+    }
+
+
 }

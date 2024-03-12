@@ -51,6 +51,8 @@ public interface GoalRepository {
 
      */
 
+    void moveTomorrowToToday();
+
 
 
 
