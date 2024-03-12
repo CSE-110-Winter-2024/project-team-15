@@ -135,6 +135,27 @@ public class ComplexDateTracker implements DateTracker {
         return tempDateTime.getDayOfWeek().getValue();
     }
 
+    // ethan wrote this i just pasted
+    public int getNextDateWeekOfMonth() {
+        int dayOfMonth = getNextDateDayOfMonth();
+
+        //weekOfMonth correlates to how many times dayOfWeek has occurred this month.
+        //this value is found by integer dividing the dayOfMonth-1 by 7 and adding one.
+        //a value of 1 is subtracted from dayOfMonth so that the 1st-7th are 1st occurrences,
+        //8th-14th are second occurrences, and so on.
+        int weekOfMonth = ((dayOfMonth-1) / 7) + 1;
+        int numDaysInLastMonth = getNextDateLastMonthNumDays();
+
+        //a weekOfMonth value of 6 is assigned to days which correspond to the 5th week of
+        //the previous month.  The last day of a given month for which a weekOfMonth value of
+        //6 should be assigned is equal to 35days(5 weeks) - the # of days in the previous month.
+        if(dayOfMonth <= (35 - numDaysInLastMonth)  ){
+            weekOfMonth = 6;
+        }
+
+        return weekOfMonth;
+    }
+
     @Override
     public void setForwardBy(Integer forwardBy) {
         if(forwardBy > 0) {

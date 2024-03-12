@@ -91,26 +91,12 @@ public class MainViewModel extends ViewModel {
                 goalRepository.setLastUpdated(timeChange.getDate());
                 goalRepository.clearCompletedGoals();
 
-                // we need to do rollover here too
-
+                // fields necessary to add recurrence
                 int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
                 int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
                 int year = dateTracker.getValue().getNextDateYear();
                 int dayOfWeek = dateTracker.getValue().getNextDateDayOfWeek();
-
-                //weekOfMonth correlates to how many times dayOfWeek has occurred this month.
-                //this value is found by integer dividing the dayOfMonth-1 by 7 and adding one.
-                //a value of 1 is subtracted from dayOfMonth so that the 1st-7th are 1st occurrences,
-                //8th-14th are second occurrences, and so on.
-                int weekOfMonth = ((dayOfMonth-1) / 7) + 1;
-                int numDaysInLastMonth = dateTracker.getValue().getNextDateLastMonthNumDays();
-
-                //a weekOfMonth value of 6 is assigned to days which correspond to the 5th week of
-                //the previous month.  The last day of a given month for which a weekOfMonth value of
-                //6 should be assigned is equal to 35days(5 weeks) - the # of days in the previous month.
-                if(dayOfMonth <= (35 - numDaysInLastMonth)  ){
-                    weekOfMonth = 6;
-                }
+                int weekOfMonth = dateTracker.getValue().getNextDateWeekOfMonth();
                 boolean isLeapYear = dateTracker.getValue().getNextDateIsLeapYear();
 
                 goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year,
