@@ -335,6 +335,7 @@ public class ComplexDateTracker implements DateTracker {
     // Returns the next date after $L that $goal is supposed to recur
     public static LocalDate whenHappen(Goal goal, LocalDate L) throws Exception {
         LocalDate startOf = goalRepresentation(goal).toLocalDate();
+
         if (startOf.isAfter(L)) return startOf;
         switch(goal.recurrenceType()){
             case 1:
@@ -343,7 +344,8 @@ public class ComplexDateTracker implements DateTracker {
                 return L.with(TemporalAdjusters.next(dayToEnum(goal.dayOfWeekToRecur())));
             case 3:
                 LocalDate monthStart = L.with(TemporalAdjusters.firstDayOfMonth());
-                int thisDayOfWeek = L.getDayOfWeek().getValue()+1;
+                //would crash bc this could equal 8.  used modulus to turn would-be 8 into a 1
+                int thisDayOfWeek = (L.getDayOfWeek().getValue() % 7) + 1;
                 if(thisDayOfWeek != goal.dayOfWeekToRecur()){
                     monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
                 }
