@@ -23,21 +23,28 @@ public class GoalEntity {
     @ColumnInfo(name = "completed")
     public boolean completed;
 
+    @ColumnInfo(name = "context")
+    public int context;
+
     @ColumnInfo(name = "list_num")
     public int listNum;
 
-    GoalEntity(@NonNull String contents, int sortOrder, boolean completed, int listNum){
+
+
+    GoalEntity(@NonNull String contents, int sortOrder, boolean completed, int listNum, int context){
         this.contents = contents;
         this.sortOrder = sortOrder;
         this.completed = completed;
         this.listNum = listNum;
+        this.context = context;
     }
     public static GoalEntity fromGoal(@NonNull Goal goal){
-        var gol = new GoalEntity(goal.contents(), goal.sortOrder(), goal.completed(), goal.listNum());
+        var gol = new GoalEntity(goal.contents(), goal.sortOrder(), goal.completed(), goal.listNum(), goal.context());
         gol.id = goal.id();
         return gol;
     }
     public @NonNull Goal toGoal(){
-        return new Goal(contents, id, completed, sortOrder, listNum);
+
+        return new Goal(contents, id, completed, sortOrder, listNum, context);
     }
 }

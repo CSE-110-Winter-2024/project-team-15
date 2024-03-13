@@ -17,4 +17,53 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goal_name_edit_text">
+
+        <RadioButton
+            android:id="@+id/homeContextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle"
+            android:backgroundTint="@drawable/homebackground"
+            android:button="@null"
+            android:foreground="@drawable/homecontext" />
+<!--            android:backgroundTint="@drawable/styles"-->
+
+
+        <RadioButton
+            android:id="@+id/workContextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle"
+            android:backgroundTint="@drawable/workbackground"
+            android:button="@null"
+            android:foreground="@drawable/workcontext" />
+
+        <RadioButton
+            android:id="@+id/schoolContextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle"
+            android:backgroundTint="@drawable/schoolbackground"
+            android:button="@null"
+            android:foreground="@drawable/schoolcontext" />
+
+        <RadioButton
+            android:id="@+id/errandContextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle"
+            android:backgroundTint="@drawable/errandsbackground"
+            android:button="@null"
+            android:foreground="@drawable/errandscontext" />
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

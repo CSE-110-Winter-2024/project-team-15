@@ -37,6 +37,10 @@ public interface GoalsDao {
     int count();
     @Query("SELECT Min(sort_order) FROM goals")
     int getMinSortOrder();
+
+    @Query("SELECT Min(sort_order) FROM goals WHERE context >= :context AND completed == false")
+    Integer getMinIncompleteSortOrderForContext(int context);
+
     @Query("SELECT Max(sort_order) FROM goals")
     int getMaxSortOrder();
 
@@ -47,6 +51,9 @@ public interface GoalsDao {
     @Query("SELECT Max(sort_order) FROM goals WHERE completed = false")
     Integer getMaxIncompleteSortOrder();
 
+    @Query("SELECT Max(sort_order) FROM goals WHERE completed = false AND context <= :context")
+    Integer getMaxIncompleteSortOrderWithContext(int context);
+
 
     //I don't know if query update happens before or after method body, definitely need to test
     //also unsure if it matters as long as both happen now
@@ -54,14 +61,45 @@ public interface GoalsDao {
             "WHERE completed = true")
     void shiftCompletedSortOrders();
 
+    @Query("UPDATE goals SET sort_order = sort_order + 1 " +
+            "WHERE completed = true OR context > :context")
+    void shiftSortOrdersAfterContext(int context);
+
     @Transaction
     default int prepend(GoalEntity goal){
         shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
         var newGoal = new GoalEntity(
-                goal.contents, getMinSortOrder()-1, goal.completed, goal.listNum
+
+                goal.contents, getMinSortOrder()-1, goal.completed, goal.listNum, goal.context
         );
         return Math.toIntExact(insert(newGoal));
     }
+
+    @Transaction
+    default int prependWithContext(GoalEntity goal){
+
+        int context = goal.context;
+        Integer minContextOrder = getMinIncompleteSortOrderForContext(context);
+        //need to make sure that if there are no goals with this context or one of lesser priority
+        //the goal is not prepended before goals with higher context priority
+        if(minContextOrder == null){
+            if(context > 0){
+                minContextOrder = getMaxIncompleteSortOrderWithContext(context-1);
+                //need to move to 1 after the highest sort order among the previous context or
+                //start of the list if there are no other incomplete goals
+                if(minContextOrder == null){minContextOrder = 0;} else {minContextOrder++;}
+            } else {minContextOrder = 0;}
+        }
+
+        shiftSortOrders(minContextOrder, getMaxSortOrder(), 1);
+        var newGoal = new GoalEntity(
+
+                goal.contents, minContextOrder, goal.completed,
+                goal.listNum, goal.context
+        );
+        return Math.toIntExact(insert(newGoal));
+    }
+
     @Transaction
     default void insertUnderIncompleteGoals(GoalEntity goal){
 
@@ -76,7 +114,26 @@ public interface GoalsDao {
         }
 
         GoalEntity gol = new GoalEntity(
-                goal.contents, incomp, goal.completed, goal.listNum
+                goal.contents, incomp, goal.completed, goal.listNum, goal.context
+        );
+        insert(gol);
+    }
+    @Transaction
+    default void insertUnderIncompleteGoalsWithContext(GoalEntity goal){
+
+        int context = goal.context;
+        shiftSortOrdersAfterContext(context);
+
+        Integer incomp = getMaxIncompleteSortOrderWithContext(context);
+        if(incomp == null) {
+            incomp = 0;
+        }
+        else {
+            incomp = incomp+1;
+        }
+
+        GoalEntity gol = new GoalEntity(
+                goal.contents, incomp, goal.completed, goal.listNum, goal.context
         );
         insert(gol);
     }
@@ -88,13 +145,20 @@ public interface GoalsDao {
 
         // then add into correct location with toggled complete
         if (toggledGoal.completed) {
+            //mark complete is not supposed to care about context, so this still has use
             insertUnderIncompleteGoals(toggledGoal);
         } else {
-            prepend(toggledGoal);
+            //use with context now as this is new desired behaviour of un-toggle
+            prependWithContext(toggledGoal);
         }
     }
     @Query("DELETE FROM goals WHERE id = :id")
     void delete(int id);
     @Query("DELETE FROM goals WHERE completed = true")
     void clearCompletedGoals();
+
+    @Query("SELECT context FROM goals WHERE id = :id")
+    int getContext(int id);
+
+
 }

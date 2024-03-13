@@ -17,13 +17,20 @@ public class Goal {
     //0 = today, 1 = tomorrow, 2 = pending, 3 = recurring
     private final int listNum;
 
+    //0 = Home, 1 = Work, 2 = School, 3 = Errand
+    private final int context;
+
     public Goal(@NonNull String contents, @Nullable Integer id,
-                @NonNull Boolean completed, int sortOrder, int listNum) {
+                @NonNull Boolean completed, int sortOrder, int listNum, int context) {
+
         this.contents = contents;
         this.id = id;
         this.completed = completed;
         this.sortOrder = sortOrder;
+
         this.listNum = listNum;
+        this.context = context;
+
     }
 
     public @NonNull String contents(){
@@ -39,17 +46,25 @@ public class Goal {
     public int listNum() {
         return this.listNum;
     }
+    public int context() {
+        return this.context;
+    }
     public @NonNull Goal withId(@NonNull Integer id){
-        return new Goal(this.contents, id, this.completed, this.sortOrder, this.listNum);
+        return new Goal(this.contents, id, this.completed, this.sortOrder, this.listNum, this.context);
     }
     public @NonNull Goal withSortOrder(int sortOrder){
-        return new Goal(this.contents, this.id, this.completed, sortOrder, this.listNum);
+        return new Goal(this.contents, this.id, this.completed, sortOrder, this.listNum, this.context);
     }
     public @NonNull Goal withComplete(@NonNull Boolean completed){
-        return new Goal(this.contents, this.id, completed, this.sortOrder, this.listNum);
+        return new Goal(this.contents, this.id, completed, this.sortOrder, this.listNum, this.context);
     }
     public @NonNull Goal withListNum(int listNum){
-        return new Goal(this.contents, this.id, completed, this.sortOrder, listNum);
+        return new Goal(this.contents, this.id, completed, this.sortOrder, listNum, this.context);
+    }
+
+    public @NonNull Goal withContext(int context){
+        return new Goal(this.contents, this.id, this.completed, this.sortOrder,this.listNum, context);
+
     }
 
 //    public @NonNull Goal copiedGoal(){
