@@ -344,7 +344,17 @@ public class ComplexDateTracker implements DateTracker {
                 return L.with(TemporalAdjusters.next(dayToEnum(goal.dayOfWeekToRecur())));
             case 3:
                 int thisDayOfWeek = goal.dayOfWeekToRecur();
-                LocalDate monthStart = L.with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                LocalDate monthStart;
+                if (goal.weekOfMonthToRecur() == 5 &&
+                        35 - L.minusMonths(1).lengthOfMonth() >= L.getDayOfMonth()) {
+                    monthStart = L
+                            .minusMonths(1)
+                            .with(TemporalAdjusters.firstDayOfMonth())
+                            .with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                }
+                else {
+                    monthStart = L.with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                }
                 // want to use LocalDate instead of LocalDateTime later
                 int currWeekOfMonth = getWeekOfMonth(monthStart.atStartOfDay());
                 if (currWeekOfMonth > goal.weekOfMonthToRecur()){
@@ -356,6 +366,8 @@ public class ComplexDateTracker implements DateTracker {
                 for(int i = currWeekOfMonth; i < goal.weekOfMonthToRecur(); i++){
                     monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
                 }
+                if (monthStart.isBefore(L))
+                    return whenHappen(goal, L.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek))));
 //                LocalDate monthStart = L.with(TemporalAdjusters.firstDayOfMonth());
 //                int thisDayOfWeek = L.getDayOfWeek().getValue();
 //                if(thisDayOfWeek != goal.dayOfWeekToRecur()){
