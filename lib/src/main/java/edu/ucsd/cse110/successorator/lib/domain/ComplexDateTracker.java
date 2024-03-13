@@ -98,6 +98,11 @@ public class ComplexDateTracker implements DateTracker {
         return tempDateTime.format(dateFormat);
     }
 
+    //idk if need to test since it is so simple
+    public int getYear(){
+        return this.dateTime.getYear();
+    }
+
     //returns true iff the year of tomorrow's date is a leap year
     public boolean getNextDateIsLeapYear() {
         LocalDateTime tempDateTime = this.dateTime.plusDays(1);

@@ -34,7 +34,7 @@ public interface GoalRepository {
     void prepend(Goal goal);
 
     void clearCompletedGoals();
-    void setLastUpdated(String lastUpdated);
+    void setLastUpdated(String lastUpdated, int lastUpdatedYear);
 
     void refreshRecurrence();
 

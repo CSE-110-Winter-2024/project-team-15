@@ -5,11 +5,13 @@ import androidx.lifecycle.Transformations;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalBuilder;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
@@ -21,6 +23,7 @@ import edu.ucsd.cse110.successorator.util.LiveDataSubjectAdapter;
 public class RoomGoalRepository implements GoalRepository {
     private final GoalsDao goalsDao;
     private String lastUpdated;
+    private int lastUpdatedYear;
 
     public RoomGoalRepository(GoalsDao goalsDao){
         this.goalsDao = goalsDao;
@@ -167,8 +170,9 @@ public class RoomGoalRepository implements GoalRepository {
                 .forEach(this::insertUnderIncompleteGoals);
     }
     public void addRecurrencesBeforeDate(LocalDate T, int view) throws Exception {
+        //need to add last-updated-year field to repo to make a local date out of it
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("EEE, MMM dd");
-        var L = LocalDate.parse(lastUpdated, dateFormat);
+        LocalDate L = MonthDay.parse(lastUpdated, dateFormat).atYear(lastUpdatedYear);
         addRecurrencesInRange(L, T, view);
     }
     public void toggleCompleteGoal(Goal goal){
@@ -182,7 +186,10 @@ public class RoomGoalRepository implements GoalRepository {
 
     public String getLastUpdated(){ return this.lastUpdated; }
 
-    public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
+    //may have broken tests, but haven't checked yet
+    public void setLastUpdated(String lastUpdated, int lastUpdatedYear){
+                                this.lastUpdated = lastUpdated;
+                                this.lastUpdatedYear = lastUpdatedYear;}
 
     // need method to move goals from tomorrow to today
 

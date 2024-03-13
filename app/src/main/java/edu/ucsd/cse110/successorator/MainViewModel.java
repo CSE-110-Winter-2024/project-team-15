@@ -52,7 +52,11 @@ public class MainViewModel extends ViewModel {
         this.dateTracker = dateTracker;
 //        this.numInfo = new SimpleSubject<ViewNumInfo>();
  //       numInfo.setValue(ViewNumInfo.getInstance());
-        goalRepository.setLastUpdated(dateTracker.getValue().getDate());
+
+        //this is setting last updated field without recurrences getting triggered, can explain
+        //the problem in morning
+        goalRepository.setLastUpdated(dateTracker.getValue().getDate(),
+                                        ComplexDateTracker.getInstance().getValue().getYear());
 
         /* PLANS:
          * 1. Observe goalRepository so that when it changes, the updated list of goals
@@ -87,8 +91,7 @@ public class MainViewModel extends ViewModel {
             // completed goals
             // in case 2, it's redundant but not harmful.
             if(!goalRepository.getLastUpdated().equals(timeChange.getDate()) && timeChange.getHour()>=2) {
-                // get with the times old man
-                goalRepository.setLastUpdated(timeChange.getDate());
+
                 goalRepository.clearCompletedGoals();
 
                 // fields necessary to add recurrence
@@ -101,6 +104,11 @@ public class MainViewModel extends ViewModel {
 
                 goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year,
                         dayOfWeek, weekOfMonth, isLeapYear);
+
+                // get with the times old man
+                //moved below addRecurrences for timing reasons, can explain in the morning
+                goalRepository.setLastUpdated(timeChange.getDate(),
+                        ComplexDateTracker.getInstance().getValue().getYear());
 
                 //get list of recurring goals
                 //filter out all the ones that aren't supposed to be refreshed
@@ -163,7 +171,7 @@ public class MainViewModel extends ViewModel {
         // violates SRP but fine for now (let's delete these comments if there isn't a simple fix)
         // shouldn't check date tracker in a clearing goals method
         if(!goalRepository.getLastUpdated().equals(rawDateTracker.getDate()) && rawDateTracker.getHour()>=2) {
-            goalRepository.setLastUpdated(rawDateTracker.getDate());
+            goalRepository.setLastUpdated(rawDateTracker.getDate(), rawDateTracker.getYear());
 
             goalRepository.clearCompletedGoals();
         }

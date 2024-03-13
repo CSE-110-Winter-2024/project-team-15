@@ -8,6 +8,7 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 public class SimpleGoalRepository implements GoalRepository {
     private final InMemoryDataSource dataSource;
     private String lastUpdated;
+    private  int lastUpdatedYear;
 
     public SimpleGoalRepository(InMemoryDataSource dataSource) {
         this.lastUpdated ="";
@@ -88,7 +89,9 @@ public class SimpleGoalRepository implements GoalRepository {
     @Override
     public String getLastUpdated(){ return this.lastUpdated; }
     @Override
-    public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
+    public void setLastUpdated(String lastUpdated, int lastUpdatedYear){
+                                this.lastUpdated = lastUpdated;
+                                this.lastUpdatedYear = lastUpdatedYear;}
 
     @Override
     public void clearCompletedGoals(){
