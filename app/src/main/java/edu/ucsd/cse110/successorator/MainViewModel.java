@@ -95,6 +95,7 @@ public class MainViewModel extends ViewModel {
 
                 // information needed for recurrence below.
                 // would do good to make this stuff into a method if there's time later
+                // ok this stuff was made into a method in us4 will delete this when merging
                 int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
                 int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
                 int year = dateTracker.getValue().getNextDateYear();

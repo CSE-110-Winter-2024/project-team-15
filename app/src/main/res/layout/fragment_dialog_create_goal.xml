@@ -17,4 +17,44 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="284dp"
+        android:layout_height="192dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goal_name_edit_text">
+
+        <RadioButton
+            android:id="@+id/one_time_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="One Time" />
+
+        <RadioButton
+            android:id="@+id/daily_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Daily" />
+
+        <RadioButton
+            android:id="@+id/weekly_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Weekly" />
+
+        <RadioButton
+            android:id="@+id/monthly_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Monthly" />
+
+        <RadioButton
+            android:id="@+id/yearly_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Yearly" />
+
+    </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>
