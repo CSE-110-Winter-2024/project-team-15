@@ -171,15 +171,15 @@ public class ComplexDateTrackerTest extends TestCase {
                 1, 1, 2024, 1, 1,
                 false);
         Goal firstInstanceOutOfRange = new Goal("first out", 1, false,
-                1, 0, 2,
+                1, 0, 3,
                 25, 1, 2024, 4, 4,
                 false);
         Goal recursInRange = new Goal("recur in", 2, false,
-                2, 0, 2,
-                21, 12, 2023, 3, 1,
+                2, 0, 3,
+                21, 12, 2023, 5, 1,
                 false);
         Goal recursOutOfRange = new Goal("recur out", 3, false,
-                3, 0, 2,
+                3, 0, 3,
                 1, 1, 2023, 1, 3,
                 false);
 //        System.out.println(recursOutOfRange);

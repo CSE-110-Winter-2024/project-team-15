@@ -343,15 +343,27 @@ public class ComplexDateTracker implements DateTracker {
             case 2:
                 return L.with(TemporalAdjusters.next(dayToEnum(goal.dayOfWeekToRecur())));
             case 3:
-                LocalDate monthStart = L.with(TemporalAdjusters.firstDayOfMonth());
-                //would crash bc this could equal 8.  used modulus to turn would-be 8 into a 1
-                int thisDayOfWeek = (L.getDayOfWeek().getValue() % 7) + 1;
-                if(thisDayOfWeek != goal.dayOfWeekToRecur()){
+                int thisDayOfWeek = goal.dayOfWeekToRecur();
+                LocalDate monthStart = L.with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                // want to use LocalDate instead of LocalDateTime later
+                int currWeekOfMonth = getWeekOfMonth(monthStart.atStartOfDay());
+                if (currWeekOfMonth > goal.weekOfMonthToRecur()){
+                    monthStart = monthStart
+                            .with(TemporalAdjusters.firstDayOfNextMonth())
+                            .with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                    currWeekOfMonth = getWeekOfMonth(monthStart.atStartOfDay());
+                }
+                for(int i = currWeekOfMonth; i < goal.weekOfMonthToRecur(); i++){
                     monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
                 }
-                for(int i = 1; i < goal.weekOfMonthToRecur(); i++){
-                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
-                }
+//                LocalDate monthStart = L.with(TemporalAdjusters.firstDayOfMonth());
+//                int thisDayOfWeek = L.getDayOfWeek().getValue();
+//                if(thisDayOfWeek != goal.dayOfWeekToRecur()){
+//                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
+//                }
+//                for(int i = 1; i < goal.weekOfMonthToRecur(); i++){
+//                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
+//                }
                 return monthStart;
             case 4:
                 return startOf.plusYears(1);
