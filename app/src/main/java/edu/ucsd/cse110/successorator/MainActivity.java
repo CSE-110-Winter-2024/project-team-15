@@ -15,6 +15,7 @@ import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
+import edu.ucsd.cse110.successorator.ui.goallist.dialog.FocusModeDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.SwitchViewDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -93,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
         else if  (item.getItemId() == R.id.action_bar_menu_swap_lists){
             var dialogFragment = SwitchViewDialogFragment.newInstance();
             dialogFragment.show(getSupportFragmentManager(), "SwitchViewDialogFragment");
+        }
+        else if(item.getItemId() == R.id.action_bar_menu_filter){
+            var dialogFragment = FocusModeDialogFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(), "FocusModeDialogFragment");
         }
 
         return super.onOptionsItemSelected(item);
