@@ -200,4 +200,33 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    // Add a method to handle positive button click action from the dialog
+    public void createRecurringGoal(String goalText, int recurrenceType, LocalDateTime representation) {
+        if(!goalText.equals("")) {
+            int dayOfWeekToRecur = representation.getDayOfWeek().getValue(); // 1 is Monday.
+            int weekOfMonthToRecur = dateTracker.getValue().getWeekOfMonth(representation);
+            var goal = new Goal(goalText, null, false, -1, getListShown());
+            goal = goal.withRecurrenceData(recurrenceType, representation.getDayOfMonth(),
+                    representation.getMonthValue(), representation.getYear(),
+                    dayOfWeekToRecur, weekOfMonthToRecur, false);
+
+            insertIncompleteGoal(goal);
+        }
+    }
+
+    // Add a method to resolve the recurrence type based on selected radio button id
+    public int resolveRecurrenceType(int recurrenceId) {
+        if(recurrenceId == R.id.daily_button){
+            return 1;
+        } else if(recurrenceId == R.id.weekly_button){
+            return 2;
+        } else if(recurrenceId == R.id.monthly_button){
+            return 3;
+        } else if(recurrenceId == R.id.yearly_button){
+            return 4;
+        }
+        return 0; // default or unknown type
+    }
+
+
 }
