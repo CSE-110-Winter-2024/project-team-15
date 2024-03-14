@@ -177,6 +177,20 @@ public class MainViewModel extends ViewModel {
             goalRepository.setLastUpdated(rawDateTracker.getDate(), rawDateTracker.getYear());
 
             goalRepository.clearCompletedGoals();
+            //need to run recurrences here so they work when app is opened rather than just when mocking
+
+            int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
+            int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
+            int year = dateTracker.getValue().getNextDateYear();
+            int dayOfWeek = dateTracker.getValue().getNextDateDayOfWeek();
+            int weekOfMonth = dateTracker.getValue().getNextDateWeekOfMonth();
+            boolean isLeapYear = dateTracker.getValue().getNextDateIsLeapYear();
+
+            goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year,
+                    dayOfWeek, weekOfMonth, isLeapYear);
+
+            goalRepository.setLastRecurrence(ComplexDateTracker.getInstance().getValue().
+                    getDateTime().toLocalDate());
         }
         rawDateTracker.update();
         dateTracker.setValue(rawDateTracker);

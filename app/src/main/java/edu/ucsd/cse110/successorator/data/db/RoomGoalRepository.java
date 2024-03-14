@@ -179,6 +179,8 @@ public class RoomGoalRepository implements GoalRepository {
         //need to add last-updated-year field to repo to make a local date out of it
 //        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("EEE, MMM dd");
         LocalDate L = getLastRecurrence();
+        //if range is too small to be adding goals to today, don't add them
+        if(!T.isAfter(L.plusDays(2))){return;}
         addRecurrencesInRange(L, T, view);
     }
     public void toggleCompleteGoal(Goal goal){
