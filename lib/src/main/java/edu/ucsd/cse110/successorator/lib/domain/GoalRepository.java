@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.util.Subject;
@@ -51,6 +52,8 @@ public interface GoalRepository {
 
      */
 
+    void setLastRecurrence(LocalDate last);
+    LocalDate getLastRecurrence();
 
 
 

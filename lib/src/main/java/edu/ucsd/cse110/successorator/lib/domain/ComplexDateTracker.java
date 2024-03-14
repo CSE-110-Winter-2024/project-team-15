@@ -42,6 +42,10 @@ public class ComplexDateTracker implements DateTracker {
         this.forwardBy = 0;
     }
 
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
     // singleton pattern to use this one EVERYWHERE
     public static MutableSubject<ComplexDateTracker> getInstance() {
         if (instance == null) {
