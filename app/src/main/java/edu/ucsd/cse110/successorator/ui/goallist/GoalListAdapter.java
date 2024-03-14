@@ -77,32 +77,27 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         // populate view with goal data
         binding.goalText.setText(goal.contents());
 
-        if(goal.context() == 0){
-            binding.contextIcon.setImageDrawable(circleSupplier.get());
-            binding.contextIcon.setForeground(homeContextSupplier.get());
-            binding.contextIcon.setColorFilter(Color.parseColor("#EDDB35"));
-        }else if(goal.context() == 1){
-            binding.contextIcon.setImageDrawable(circleSupplier.get());
-            binding.contextIcon.setForeground(workContextSupplier.get());
-            binding.contextIcon.setColorFilter(Color.parseColor("#56AEF4"));
-        }else if(goal.context() == 2){
-            binding.contextIcon.setImageDrawable(circleSupplier.get());
-            binding.contextIcon.setForeground(schoolContextSupplier.get());
-            binding.contextIcon.setColorFilter(Color.parseColor("#956AE1"));
-        }else if(goal.context() == 3){
-            binding.contextIcon.setImageDrawable(circleSupplier.get());
-            binding.contextIcon.setForeground(errandsContextSupplier.get());
-            binding.contextIcon.setColorFilter(Color.parseColor("#6AE46F"));
+        //MS2-US8 I refactored this part according to lecture to use hash table instead of cases
+        //This also made it easier to gray out
+        //-Sheridan
+        Drawable[] contextForegrounds = {homeContextSupplier.get(), workContextSupplier.get(), schoolContextSupplier.get(), errandsContextSupplier.get()};
+        String[] colors = {"#EDDB35", "#56AEF4", "#956AE1", "#6AE46F"};
 
-        }
 
-        if (goal.completed()) {//US7 adding strikethrough
-            var drawable = strikethroughSupplier.get();
-            binding.goalText.setForeground(drawable); //strikethroughDrawable is found in GoalListFragment
-//            binding.goalText.setForegroundGravity(Gravity.FILL_HORIZONTAL);
-//            binding.goalText.setForegroundGravity(Gravity.CENTER_VERTICAL);
+        binding.contextIcon.setImageDrawable(circleSupplier.get());
+
+        Drawable contextForeground = contextForegrounds[goal.context()];
+        String color= colors[goal.context()];
+        binding.contextIcon.setForeground(contextForeground); //sets icon itself
+        binding.contextIcon.setColorFilter(Color.parseColor(color)); //sets background color
+
+        if (goal.completed()) {
+            binding.goalText.setForeground(strikethroughSupplier.get());
+            color = "#808080";
+            binding.contextIcon.setColorFilter(Color.parseColor(color)); //grayed out icon for complete goal
         } else {
             binding.goalText.setForeground(null);
+
         }
 
         binding.goalText.setOnClickListener(v -> onGoalClicked.accept(goal));

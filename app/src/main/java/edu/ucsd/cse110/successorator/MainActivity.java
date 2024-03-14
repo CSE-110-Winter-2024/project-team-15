@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             dialogFragment.show(getSupportFragmentManager(), "SwitchViewDialogFragment");
         }
         else if(item.getItemId() == R.id.action_bar_menu_filter){
-            var dialogFragment = FocusModeDialogFragment.newInstance();
+            var dialogFragment = FocusModeDialogFragment.newInstance(item);
             dialogFragment.show(getSupportFragmentManager(), "FocusModeDialogFragment");
         }
 
