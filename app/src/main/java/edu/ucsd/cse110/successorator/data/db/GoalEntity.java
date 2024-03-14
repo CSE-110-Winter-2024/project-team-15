@@ -55,6 +55,7 @@ public class GoalEntity {
         this.completed = completed;
         this.listNum = listNum;
         this.recurrenceType = recurrenceType;
+        this.context = context;
         this.dayStarting = dayStarting;
         this.monthStarting = monthStarting;
         this.yearStarting = yearStarting;

@@ -44,7 +44,7 @@ public interface GoalsDao {
     @Query("SELECT Min(sort_order) FROM goals")
     int getMinSortOrder();
 
-    @Query("SELECT Min(sort_order) FROM goals WHERE context >= :context AND completed == false")
+    @Query("SELECT Min(sort_order) FROM goals WHERE (context >= :context AND context <= 4) AND completed == false")
     Integer getMinIncompleteSortOrderForContext(int context);
 
     @Query("SELECT Max(sort_order) FROM goals")
@@ -88,7 +88,7 @@ public interface GoalsDao {
             "AND (week_of_month_to_recur == :weekOfMonth)")
     List<GoalEntity> getStartedMonthlyGoalsForToday(int day, int month, int year, int todayOfWeek, int weekOfMonth);
 
-    @Query("SELECT Max(sort_order) FROM goals WHERE completed = false AND context <= :context")
+    @Query("SELECT Max(sort_order) FROM goals WHERE completed = false AND (context <= :context AND context <=4)")
     Integer getMaxIncompleteSortOrderWithContext(int context);
 
 
