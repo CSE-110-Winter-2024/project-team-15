@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
@@ -126,5 +127,13 @@ public class SimpleGoalRepository implements GoalRepository {
     }
     */
 
+    @Override
+    public LocalDate getLastRecurrence() {
+        return null;
+    }
 
+    @Override
+    public void setLastRecurrence(LocalDate last) {
+        return;
+    }
 }

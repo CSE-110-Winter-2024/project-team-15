@@ -42,6 +42,10 @@ public class ComplexDateTracker implements DateTracker {
         this.forwardBy = 0;
     }
 
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
     // singleton pattern to use this one EVERYWHERE
     public static MutableSubject<ComplexDateTracker> getInstance() {
         if (instance == null) {
@@ -343,15 +347,39 @@ public class ComplexDateTracker implements DateTracker {
             case 2:
                 return L.with(TemporalAdjusters.next(dayToEnum(goal.dayOfWeekToRecur())));
             case 3:
-                LocalDate monthStart = L.with(TemporalAdjusters.firstDayOfMonth());
-                //would crash bc this could equal 8.  used modulus to turn would-be 8 into a 1
-                int thisDayOfWeek = (L.getDayOfWeek().getValue() % 7) + 1;
-                if(thisDayOfWeek != goal.dayOfWeekToRecur()){
+                int thisDayOfWeek = goal.dayOfWeekToRecur();
+                LocalDate monthStart;
+                if (goal.weekOfMonthToRecur() == 5 &&
+                        35 - L.minusMonths(1).lengthOfMonth() >= L.getDayOfMonth()) {
+                    monthStart = L
+                            .minusMonths(1)
+                            .with(TemporalAdjusters.firstDayOfMonth())
+                            .with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                }
+                else {
+                    monthStart = L.with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                }
+                // want to use LocalDate instead of LocalDateTime later
+                int currWeekOfMonth = getWeekOfMonth(monthStart.atStartOfDay());
+                if (currWeekOfMonth > goal.weekOfMonthToRecur()){
+                    monthStart = monthStart
+                            .with(TemporalAdjusters.firstDayOfNextMonth())
+                            .with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                    currWeekOfMonth = getWeekOfMonth(monthStart.atStartOfDay());
+                }
+                for(int i = currWeekOfMonth; i < goal.weekOfMonthToRecur(); i++){
                     monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
                 }
-                for(int i = 1; i < goal.weekOfMonthToRecur(); i++){
-                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
-                }
+                if (monthStart.isBefore(L))
+                    return whenHappen(goal, L.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek))));
+//                LocalDate monthStart = L.with(TemporalAdjusters.firstDayOfMonth());
+//                int thisDayOfWeek = L.getDayOfWeek().getValue();
+//                if(thisDayOfWeek != goal.dayOfWeekToRecur()){
+//                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
+//                }
+//                for(int i = 1; i < goal.weekOfMonthToRecur(); i++){
+//                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
+//                }
                 return monthStart;
             case 4:
                 return startOf.plusYears(1);

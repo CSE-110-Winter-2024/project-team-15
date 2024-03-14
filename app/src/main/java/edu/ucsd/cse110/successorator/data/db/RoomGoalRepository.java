@@ -44,6 +44,24 @@ public class RoomGoalRepository implements GoalRepository {
         });
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
+    public void setLastRecurrence(LocalDate last){
+        goalsDao.insert(GoalEntity.fromGoal(
+                new Goal("IF YOU SEE THIS, YOU ARE LOST", 9999,
+                        false, 9999, 9999)
+                .withRecurrenceData(0, last.getDayOfMonth(), last.getMonthValue(),
+                        last.getYear(),0,0,false)));
+    }
+    public LocalDate getLastRecurrence(){
+        var ourEntity = goalsDao.find(9999);
+        if (ourEntity == null){
+            setLastRecurrence(LocalDate.now());
+            ourEntity = goalsDao.find(9999);
+        }
+        var ourGoal = ourEntity.toGoal();
+        return LocalDate.of(ourGoal.yearStarting(), ourGoal.monthStarting(),
+                ourGoal.dayStarting());
+    }
+
 
     public Subject<List<Goal>> findAll(int listNum){
         var entitiesLiveData = goalsDao.findAllAsLiveData(listNum);
@@ -124,18 +142,6 @@ public class RoomGoalRepository implements GoalRepository {
         //add queried goals to repository
         insertAllUnderIncomplete(stringToGoal(goalContents));
     }
-    /*
-    x = getAllRecurrence()
-    x.stream()
-        .filter(goal -> {
-            switch(goal.recurrenceType()){
-                case 1:
-                case 2:
-                case 3:
-                case 4: return (goal.) && (!isLeapYear && (day == 1 && month == 3))
-            }
-        })
-     */
 
     //adds goals that should recur on the passed date to the repository
     public void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek,
@@ -148,7 +154,7 @@ public class RoomGoalRepository implements GoalRepository {
             LocalDate T = LocalDate.of(year, month, day);
             addRecurrencesBeforeDate(T, 0);
             // might be possible to do something like
-            // addRecurrencesInRange(T.plusDays(-1), T.plusDays(1), 1)
+            // addRecurrencesInRange(T, T.plusDays(1), 1)
             // this could replace the four method calls above
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -171,8 +177,10 @@ public class RoomGoalRepository implements GoalRepository {
     }
     public void addRecurrencesBeforeDate(LocalDate T, int view) throws Exception {
         //need to add last-updated-year field to repo to make a local date out of it
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("EEE, MMM dd");
-        LocalDate L = MonthDay.parse(lastUpdated, dateFormat).atYear(lastUpdatedYear);
+//        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("EEE, MMM dd");
+        LocalDate L = getLastRecurrence();
+        //if range is too small to be adding goals to today, don't add them
+        if(!T.isAfter(L.plusDays(2))){return;}
         addRecurrencesInRange(L, T, view);
     }
     public void toggleCompleteGoal(Goal goal){
@@ -188,8 +196,9 @@ public class RoomGoalRepository implements GoalRepository {
 
     //may have broken tests, but haven't checked yet
     public void setLastUpdated(String lastUpdated, int lastUpdatedYear){
-                                this.lastUpdated = lastUpdated;
-                                this.lastUpdatedYear = lastUpdatedYear;}
+        this.lastUpdated = lastUpdated;
+        this.lastUpdatedYear = lastUpdatedYear;
+    }
 
     // need method to move goals from tomorrow to today
 
