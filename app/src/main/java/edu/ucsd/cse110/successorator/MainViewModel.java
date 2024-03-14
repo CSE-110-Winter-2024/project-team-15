@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -83,50 +84,14 @@ public class MainViewModel extends ViewModel {
             noGoals.setValue(orderedGoals.getValue().size() == 0);
         });
 
+        // handling time change encapsulated :)
         this.dateTracker.observe(timeChange -> {
-            // when the date changes, one of two things have happened:
-            // 1. the date was manually changed with the arrow
-            // 2. the date was changed in the onResume() of GoalListFragment
-            // in case 1, this part makes sure the date reflects the desired date and removes
-            // completed goals
-            // in case 2, it's redundant but not harmful.
-            if(!goalRepository.getLastUpdated().equals(timeChange.getDate()) && timeChange.getHour()>=2) {
-
-                goalRepository.clearCompletedGoals();
-
-                // fields necessary to add recurrence
-                int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
-                int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
-                int year = dateTracker.getValue().getNextDateYear();
-                int dayOfWeek = dateTracker.getValue().getNextDateDayOfWeek();
-                int weekOfMonth = dateTracker.getValue().getNextDateWeekOfMonth();
-                boolean isLeapYear = dateTracker.getValue().getNextDateIsLeapYear();
-
-                goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year,
-                        dayOfWeek, weekOfMonth, isLeapYear);
-
-
-
-                // get with the times old man
-                //moved below addRecurrences for timing reasons, can explain in the morning
-                goalRepository.setLastUpdated(timeChange.getDate(),
-                        ComplexDateTracker.getInstance().getValue().getYear());
-                goalRepository.setLastRecurrence(ComplexDateTracker.getInstance().getValue().getDateTime().toLocalDate());
-
-                //get list of recurring goals
-                //filter out all the ones that aren't supposed to be refreshed
-                //add copies of the remaining recurring goals to the tomorrow view (without recurrence)
-                //update the remaining recurring goals with the next date of recurrence
-
-                // adding recurrence to tmrw
-
-                //other method that functions quite well should be intact if I don't get it right
-                //goalRepository.refreshRecurrence();
-
-            }
-
+            assert timeChange != null; // the compiler said so ...
+            handleDateChange(timeChange);
         });
+
     }
+
     public MutableSubject<List<Goal>> getOrderedGoals(){
         return orderedGoals;
     }
@@ -135,6 +100,32 @@ public class MainViewModel extends ViewModel {
     // for usage in fragment. to goal or not to goal?
     public MutableSubject<Boolean> getNoGoals() {
         return noGoals;
+    }
+
+    // this is a function now so we can test it
+    public void handleDateChange(DateTracker timeChange) {
+        // when the date changes, one of two things have happened:
+        // 1. the date was manually changed with the arrow
+        // 2. the date was changed in the onResume() of GoalListFragment
+        // in case 1, this part makes sure the date reflects the desired date and removes
+        // completed goals
+        // in case 2, it's redundant but not harmful.
+        if (!goalRepository.getLastUpdated().equals(timeChange.getDate()) && timeChange.getHour() >= 2) {
+            goalRepository.clearCompletedGoals();
+
+            int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
+            int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
+            int year = dateTracker.getValue().getNextDateYear();
+            int dayOfWeek = dateTracker.getValue().getNextDateDayOfWeek();
+            int weekOfMonth = dateTracker.getValue().getNextDateWeekOfMonth();
+            boolean isLeapYear = dateTracker.getValue().getNextDateIsLeapYear();
+
+            goalRepository.addRecurrencesToTomorrowForDate(dayOfMonth, monthOfYear, year, dayOfWeek, weekOfMonth, isLeapYear);
+
+            //moved below addRecurrences for timing reasons, can explain in the morning
+            goalRepository.setLastUpdated(timeChange.getDate(), ComplexDateTracker.getInstance().getValue().getYear());
+            goalRepository.setLastRecurrence(ComplexDateTracker.getInstance().getValue().getDateTime().toLocalDate());
+        }
     }
 
     // "index" of the view you're in

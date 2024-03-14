@@ -7,13 +7,19 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+
+//import static org.mockito.Mockito.*;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
+import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 
 public class MainViewModelTest {
 
@@ -218,6 +224,49 @@ public class MainViewModelTest {
         assertEquals(4, mvm.resolveRecurrenceType(yearlyButtonId));
     }
 
+    // eugh this doesn't work
+//    @Test
+//    public void observingTimeChange() {
+//        // Mock setup
+//        MutableSubject<List<Goal>> mockGoalsSubject = mock(MutableSubject.class);
+//        mockGoalsSubject.setValue(new ArrayList<Goal>()); // Set an empty list of goals
+//
+//        GoalRepository mockRepository = mock(GoalRepository.class);
+//
+//        ComplexDateTracker mockDateTracker = mock(ComplexDateTracker.class);
+//        MutableSubject<ComplexDateTracker> mockSubject = mock(MutableSubject.class);
+//        mockDateTracker.setInstance(mockSubject);
+//
+//
+//        // mocking certain things..
+//        when(mockSubject.getValue()).thenReturn(mockDateTracker);
+//        when(mockRepository.findAll()).thenReturn(mockGoalsSubject);
+//        when(mockRepository.getLastUpdated()).thenReturn("2024-03-14");
+//
+//
+//        // Return values for mocked methods
+//        LocalDateTime mockDateTime = LocalDateTime.of(2024, 3, 14, 0, 0);
+//        when(mockDateTracker.getDateTime()).thenReturn(mockDateTime);
+//        when(mockDateTracker.getDate()).thenReturn(mockDateTime.toLocalDate().toString());
+//        when(mockDateTracker.getHour()).thenReturn(3);
+//        when(mockRepository.getLastUpdated()).thenReturn("2024-03-14");
+//
+//
+//        // MainViewModel initialization
+//        MainViewModel viewModel = new MainViewModel(mockRepository, ComplexDateTracker.getInstance());
+//
+//        // Triggering the observation
+//        viewModel.handleDateChange(mockDateTracker); // Ensure this is a valid call in your actual code
+//
+//        // Verify that interactions with the mockRepository occur as expected
+//        verify(mockRepository).clearCompletedGoals();
+//        verify(mockRepository).addRecurrencesToTomorrowForDate(anyInt(), anyInt(), anyInt(), anyInt(), anyInt(), anyBoolean());
+//    }
 
+    @Test
+    public void observingTimeChange() {
+        // what i need to do is mock
+
+    }
 
 }

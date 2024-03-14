@@ -56,6 +56,11 @@ public class ComplexDateTracker implements DateTracker {
         return instance;
     }
 
+    // for testing!
+    public static void setInstance(MutableSubject<ComplexDateTracker> mockInstance) {
+        instance = mockInstance;
+    }
+
     @Override
     public String getDate(){
         update();

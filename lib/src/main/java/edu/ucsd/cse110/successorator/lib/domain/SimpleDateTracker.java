@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 
-public class SimpleDateTracker implements DateTracker {
+public class SimpleDateTracker /*implements DateTracker*/ {
     // the singleton design pattern is used here in a special way to accomplish the following:
     // 1. maintain list of observers through all classes
     // 2. avoid issues where part of the code is on different dates
@@ -34,13 +34,13 @@ public class SimpleDateTracker implements DateTracker {
         return instance;
     }
 
-    @Override
+    //@Override
     public String getDate(){
         update();
         return this.currentDate;
     }
 
-    @Override
+    //@Override
     public int getHour(){
         update();
         Calendar calendar =Calendar.getInstance(this.timeZone); // creates a new calendar instance
@@ -48,7 +48,7 @@ public class SimpleDateTracker implements DateTracker {
     }
 
 
-    @Override
+    //@Override
     public void update(){
         this.timeZone = TimeZone.getDefault();
         this.calendar = Calendar.getInstance(this.timeZone);
@@ -118,7 +118,7 @@ public class SimpleDateTracker implements DateTracker {
         return day;
     }
 
-    @Override
+    //@Override
     public void setForwardBy(Integer forwardBy) {
 
         if(forwardBy > 0) {
