@@ -55,33 +55,33 @@ public interface GoalsDao {
 
     //queries daily goals (recurrence_type = 1) that have a starting date at or before the date of
     //the argument
-    @Query("SELECT contents FROM goals WHERE recurrence_type = 1 AND " +
+    @Query("SELECT * FROM goals WHERE recurrence_type = 1 AND " +
             "(((372 * :year)+(31 * :month)+(:day)) >= " +
             "((372 * year_starting)+(31 * month_starting)+(day_starting)))")
-    List<String> getStartedDailyGoals(int day, int month, int year);
+    List<GoalEntity> getStartedDailyGoals(int day, int month, int year);
 
     //queries yearly goals (recurrence_type = 4) that have the specified day and month and are set
     //to start at or before the specified year
-    @Query("SELECT contents FROM goals WHERE recurrence_type = 4 AND year_starting <= :year " +
+    @Query("SELECT * FROM goals WHERE recurrence_type = 4 AND year_starting <= :year " +
             "AND month_starting = :month AND day_starting = :day")
-    List<String> getStartedYearlyGoalsForToday(int day, int month, int year);
+    List<GoalEntity> getStartedYearlyGoalsForToday(int day, int month, int year);
 
     //queries weekly goals (recurrence_type = 2) that have a starting date at or before the date of
     //the argument and are set to recur on the passed dayOfWeek
-    @Query("SELECT contents FROM goals WHERE recurrence_type = 2 AND " +
+    @Query("SELECT * FROM goals WHERE recurrence_type = 2 AND " +
             "(((372 * :year)+(31 * :month)+(:day)) >= " +
             "((372 * year_starting)+(31 * month_starting)+(day_starting)))" +
             "AND (day_of_week_to_recur == :todayOfWeek)")
-    List<String> getStartedWeeklyGoalsForToday(int day, int month, int year, int todayOfWeek);
+    List<GoalEntity> getStartedWeeklyGoalsForToday(int day, int month, int year, int todayOfWeek);
 
     //queries monthly goals (recurrence_type = 3) that have a starting date at or before the date of
     //the argument and are set to recur on the passed dayOfWeek as well as the passed weekOfMonth
-    @Query("SELECT contents FROM goals WHERE recurrence_type = 3 AND " +
+    @Query("SELECT * FROM goals WHERE recurrence_type = 3 AND " +
             "(((372 * :year)+(31 * :month)+(:day)) >= " +
             "((372 * year_starting)+(31 * month_starting)+(day_starting)))" +
             "AND (day_of_week_to_recur == :todayOfWeek) " +
             "AND (week_of_month_to_recur == :weekOfMonth)")
-    List<String> getStartedMonthlyGoalsForToday(int day, int month, int year, int todayOfWeek, int weekOfMonth);
+    List<GoalEntity> getStartedMonthlyGoalsForToday(int day, int month, int year, int todayOfWeek, int weekOfMonth);
 
 
     @Query("UPDATE goals SET sort_order = sort_order + 1 " +
