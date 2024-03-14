@@ -132,6 +132,9 @@ public class SimpleGoalRepository implements GoalRepository {
         return null;
     }
 
+    public void insertUnderIncompleteGoalsWithContext(Goal goal){
+    }
+
     @Override
     public void setLastRecurrence(LocalDate last) {
         return;

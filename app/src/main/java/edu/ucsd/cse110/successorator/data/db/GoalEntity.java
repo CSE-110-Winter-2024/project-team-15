@@ -23,6 +23,9 @@ public class GoalEntity {
     @ColumnInfo(name = "completed")
     public boolean completed;
 
+    @ColumnInfo(name = "context")
+    public int context;
+
     @ColumnInfo(name = "list_num")
     public int listNum;
 
@@ -42,13 +45,11 @@ public class GoalEntity {
     public int dayOfWeekToRecur;
     @ColumnInfo(name = "week_of_month_to_recur")
     public int weekOfMonthToRecur;
-    @ColumnInfo(name = "overflow_flag")
-    public boolean overflowFlag;
 
 
-    GoalEntity(@NonNull String contents, int sortOrder, boolean completed, int listNum, int recurrenceType,
-               int dayStarting, int monthStarting, int yearStarting, int dayOfWeekToRecur, int weekOfMonthToRecur,
-               boolean overflowFlag){
+    GoalEntity(@NonNull String contents, int sortOrder, boolean completed, int listNum, int context
+               ,int recurrenceType, int dayStarting, int monthStarting, int yearStarting,
+               int dayOfWeekToRecur, int weekOfMonthToRecur){
         this.contents = contents;
         this.sortOrder = sortOrder;
         this.completed = completed;
@@ -59,18 +60,18 @@ public class GoalEntity {
         this.yearStarting = yearStarting;
         this.dayOfWeekToRecur = dayOfWeekToRecur;
         this.weekOfMonthToRecur = weekOfMonthToRecur;
-        this.overflowFlag = overflowFlag;
     }
     public static GoalEntity fromGoal(@NonNull Goal goal){
         var gol = new GoalEntity(goal.contents(), goal.sortOrder(), goal.completed(), goal.listNum(),
-                goal.recurrenceType(), goal.dayStarting(), goal.monthStarting(), goal.yearStarting(),
-                goal.dayOfWeekToRecur(), goal.weekOfMonthToRecur(), goal.overflowFlag());
+                goal.context(), goal.recurrenceType(), goal.dayStarting(), goal.monthStarting(),
+                goal.yearStarting(), goal.dayOfWeekToRecur(), goal.weekOfMonthToRecur());
         gol.id = goal.id();
         return gol;
     }
     public @NonNull Goal toGoal(){
-        return new Goal(contents, id, completed, sortOrder, listNum)
+        return new Goal(contents, id, completed, sortOrder, listNum, context)
                 .withRecurrenceData(recurrenceType, dayStarting, monthStarting, yearStarting,
-                                    dayOfWeekToRecur, weekOfMonthToRecur, overflowFlag);
+                                    dayOfWeekToRecur, weekOfMonthToRecur);
+
     }
 }

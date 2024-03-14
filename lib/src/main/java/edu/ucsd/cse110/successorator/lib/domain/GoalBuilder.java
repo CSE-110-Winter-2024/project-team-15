@@ -22,6 +22,8 @@ public class GoalBuilder {
     private int dayOfWeekToRecur;
     private int weekOfMonthToRecur;
 
+    private int context;
+
     //this flag will be used to handle cases like yearly on Feb29th to behave like customer required
     private boolean overflowFlag;
 
@@ -33,13 +35,13 @@ public class GoalBuilder {
         this.completed = goal.completed();
         this.sortOrder = goal.sortOrder();
         this.listNum = goal.listNum();
+        this.context = goal.context();
         this.recurrenceType = goal.recurrenceType();
         this.dayStarting = goal.dayStarting();
         this.monthStarting = goal.monthStarting();
         this.yearStarting = goal.yearStarting();
         this.dayOfWeekToRecur = goal.dayOfWeekToRecur();
         this.weekOfMonthToRecur = goal.weekOfMonthToRecur();
-        this.overflowFlag = goal.overflowFlag();
         return this;
     }
     // @require 0 <= day < 7
@@ -102,9 +104,9 @@ public class GoalBuilder {
     }
 
     public Goal build(){
-        return new Goal(contents, id, completed, sortOrder, listNum, recurrenceType,
-                dayStarting, monthStarting, yearStarting, dayOfWeekToRecur, weekOfMonthToRecur,
-                overflowFlag);
+        return new Goal(contents, id, completed, sortOrder, listNum, recurrenceType, context,
+                dayStarting, monthStarting, yearStarting, dayOfWeekToRecur, weekOfMonthToRecur
+                );
     }
 
 }

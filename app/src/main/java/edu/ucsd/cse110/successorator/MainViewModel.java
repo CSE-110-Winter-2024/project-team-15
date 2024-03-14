@@ -155,7 +155,9 @@ public class MainViewModel extends ViewModel {
     //Ethan blurb
     // we're also going to need to add this to a viewModelTest - Keren
     public void insertIncompleteGoal(Goal goal) {
-        goalRepository.insertUnderIncompleteGoals(goal);
+        //changed this method rather than making a new one since this is now always the desired
+        //behaviour of inserting an Incomplete Goal to my knowledge
+        goalRepository.insertUnderIncompleteGoalsWithContext(goal);
     }
 
     public void clearCompletedGoals() {
@@ -203,20 +205,20 @@ public class MainViewModel extends ViewModel {
         //    to fix this, we can just observe the list number, but since this works and we
         //    have deadlines it's fine to keep it this way. let's just review later
         //    \ '-' /
-        goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5));
+        goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5, 0));
         goalRepository.remove(Integer.MAX_VALUE);
 
     }
 
     // Add a method to handle positive button click action from the dialog
-    public void createRecurringGoal(String goalText, int recurrenceType, LocalDateTime representation) {
+    public void createRecurringGoal(String goalText, int recurrenceType, LocalDateTime representation, int context) {
         if(!goalText.equals("")) {
             int dayOfWeekToRecur = representation.getDayOfWeek().getValue(); // 1 is Monday.
             int weekOfMonthToRecur = dateTracker.getValue().getWeekOfMonth(representation);
-            var goal = new Goal(goalText, null, false, -1, getListShown());
+            var goal = new Goal(goalText, null, false, -1, getListShown(), context);
             goal = goal.withRecurrenceData(recurrenceType, representation.getDayOfMonth(),
                     representation.getMonthValue(), representation.getYear(),
-                    dayOfWeekToRecur, weekOfMonthToRecur, false);
+                    dayOfWeekToRecur, weekOfMonthToRecur);
 
             insertIncompleteGoal(goal);
         }

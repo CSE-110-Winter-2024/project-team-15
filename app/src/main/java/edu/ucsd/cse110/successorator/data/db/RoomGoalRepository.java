@@ -47,9 +47,9 @@ public class RoomGoalRepository implements GoalRepository {
     public void setLastRecurrence(LocalDate last){
         goalsDao.insert(GoalEntity.fromGoal(
                 new Goal("IF YOU SEE THIS, YOU ARE LOST", 9999,
-                        false, 9999, 9999)
+                        false, 9999, 9999, 5)
                 .withRecurrenceData(0, last.getDayOfMonth(), last.getMonthValue(),
-                        last.getYear(),0,0,false)));
+                        last.getYear(),0,0)));
     }
     public LocalDate getLastRecurrence(){
         var ourEntity = goalsDao.find(9999);
@@ -86,6 +86,8 @@ public class RoomGoalRepository implements GoalRepository {
     public void prepend(Goal goal){
         goalsDao.prepend(GoalEntity.fromGoal(goal));
     }
+
+    //method should probably be deprecated
     public void insertUnderIncompleteGoals(Goal goal){
         goalsDao.insertUnderIncompleteGoals(GoalEntity.fromGoal(goal));
     }
@@ -209,7 +211,10 @@ public class RoomGoalRepository implements GoalRepository {
         LocalDate L = getLastRecurrence();
         //if range is too small to be adding goals to today, don't add them
         if(!T.isAfter(L.plusDays(2))){return;}
-        addRecurrencesInRange(L, T, view);
+        addRecurrencesInRange(L, T, view);}
+
+    public void insertUnderIncompleteGoalsWithContext(Goal goal){
+        goalsDao.insertUnderIncompleteGoalsWithContext(GoalEntity.fromGoal(goal));
     }
     public void toggleCompleteGoal(Goal goal){
         goalsDao.toggleCompleteGoal(goal);
@@ -353,8 +358,10 @@ public class RoomGoalRepository implements GoalRepository {
         // if anyone wants to make this use builder instead FEEL FREE
         Goal newGoal = goal.withRecurrenceData(
                 goal.recurrenceType(), newDayStarting, newMonthStarting, newYearStarting,
-                newDayOfWeekToRecur, newWeekOfMonthToRecur, false);
+                newDayOfWeekToRecur, newWeekOfMonthToRecur);
 
         return newGoal;
     }
+    public int getContext(int id){ return goalsDao.getContext(id); }
+
 }

@@ -39,8 +39,8 @@ public class MainViewModelTest {
     @Test
     public void getNoGoalsFalse(){
         List<Goal> testGoals = List.of(
-                new Goal("get food",0, false, 0,0 ),
-                new Goal("get kids", 1, false, 1,0)
+                new Goal("get food",0, false, 0,0 , 3),
+                new Goal("get kids", 1, false, 1,0, 3)
         );
         var dataSource = new InMemoryDataSource();
         for (Goal goal : testGoals) {
@@ -57,7 +57,7 @@ public class MainViewModelTest {
     @Test
     public void completedOne() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0,0)
+                new Goal("Prepare for the midterm", 0, false, 0,0, 2)
 //             new Goal("This Massive Wall Of Text Goes On And On For All Eternity Or At Least Until It gets Off THe Screen In which Case You Will Stop Seeing It At All", 4)
         );
         var dataSource = new InMemoryDataSource();
@@ -76,10 +76,10 @@ public class MainViewModelTest {
     @Test
     public void completedMultiple() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0,0),
-                new Goal("Grocery shopping", 1, false, 1,0),
-                new Goal("Make dinner", 2, false, 2,0),
-                new Goal("Text Maria", 3, false, 3,0)
+                new Goal("Prepare for the midterm", 0, false, 0,0, 2),
+                new Goal("Grocery shopping", 1, false, 1,0, 3),
+                new Goal("Make dinner", 2, false, 2,0, 0),
+                new Goal("Text Maria", 3, false, 3,0, 3)
 //
         );
         var dataSource = new InMemoryDataSource();
@@ -102,10 +102,10 @@ public class MainViewModelTest {
     @Test
     public void uncompletedDoubleToggle() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0,0),
-                new Goal("Grocery shopping", 1, false, 1,0),
-                new Goal("Make dinner", 2, false, 2,0),
-                new Goal("Text Maria", 3, false, 3,0)
+                new Goal("Prepare for the midterm", 0, false, 0,0, 2),
+                new Goal("Grocery shopping", 1, false, 1,0, 3),
+                new Goal("Make dinner", 2, false, 2,0, 0),
+                new Goal("Text Maria", 3, false, 3,0, 3)
 //
         );
         var dataSource = new InMemoryDataSource();
@@ -122,13 +122,17 @@ public class MainViewModelTest {
         Assert.assertEquals(expected, actual);
     }
 
+
+    //why broken?
+    //this was supposed to test uncompleting a completed goal but the goal that was supposed to be completed was written as false
+    //we have fixed this and changed it back to true. The error should be fixed now.
     @Test
     public void uncompletedSingleToggle() {
         List<Goal> testGoals = List.of(
-                new Goal("Prepare for the midterm", 0, false, 0,0),
-                new Goal("Grocery shopping", 1, false, 1,0),
-                new Goal("Make dinner", 2, false, 2,0),
-                new Goal("Text Maria", 3, true, 3,0)
+                new Goal("Prepare for the midterm", 0, false, 0,0, 0),
+                new Goal("Grocery shopping", 1, false, 1,0, 3),
+                new Goal("Make dinner", 2, false, 2,0, 0),
+                new Goal("Text Maria", 3, true, 3,0, 3)
 //
         );
         var dataSource = new InMemoryDataSource();
@@ -188,7 +192,7 @@ public class MainViewModelTest {
         LocalDateTime representation = LocalDateTime.of(2024, 3, 14, 0, 0);
 
         // When: createRecurringGoal is called with the given inputs
-        mvm.createRecurringGoal(goalText, recurrenceType, representation);
+        mvm.createRecurringGoal(goalText, recurrenceType, representation, 0);
 
         // Then: A goal with the specified attributes is created
         assertFalse(mvm.getOrderedGoals().getValue().isEmpty()); // one goal needs to be made

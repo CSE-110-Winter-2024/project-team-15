@@ -70,7 +70,14 @@ public class GoalListFragment extends Fragment {
                 List.of(),
                 () -> ResourcesCompat.getDrawable(getResources(), R.drawable.line, null),
                 activityModel::toggleCompleted,
-                activityModel::recurringRemove
+                activityModel::recurringRemove,
+
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.homecontext, null),
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.workcontext, null),
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.schoolcontext, null),
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.errandscontext, null),
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.circle, null)
+
         );
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;

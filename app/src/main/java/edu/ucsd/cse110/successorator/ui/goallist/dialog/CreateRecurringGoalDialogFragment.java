@@ -63,19 +63,36 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
         int recurrenceId = view.radioGroup.getCheckedRadioButtonId();
         int recurrenceType = activityModel.resolveRecurrenceType(recurrenceId);
 
-        // date picked from date picker
-        int dayCreated = view.datePicker.getDayOfMonth();
-        int monthCreated  = view.datePicker.getMonth()+1; // month but jan is 0, so add 1
-        int yearCreated = view.datePicker.getYear();
+        if (!goalText.equals("")) {
+            int contextToAdd = 0;
+            if (view.homeContextButton.isChecked()) {
+                contextToAdd = 0;
+            } else if (view.workContextButton.isChecked()) {
+                contextToAdd = 1;
+            } else if (view.schoolContextButton.isChecked()) {
+                contextToAdd = 2;
+            } else if (view.errandContextButton.isChecked()) {
+                contextToAdd = 3;
 
-        // let's see its representation as a LocalDateTime object
-        ComplexDateTracker myTracker = ComplexDateTracker.getInstance().getValue();
-        LocalDateTime representation = myTracker.datePickerToLocalDateTime(yearCreated, monthCreated, dayCreated);
+            } else {
+                throw new IllegalStateException("No radio button is checked");
+            }
 
-        // Now call the ViewModel method to handle goal creation
-        activityModel.createRecurringGoal(goalText, recurrenceType, representation);
 
-        dialog.dismiss();
+            // date picked from date picker
+            int dayCreated = view.datePicker.getDayOfMonth();
+            int monthCreated = view.datePicker.getMonth() + 1; // month but jan is 0, so add 1
+            int yearCreated = view.datePicker.getYear();
+
+            // let's see its representation as a LocalDateTime object
+            ComplexDateTracker myTracker = ComplexDateTracker.getInstance().getValue();
+            LocalDateTime representation = myTracker.datePickerToLocalDateTime(yearCreated, monthCreated, dayCreated);
+
+            // Now call the ViewModel method to handle goal creation
+            activityModel.createRecurringGoal(goalText, recurrenceType, representation, contextToAdd);
+
+            dialog.dismiss();
+        }
     }
 
     public static CreateRecurringGoalDialogFragment newInstance(){
