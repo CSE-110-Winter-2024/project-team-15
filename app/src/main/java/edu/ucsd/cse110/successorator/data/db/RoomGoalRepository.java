@@ -144,6 +144,10 @@ public class RoomGoalRepository implements GoalRepository {
     public void toggleCompleteGoal(Goal goal){
         goalsDao.toggleCompleteGoal(goal);
     }
+
+    public void toggleCompleteGoal(int id){
+        goalsDao.toggleCompleteGoal(id);
+    }
     public void remove(int id){
         goalsDao.delete(id);
     }
@@ -295,6 +299,11 @@ public class RoomGoalRepository implements GoalRepository {
                 });
         //});
     }
+    @Override
+    public void changePendingGoalStatus(int id, int listNum) {
+        goalsDao.updatesGoalStatus(id,listNum);
+    }
+
 
 
 }

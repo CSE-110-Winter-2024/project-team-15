@@ -30,6 +30,7 @@ public interface GoalRepository {
 //    void moveIncompleteGoal(Goal goal);
 
     void toggleCompleteGoal(Goal goal);
+    void toggleCompleteGoal(int id);
 
     void prepend(Goal goal);
 
@@ -52,6 +53,8 @@ public interface GoalRepository {
      */
 
     void moveTomorrowToToday();
+
+    void changePendingGoalStatus(int id, int listNum);
 
 
 

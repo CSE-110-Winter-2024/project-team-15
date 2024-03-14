@@ -6,6 +6,8 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
 
+import android.util.Log;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -160,8 +162,20 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    public void toggleCompleted(int id){
+        goalRepository.toggleCompleteGoal(id);
+    }
+
+    public void changePendingGoalStatus(int id,int listNum){
+        goalRepository.changePendingGoalStatus(id,listNum);
+    }
+
     public void recurringRemove(Goal goal){
         goalRepository.remove(goal.id());
+    }
+
+    public void pendingRemove(int id){
+        goalRepository.remove(id);
     }
 
     //lab makes dialogFragment call a method that is only
