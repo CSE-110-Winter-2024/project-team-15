@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
@@ -171,6 +172,52 @@ public class MainViewModelTest {
         assertNotEquals(defaultView, mvm.getListShown());
         /* ************************************************************************************* */
     }
+
+    @Test
+    public void createRecurringGoal() {
+        // Given a valid input, when we create a recurring goal, then the goal is created
+        // Given: A MainViewModel instance and valid input for creating a recurring goal
+        var dataSource = new InMemoryDataSource();
+        // i have no choice but to use the simple goal repo for now
+        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
+        var dateTracker = ComplexDateTracker.getInstance();
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
+
+        String goalText = "daily";
+        int recurrenceType = 1; // Daily
+        LocalDateTime representation = LocalDateTime.of(2024, 3, 14, 0, 0);
+
+        // When: createRecurringGoal is called with the given inputs
+        mvm.createRecurringGoal(goalText, recurrenceType, representation);
+
+        // Then: A goal with the specified attributes is created
+        assertFalse(mvm.getOrderedGoals().getValue().isEmpty()); // one goal needs to be made
+        Goal createdGoal = mvm.getOrderedGoals().getValue().get(0);
+        assertEquals(goalText, createdGoal.contents());
+        assertEquals(recurrenceType, createdGoal.recurrenceType());
+    }
+
+    @Test
+    public void resolveRecurrence() {
+        // Given: A MainViewModel instance and radio button IDs for different recurrence types
+        var dataSource = new InMemoryDataSource();
+        // i have no choice but to use the simple goal repo for now
+        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
+        var dateTracker = ComplexDateTracker.getInstance();
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
+
+        int dailyButtonId = R.id.daily_button;
+        int weeklyButtonId = R.id.weekly_button;
+        int monthlyButtonId = R.id.monthly_button;
+        int yearlyButtonId = R.id.yearly_button;
+
+        // When & Then: resolveRecurrenceType is called with the given IDs, correct recurrence type is returned
+        assertEquals(1, mvm.resolveRecurrenceType(dailyButtonId));
+        assertEquals(2, mvm.resolveRecurrenceType(weeklyButtonId));
+        assertEquals(3, mvm.resolveRecurrenceType(monthlyButtonId));
+        assertEquals(4, mvm.resolveRecurrenceType(yearlyButtonId));
+    }
+
 
 
 }
