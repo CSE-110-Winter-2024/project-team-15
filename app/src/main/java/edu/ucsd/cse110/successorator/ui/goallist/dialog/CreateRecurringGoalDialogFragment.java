@@ -59,47 +59,40 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment{
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int i) {
+        String goalText = view.goalNameEditText.getText().toString();
+        int recurrenceId = view.radioGroup.getCheckedRadioButtonId();
+        int recurrenceType = activityModel.resolveRecurrenceType(recurrenceId);
 
-        var goalText = view.goalNameEditText.getText().toString();
-        var recurrenceId = view.radioGroup.getCheckedRadioButtonId();
-        int recurrenceType = 0;
+        if (!goalText.equals("")) {
+            int contextToAdd = 0;
+            if (view.homeContextButton.isChecked()) {
+                contextToAdd = 0;
+            } else if (view.workContextButton.isChecked()) {
+                contextToAdd = 1;
+            } else if (view.schoolContextButton.isChecked()) {
+                contextToAdd = 2;
+            } else if (view.errandContextButton.isChecked()) {
+                contextToAdd = 3;
 
-        //tried to write switch, was getting errors, feel free to change this to a switch if it'll work
-        if(recurrenceId == R.id.daily_button){
-                recurrenceType = 1;}
-        else if(recurrenceId == R.id.weekly_button){
-                recurrenceType = 2;}
-        else if(recurrenceId == R.id.monthly_button){
-                recurrenceType = 3;}
-        else if(recurrenceId == R.id.yearly_button){
-                recurrenceType = 4;}
-
-        // date picked from datepicker
-        var dayCreated = view.datePicker.getDayOfMonth(); // actual day not Sunday (ie the 7th)
-        var monthCreated  = view.datePicker.getMonth()+1; // month but jan is 0, so add 1
-        var yearCreated = view.datePicker.getYear(); // 2024
+            } else {
+                throw new IllegalStateException("No radio button is checked");
+            }
 
 
-        // let's see its representation as a LocalDateTime object
-        ComplexDateTracker myTracker = ComplexDateTracker.getInstance().getValue();
-        LocalDateTime representation = myTracker.datePickerToLocalDateTime(yearCreated, monthCreated, dayCreated);
+            // date picked from date picker
+            int dayCreated = view.datePicker.getDayOfMonth();
+            int monthCreated = view.datePicker.getMonth() + 1; // month but jan is 0, so add 1
+            int yearCreated = view.datePicker.getYear();
 
-        // now we can easily extract the day
-        int dayOfWeekToRecur = representation.getDayOfWeek().getValue(); // 1 is monday.
+            // let's see its representation as a LocalDateTime object
+            ComplexDateTracker myTracker = ComplexDateTracker.getInstance().getValue();
+            LocalDateTime representation = myTracker.datePickerToLocalDateTime(yearCreated, monthCreated, dayCreated);
 
-        // and the week of month (woohoo)
-        int weekOfMonthToRecur = myTracker.getWeekOfMonth(representation);
+            // Now call the ViewModel method to handle goal creation
+            activityModel.createRecurringGoal(goalText, recurrenceType, representation, contextToAdd);
 
-        // and make a new goal
-        if(!goalText.equals("")){
-            var goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown());
-            goal = goal.withRecurrenceData(recurrenceType, dayCreated, monthCreated, yearCreated,
-                    dayOfWeekToRecur, weekOfMonthToRecur, false);
-
-            activityModel.insertIncompleteGoal(goal);
+            dialog.dismiss();
         }
-
-        dialog.dismiss();
     }
 
     public static CreateRecurringGoalDialogFragment newInstance(){

@@ -58,7 +58,7 @@ public class CreatePendingGoalDialogFragment extends DialogFragment {
         var goalText = view.goalNameEditText.getText().toString();
 
         if(!goalText.equals("")){
-            var goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown());
+            var goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown(), 0);
 
             activityModel.insertIncompleteGoal(goal);
         }

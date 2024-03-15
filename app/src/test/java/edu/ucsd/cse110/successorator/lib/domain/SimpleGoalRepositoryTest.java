@@ -47,7 +47,7 @@ public class SimpleGoalRepositoryTest {
     public void insertUnderIncompleteGoals(){
         SimpleGoalRepository testRepository = new SimpleGoalRepository(InMemoryDataSource.fromDefaultEmpty());
 
-        Goal g1 = new Goal("1", null, false, -1,0);
+        Goal g1 = new Goal("1", null, false, -1,0, 0);
         testRepository.insertUnderIncompleteGoals(g1);
 
         //add to empty repo
@@ -56,13 +56,13 @@ public class SimpleGoalRepositoryTest {
         assertEquals(g1t.contents(), "1");
 
         //add after incomplete goals
-        Goal g2 = new Goal("2", null, false, -1,0);
+        Goal g2 = new Goal("2", null, false, -1,0,0);
         testRepository.insertUnderIncompleteGoals(g2);
         int g2order = testRepository.find(1).getValue().sortOrder();
         int g1order = testRepository.find(0).getValue().sortOrder();
         assertEquals(g1order+1, g2order);
 
-        Goal g3 = new Goal("3", null, true, -1,0);
+        Goal g3 = new Goal("3", null, true, -1,0,0);
         //insertIncomplete doesn't know if goal is completed or not, just inserts as if it is,
         //so this test will place this incomplete goal at the end since no other completed
         // goals are present
@@ -70,7 +70,7 @@ public class SimpleGoalRepositoryTest {
         int g3order1 = testRepository.find(2).getValue().sortOrder();
         //insert into repo with completed goals and make sure
         //both goals have updated order
-        Goal g4 = new Goal("4", null, true, -1,0);
+        Goal g4 = new Goal("4", null, true, -1,0,0);
 
         testRepository.insertUnderIncompleteGoals(g4);
         int g4order = testRepository.find(3).getValue().sortOrder();
@@ -113,11 +113,11 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
 
-        actual1 = new Goal("1", 1, false, 1,0);
-        actual2 = new Goal("2", 2, false, 2,0);
+        actual1 = new Goal("1", 1, false, 1,0,0);
+        actual2 = new Goal("2", 2, false, 2,0,0);
 
-        expected1 = new Goal("1", 1, true, 3,0);
-        expected2 = new Goal("2", 2, false, 2,0);
+        expected1 = new Goal("1", 1, true, 3,0,0);
+        expected2 = new Goal("2", 2, false, 2,0,0);
 
         testMemoryDataSource.putGoal(actual1); // 1 = sort order
         testMemoryDataSource.putGoal(actual2); // 2 = sort order
@@ -151,11 +151,11 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
 
-        actual1 = new Goal("1", 1, false, 1,0);
-        actual2 = new Goal("2", 2, false, 2,0);
+        actual1 = new Goal("1", 1, false, 1,0, 0);
+        actual2 = new Goal("2", 2, false, 2,0,0);
 
-        expected1 = new Goal("1", 1, false, 1,0);
-        expected2 = new Goal("2", 2, true, 3,0);
+        expected1 = new Goal("1", 1, false, 1,0,0);
+        expected2 = new Goal("2", 2, true, 3,0, 0);
 
         testMemoryDataSource.putGoal(actual1); // 1 = sort order
         testMemoryDataSource.putGoal(actual2); // 2 = sort order
@@ -191,15 +191,15 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
 
-        actual1 = new Goal("1", 1, false, 1,0);
-        actual2 = new Goal("2", 2, false, 2,0);
-        actual3 = new Goal("3", 3, true, 3,0);
-        actual4 = new Goal("4", 4, true, 4,0);
+        actual1 = new Goal("1", 1, false, 1,0,0);
+        actual2 = new Goal("2", 2, false, 2,0,0);
+        actual3 = new Goal("3", 3, true, 3,0,0);
+        actual4 = new Goal("4", 4, true, 4,0,0);
 
-        expected1 = new Goal("1", 1, true, 3,0);
-        expected2 = new Goal("2", 2, false, 2,0);
-        expected3 = new Goal("3", 3, true, 4,0);
-        expected4 = new Goal("4", 4, true, 5,0);
+        expected1 = new Goal("1", 1, true, 3,0,0);
+        expected2 = new Goal("2", 2, false, 2,0,0);
+        expected3 = new Goal("3", 3, true, 4,0,0);
+        expected4 = new Goal("4", 4, true, 5,0,0);
 
         testMemoryDataSource.putGoal(actual1);
         testMemoryDataSource.putGoal(actual2);
@@ -242,15 +242,15 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
 
-        actual1 = new Goal("1", 1, false, 1,0);
-        actual2 = new Goal("2", 2, false, 2,0);
-        actual3 = new Goal("3", 3, true, 3,0);
-        actual4 = new Goal("4", 4, true, 4,0);
+        actual1 = new Goal("1", 1, false, 1,0,0);
+        actual2 = new Goal("2", 2, false, 2,0,0);
+        actual3 = new Goal("3", 3, true, 3,0,0);
+        actual4 = new Goal("4", 4, true, 4,0,0);
 
-        expected1 = new Goal("1", 1, false, 2,0);
-        expected2 = new Goal("2", 2, false, 3, 0);
-        expected3 = new Goal("3", 3, true, 4, 0);
-        expected4 = new Goal("4", 4, false, 1, 0);
+        expected1 = new Goal("1", 1, false, 2,0,0);
+        expected2 = new Goal("2", 2, false, 3, 0,0);
+        expected3 = new Goal("3", 3, true, 4, 0,0);
+        expected4 = new Goal("4", 4, false, 1, 0,0);
 
         testMemoryDataSource.putGoal(actual1);
         testMemoryDataSource.putGoal(actual2);
@@ -292,15 +292,15 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
 
-        actual1 = new Goal("1", 1, false, 1,0);
-        actual2 = new Goal("2", 2, true, 2, 0);
-        actual3 = new Goal("3", 3, true, 3, 0);
-        actual4 = new Goal("4", 4, true, 4, 0);
+        actual1 = new Goal("1", 1, false, 1,0,0);
+        actual2 = new Goal("2", 2, true, 2, 0,0);
+        actual3 = new Goal("3", 3, true, 3, 0,0);
+        actual4 = new Goal("4", 4, true, 4, 0,0);
 
-        expected1 = new Goal("1", 1, false, 2, 0);
-        expected2 = new Goal("2", 2, false, 1, 0);
-        expected3 = new Goal("3", 3, true, 4, 0);
-        expected4 = new Goal("4", 4, true, 5, 0);
+        expected1 = new Goal("1", 1, false, 2, 0,0);
+        expected2 = new Goal("2", 2, false, 1, 0,0);
+        expected3 = new Goal("3", 3, true, 4, 0,0);
+        expected4 = new Goal("4", 4, true, 5, 0,0);
 
         testMemoryDataSource.putGoal(actual1);
         testMemoryDataSource.putGoal(actual2);
@@ -335,9 +335,9 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
 
-        actual1 = new Goal("1", 1, true, 1, 0);
+        actual1 = new Goal("1", 1, true, 1, 0,0);
 
-        expected1 = new Goal("1", 1, false, 1, 0);
+        expected1 = new Goal("1", 1, false, 1, 0,0);
 
         testMemoryDataSource.putGoal(actual1);
 
@@ -361,8 +361,8 @@ public class SimpleGoalRepositoryTest {
         // Given
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
-        actual1 = new Goal("1", 1, false, 1, 0);
-        expected1 = new Goal("1", 1, true, 2, 0);
+        actual1 = new Goal("1", 1, false, 1, 0,0);
+        expected1 = new Goal("1", 1, true, 2, 0,0);
         testMemoryDataSource.putGoal(actual1);
 
 
@@ -380,7 +380,7 @@ public class SimpleGoalRepositoryTest {
 
 
         // Given
-        expected1 = new Goal("1", 1, false, 2, 0);
+        expected1 = new Goal("1", 1, false, 2, 0,0);
 
 
         // When
@@ -425,13 +425,13 @@ public class SimpleGoalRepositoryTest {
         testMemoryDataSource = new InMemoryDataSource();
         testRepository = new SimpleGoalRepository(testMemoryDataSource);
 
-        actual1 = new Goal("1", 1, false, 1, 0);
-        actual2 = new Goal("2", 2, false, 2, 0);
-        actual3 = new Goal("3", 3, true, 3, 0);
-        actual4 = new Goal("4", 4, true, 4, 0);
+        actual1 = new Goal("1", 1, false, 1, 0,0);
+        actual2 = new Goal("2", 2, false, 2, 0,0);
+        actual3 = new Goal("3", 3, true, 3, 0,0);
+        actual4 = new Goal("4", 4, true, 4, 0,0);
 
-        expected1 = new Goal("1", 1, false, 1, 0);
-        expected2 = new Goal("2", 2, false, 2, 0);
+        expected1 = new Goal("1", 1, false, 1, 0,0);
+        expected2 = new Goal("2", 2, false, 2, 0,0);
         expected3 = null;
         expected4 = null;
 
@@ -469,12 +469,12 @@ public class SimpleGoalRepositoryTest {
 
         // When goals are added to two different views
         listNum = 0; // For example, and goals for "today"
-        List<Goal> expectedGoals0 = List.of(new Goal("Today Goal 1", 3, false, 3, listNum),
-                new Goal("Today Goal 2", 4, true, 4, listNum));
+        List<Goal> expectedGoals0 = List.of(new Goal("Today Goal 1", 3, false, 3, listNum,0),
+                new Goal("Today Goal 2", 4, true, 4, listNum,0));
 
         listNum = 1; // For example, goals for "tomorrow"
-        List<Goal> expectedGoals1 = List.of(new Goal("Tomorrow Goal 1", 3, false, 3, listNum),
-                new Goal("Tomorrow Goal 2", 4, true, 4, listNum));
+        List<Goal> expectedGoals1 = List.of(new Goal("Tomorrow Goal 1", 3, false, 3, listNum,0),
+                new Goal("Tomorrow Goal 2", 4, true, 4, listNum,0));
 
         testRepository.save(expectedGoals0);
         testRepository.save(expectedGoals1);
@@ -492,6 +492,38 @@ public class SimpleGoalRepositoryTest {
 
     }
 
+    @Test
+    public void testContext(){
+        SimpleGoalRepository testRepository;
+        InMemoryDataSource testMemoryDataSource;
+        testMemoryDataSource = new InMemoryDataSource();
+        testRepository = new SimpleGoalRepository(testMemoryDataSource);
 
+
+        Goal actual1 = new Goal("This is a goal", 1, true, 1, 0, 0);
+        Goal actual2 = new Goal("2", 2, false, 2, 0,1);
+        Goal actual3 = new Goal("3", 3, true, 3, 0,2);
+        Goal actual4 = new Goal("4", 4, true, 4, 0,3);
+
+        testMemoryDataSource.putGoal(actual1);
+        testMemoryDataSource.putGoal(actual2);
+        testMemoryDataSource.putGoal(actual3);
+        testMemoryDataSource.putGoal(actual4);
+
+        Goal expected1 = new Goal("This is a goal", 1, true, 1, 0, 0);
+        Goal expected2 = new Goal("2", 2, false, 2, 0,1);
+        Goal expected3 = new Goal("3", 3, true, 3, 0,2);
+        Goal expected4 = new Goal("4", 4, true, 4, 0,3);
+
+        actual1 = testMemoryDataSource.getGoal(1);
+        actual2 = testMemoryDataSource.getGoal(2);
+        actual3 = testMemoryDataSource.getGoal(3);
+        actual4 = testMemoryDataSource.getGoal(4);
+
+        assertEquals(expected1.context(), actual1.context());
+        assertEquals(expected2.context(), actual2.context());
+        assertEquals(expected3.context(), actual3.context());
+        assertEquals(expected4.context(), actual4.context());
+    }
 
 }

@@ -60,83 +60,99 @@ public class CreateGoalDialogFragment extends DialogFragment {
 
     private void onPositiveButtonClick(DialogInterface dialog, int i) {
         var goalText = view.goalNameEditText.getText().toString();
+
         var recurrenceId = view.radioGroup.getCheckedRadioButtonId();
         int recurrenceType = 0;
 
         // first if is slightly unnecessary but whatever
-        if(recurrenceId == R.id.one_time_button) {
+        if (recurrenceId == R.id.one_time_button) {
             recurrenceType = 0;
         } else if (recurrenceId == R.id.daily_button) {
             recurrenceType = 1;
         } else if (recurrenceId == R.id.weekly_button) {
             recurrenceType = 2;
-        } else if (recurrenceId == R.id.monthly_button){
+        } else if (recurrenceId == R.id.monthly_button) {
             recurrenceType = 3;
-        } else if (recurrenceId == R.id.yearly_button){
+        } else if (recurrenceId == R.id.yearly_button) {
             recurrenceType = 4;
         }
 
-        // objects necessary to extract goal recurrence data
-        ComplexDateTracker myTracker = ComplexDateTracker.getInstance().getValue();
-        int currentList = ViewNumInfo.getInstance().getValue().getListShown();
-        LocalDateTime myTime = myTracker.getLocalDateTime();
+        if (!goalText.equals("")) {
+            int contextToAdd = 0;
+            if (view.homeContextButton.isChecked()) {
+                contextToAdd = 0;
+            } else if (view.workContextButton.isChecked()) {
+                contextToAdd = 1;
+            } else if (view.schoolContextButton.isChecked()) {
+                contextToAdd = 2;
+            } else if (view.errandContextButton.isChecked()) {
+                contextToAdd = 3;
 
-        // move the time forwards if we're in the tomorrow view since it defaults to today
-        if(currentList == 1) {
-            myTime.plusDays(1);
-        }
+            } else {
+                throw new IllegalStateException("No radio button is checked");
+            }
 
-        // let's see if this works
-        int dayCreated = myTime.getDayOfMonth();
-        int monthCreated  = myTime.getMonthValue();
-        int yearCreated = myTime.getYear();
-        int dayOfWeekToRecur = myTime.getDayOfWeek().getValue(); // 1 is monday.
-        int weekOfMonthToRecur = myTracker.getWeekOfMonth(myTime);
+            // objects necessary to extract goal recurrence data
+            ComplexDateTracker myTracker = ComplexDateTracker.getInstance().getValue();
+            int currentList = ViewNumInfo.getInstance().getValue().getListShown();
+            LocalDateTime myTime = myTracker.getLocalDateTime();
+
+            // move the time forwards if we're in the tomorrow view since it defaults to today
+            if (currentList == 1) {
+                myTime.plusDays(1);
+            }
+
+            // let's see if this works
+            int dayCreated = myTime.getDayOfMonth();
+            int monthCreated = myTime.getMonthValue();
+            int yearCreated = myTime.getYear();
+            int dayOfWeekToRecur = myTime.getDayOfWeek().getValue(); // 1 is monday.
+            int weekOfMonthToRecur = myTracker.getWeekOfMonth(myTime);
 
 
-        // now we need to add goals.. it gets SLIGHTLY trickier here
-        if(!goalText.equals("")){
+            // now we need to add goals.. it gets SLIGHTLY trickier here
+
             Goal goal;
 
             // some conditions based on what the goal is are necessary
             // if it's not one time, we need to add a recurrence template to the recurrence view
-            if(recurrenceType != 0) {
-                goal = new Goal(goalText, null, false, -1, /*this.activityModel.getListShown()*/ 3);
+            if (recurrenceType != 0) {
+                goal = new Goal(goalText, null, false, -1, /*this.activityModel.getListShown()*/ 3, contextToAdd);
                 goal = goal.withRecurrenceData(recurrenceType, dayCreated, monthCreated, yearCreated,
-                        dayOfWeekToRecur, weekOfMonthToRecur, false);
+                        dayOfWeekToRecur, weekOfMonthToRecur);
 
                 activityModel.insertIncompleteGoal(goal);
             }
 
             // as one does for any type of goal, add it to the current view
-            goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown());
+            goal = new Goal(goalText, null, false, -1, this.activityModel.getListShown(), contextToAdd);
             goal = goal.withRecurrenceData(0, dayCreated, monthCreated, yearCreated,
-                    dayOfWeekToRecur, weekOfMonthToRecur, false);
+                    dayOfWeekToRecur, weekOfMonthToRecur);
 
             activityModel.insertIncompleteGoal(goal);
 
             // if also happens to be daily AND starts TODAY, we need to add it to the tomorrow view
-            if(recurrenceType == 1 && currentList == 0) {
+            if (recurrenceType == 1 && currentList == 0) {
                 // this isn't so dry but it is easy :(
                 myTime.plusDays(1);
 
                 dayCreated = myTime.getDayOfMonth();
-                monthCreated  = myTime.getMonthValue();
+                monthCreated = myTime.getMonthValue();
                 yearCreated = myTime.getYear();
                 dayOfWeekToRecur = myTime.getDayOfWeek().getValue(); // 1 is monday.
                 weekOfMonthToRecur = myTracker.getWeekOfMonth(myTime);
 
-                goal = new Goal(goalText, null, false, -1, /*this.activityModel.getListShown()*/ 1);
+                goal = new Goal(goalText, null, false, -1, /*this.activityModel.getListShown()*/ 1, contextToAdd);
                 goal = goal.withRecurrenceData(0, dayCreated, monthCreated, yearCreated,
-                        dayOfWeekToRecur, weekOfMonthToRecur, false);
+                        dayOfWeekToRecur, weekOfMonthToRecur);
 
                 activityModel.insertIncompleteGoal(goal);
             }
 
             // can't think of any more cases
-        }
 
-        dialog.dismiss();
+            dialog.dismiss();
+        }
     }
 
     public static CreateGoalDialogFragment newInstance(){

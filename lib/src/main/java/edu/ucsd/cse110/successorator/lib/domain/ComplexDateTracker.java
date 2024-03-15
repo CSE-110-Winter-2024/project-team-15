@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 
 // new imports to use local time instead
@@ -39,6 +40,10 @@ public class ComplexDateTracker implements DateTracker {
 
         this.currentDate = this.dateTime.format(dateFormat);
         this.forwardBy = 0;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     // singleton pattern to use this one EVERYWHERE
@@ -100,6 +105,11 @@ public class ComplexDateTracker implements DateTracker {
         return tempDateTime.format(dateFormat);
     }
 
+    //idk if need to test since it is so simple
+    public int getYear(){
+        return this.dateTime.getYear();
+    }
+
     //returns true iff the year of tomorrow's date is a leap year
     public boolean getNextDateIsLeapYear() {
         LocalDateTime tempDateTime = this.dateTime.plusDays(1);
@@ -135,6 +145,27 @@ public class ComplexDateTracker implements DateTracker {
         // i wanted a number so I did get value. monday is 1 sunday is 7
         LocalDateTime tempDateTime = this.dateTime.plusDays(1);
         return tempDateTime.getDayOfWeek().getValue();
+    }
+
+    // ethan wrote this i just pasted
+    public int getNextDateWeekOfMonth() {
+        int dayOfMonth = getNextDateDayOfMonth();
+
+        //weekOfMonth correlates to how many times dayOfWeek has occurred this month.
+        //this value is found by integer dividing the dayOfMonth-1 by 7 and adding one.
+        //a value of 1 is subtracted from dayOfMonth so that the 1st-7th are 1st occurrences,
+        //8th-14th are second occurrences, and so on.
+        int weekOfMonth = ((dayOfMonth-1) / 7) + 1;
+        int numDaysInLastMonth = getNextDateLastMonthNumDays();
+
+        //a weekOfMonth value of 6 is assigned to days which correspond to the 5th week of
+        //the previous month.  The last day of a given month for which a weekOfMonth value of
+        //6 should be assigned is equal to 35days(5 weeks) - the # of days in the previous month.
+        if(dayOfMonth <= (35 - numDaysInLastMonth)  ){
+            weekOfMonth = 6;
+        }
+
+        return weekOfMonth;
     }
 
     @Override
@@ -308,5 +339,77 @@ public class ComplexDateTracker implements DateTracker {
         }
 
     }
+    // Returns the next date after $L that $goal is supposed to recur
+    public static LocalDate whenHappen(Goal goal, LocalDate L) throws Exception {
+        LocalDate startOf = goalRepresentation(goal).toLocalDate();
+
+        if (startOf.isAfter(L)) return startOf;
+        switch(goal.recurrenceType()){
+            case 1:
+                return L.plusDays(1);
+            case 2:
+                return L.with(TemporalAdjusters.next(dayToEnum(goal.dayOfWeekToRecur())));
+            case 3:
+                int thisDayOfWeek = goal.dayOfWeekToRecur();
+                LocalDate monthStart;
+                if (goal.weekOfMonthToRecur() == 5 &&
+                        35 - L.minusMonths(1).lengthOfMonth() >= L.getDayOfMonth()) {
+                    monthStart = L
+                            .minusMonths(1)
+                            .with(TemporalAdjusters.firstDayOfMonth())
+                            .with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                }
+                else {
+                    monthStart = L.with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                }
+                // want to use LocalDate instead of LocalDateTime later
+                int currWeekOfMonth = getWeekOfMonth(monthStart.atStartOfDay());
+                if (currWeekOfMonth > goal.weekOfMonthToRecur()){
+                    monthStart = monthStart
+                            .with(TemporalAdjusters.firstDayOfNextMonth())
+                            .with(TemporalAdjusters.nextOrSame(dayToEnum(thisDayOfWeek)));
+                    currWeekOfMonth = getWeekOfMonth(monthStart.atStartOfDay());
+                }
+                for(int i = currWeekOfMonth; i < goal.weekOfMonthToRecur(); i++){
+                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
+                }
+                if (monthStart.isBefore(L))
+                    return whenHappen(goal, L.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek))));
+//                LocalDate monthStart = L.with(TemporalAdjusters.firstDayOfMonth());
+//                int thisDayOfWeek = L.getDayOfWeek().getValue();
+//                if(thisDayOfWeek != goal.dayOfWeekToRecur()){
+//                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
+//                }
+//                for(int i = 1; i < goal.weekOfMonthToRecur(); i++){
+//                    monthStart = monthStart.with(TemporalAdjusters.next(dayToEnum(thisDayOfWeek)));
+//                }
+                return monthStart;
+            case 4:
+                return startOf.plusYears(1);
+            default: throw new Exception("Invalid recurrence type.");
+        }
+    }
+    private static LocalDate whenHappen(Goal goal, LocalDateTime L) throws Exception {
+        return whenHappen(goal, L.toLocalDate());
+    }
+    // converts integer day to DayOfWeek enum
+    private static DayOfWeek dayToEnum(int day){
+        switch(day){
+            case 1: return DayOfWeek.MONDAY;
+            case 2: return DayOfWeek.TUESDAY;
+            case 3: return DayOfWeek.WEDNESDAY;
+            case 4: return DayOfWeek.THURSDAY;
+            case 5: return DayOfWeek.FRIDAY;
+            case 6: return DayOfWeek.SATURDAY;
+            case 7: return DayOfWeek.SUNDAY;
+            default: throw new IllegalArgumentException();
+        }
+    }
+    // TRUE iff $goal recurs between $start and $current
+    public static boolean shouldHappen(Goal goal, LocalDate start, LocalDate current)
+            throws Exception {
+        return whenHappen(goal, start).isBefore(current);
+    }
+
 
 }

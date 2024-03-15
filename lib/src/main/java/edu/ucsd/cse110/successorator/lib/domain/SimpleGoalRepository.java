@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
@@ -8,6 +9,7 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 public class SimpleGoalRepository implements GoalRepository {
     private final InMemoryDataSource dataSource;
     private String lastUpdated;
+    private  int lastUpdatedYear;
 
     public SimpleGoalRepository(InMemoryDataSource dataSource) {
         this.lastUpdated ="";
@@ -88,7 +90,9 @@ public class SimpleGoalRepository implements GoalRepository {
     @Override
     public String getLastUpdated(){ return this.lastUpdated; }
     @Override
-    public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
+    public void setLastUpdated(String lastUpdated, int lastUpdatedYear){
+                                this.lastUpdated = lastUpdated;
+                                this.lastUpdatedYear = lastUpdatedYear;}
 
     @Override
     public void clearCompletedGoals(){
@@ -124,5 +128,18 @@ public class SimpleGoalRepository implements GoalRepository {
     */
     public void moveTomorrowToToday() {}
 
+    @Override
+    public LocalDate getLastRecurrence() {
+        return null;
+    }
 
+    public void insertUnderIncompleteGoalsWithContext(Goal goal){
+        //going to just use other method so tests don't crash rather than implementing properly
+        insertUnderIncompleteGoals(goal);
+    }
+
+    @Override
+    public void setLastRecurrence(LocalDate last) {
+        return;
+    }
 }

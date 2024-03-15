@@ -24,17 +24,19 @@ public class Goal {
     private final int yearStarting;
     private final int dayOfWeekToRecur;
     private final int weekOfMonthToRecur;
-
-    //this flag will be used to handle cases like yearly on Feb29th to behave like customer required
-    private final boolean overflowFlag;
+    //0 = Home, 1 = Work, 2 = School, 3 = Errand
+    private final int context;
 
     public Goal(@NonNull String contents, @Nullable Integer id,
-                @NonNull Boolean completed, int sortOrder, int listNum) {
+                @NonNull Boolean completed, int sortOrder, int listNum, int context) {
+
         this.contents = contents;
         this.id = id;
         this.completed = completed;
         this.sortOrder = sortOrder;
+
         this.listNum = listNum;
+        this.context = context;
         //default goal is non-recurring, so recurrence data is irrelevent and can be initialized to 0
         this.recurrenceType = 0;
         this.dayStarting = 0;
@@ -42,16 +44,15 @@ public class Goal {
         this.yearStarting = 0;
         this.dayOfWeekToRecur = 0;
         this.weekOfMonthToRecur = 0;
-        this.overflowFlag = false;
 
     }
 
     //overloaded constructor for use in withRecurringData; could refactor into a factory,
     //but this is (as of now) the only other constructor the class will have
     public Goal(@NonNull String contents, @Nullable Integer id,
-                @NonNull Boolean completed, int sortOrder, int listNum, int recurrenceType,
+                @NonNull Boolean completed, int sortOrder, int listNum, int context, int recurrenceType,
                 int dayStarting, int monthStarting, int yearStarting, int dayOfWeekToRecur,
-                int weekOfMonthToRecur, boolean overflowFlag) {
+                int weekOfMonthToRecur) {
         this.contents = contents;
         this.id = id;
         this.completed = completed;
@@ -67,7 +68,8 @@ public class Goal {
 
         this.dayOfWeekToRecur = dayOfWeekToRecur; // Friday is 7, Saturday is 1
         this.weekOfMonthToRecur = weekOfMonthToRecur;
-        this.overflowFlag = overflowFlag;
+
+        this.context = context;
 
     }
 
@@ -106,45 +108,55 @@ public class Goal {
     }
 
 
-    public boolean overflowFlag() { return this.overflowFlag; }
 
     public @NonNull Goal withId(@NonNull Integer id){
-        return new Goal(this.contents, id, this.completed, this.sortOrder, this.listNum, this.recurrenceType,
-        this.dayStarting, this.monthStarting, this.yearStarting, this.dayOfWeekToRecur, this.weekOfMonthToRecur,
-        this.overflowFlag);
+        return new Goal(this.contents, id, this.completed, this.sortOrder, this.listNum, this.context,
+                this.recurrenceType, this.dayStarting, this.monthStarting, this.yearStarting,
+                this.dayOfWeekToRecur, this.weekOfMonthToRecur
+        );
     }
     public @NonNull Goal withSortOrder(int sortOrder){
-        return new Goal(this.contents, this.id, this.completed, sortOrder, this.listNum, this.recurrenceType,
-        this.dayStarting, this.monthStarting, this.yearStarting, this.dayOfWeekToRecur, this.weekOfMonthToRecur,
-        this.overflowFlag);
+        return new Goal(this.contents, this.id, this.completed, sortOrder, this.listNum,
+                this.recurrenceType, this.context, this.dayStarting, this.monthStarting,
+                this.yearStarting, this.dayOfWeekToRecur, this.weekOfMonthToRecur
+        );
     }
     public @NonNull Goal withComplete(@NonNull Boolean completed){
-        return new Goal(this.contents, this.id, completed, this.sortOrder, this.listNum, this.recurrenceType,
-        this.dayStarting, this.monthStarting, this.yearStarting, this.dayOfWeekToRecur, this.weekOfMonthToRecur,
-        this.overflowFlag);
+        return new Goal(this.contents, this.id, completed, this.sortOrder, this.listNum, this.context,
+                this.recurrenceType, this.dayStarting, this.monthStarting, this.yearStarting,
+                this.dayOfWeekToRecur, this.weekOfMonthToRecur
+        );
     }
     public @NonNull Goal withListNum(int listNum){
-        return new Goal(this.contents, this.id, completed, this.sortOrder, listNum, this.recurrenceType,
-        this.dayStarting, this.monthStarting, this.yearStarting, this.dayOfWeekToRecur, this.weekOfMonthToRecur,
-        this.overflowFlag);
+        return new Goal(this.contents, this.id, completed, this.sortOrder, listNum, this.context,
+                this.recurrenceType, this.dayStarting, this.monthStarting, this.yearStarting,
+                this.dayOfWeekToRecur, this.weekOfMonthToRecur
+        );
     }
 
     //new methods
     public @NonNull Goal withRecurrenceData(int recurrenceType, int dayStarting,
                                             int monthStarting, int yearStarting, int dayOfWeekToRecur,
-                                            int weekOfMonthToRecur, boolean overflowFlag){
+                                            int weekOfMonthToRecur){
         return new Goal(this.contents, this.id, this.completed, this.sortOrder, this.listNum,
-                recurrenceType, dayStarting, monthStarting, yearStarting, dayOfWeekToRecur, weekOfMonthToRecur,
-                overflowFlag);
+                this.context, recurrenceType, dayStarting, monthStarting, yearStarting,
+                dayOfWeekToRecur, weekOfMonthToRecur
+                );
     }
     //returns a version of this goal with any recurrence data cleared
     public @NonNull Goal withoutRecurrence(){
-        return new Goal(this.contents, null, this.completed, this.sortOrder, this.listNum);
+        return new Goal(this.contents, null, this.completed, this.sortOrder, this.listNum, this.context);
     }
-    public @NonNull Goal withOverflowFlag(boolean overflowFlag){
-        return new Goal(this.contents, this.id, completed, this.sortOrder, this.listNum, this.recurrenceType,
-                this.dayStarting, this.monthStarting, this.yearStarting, this.dayOfWeekToRecur, this.weekOfMonthToRecur,
-                overflowFlag);
+
+    public int context() {
+        return this.context;
+    }
+
+    public @NonNull Goal withContext(int context){
+        return new Goal(this.contents, this.id, this.completed, this.sortOrder,this.listNum, context,
+                this.recurrenceType, this.dayStarting, this.monthStarting, this.yearStarting,
+                this.dayOfWeekToRecur, this.weekOfMonthToRecur);
+
     }
 
 //    public @NonNull Goal copiedGoal(){
@@ -158,7 +170,6 @@ public class Goal {
         Goal goal = (Goal) o;
         return sortOrder == goal.sortOrder && Objects.equals(contents, goal.contents) && Objects.equals(id, goal.id) && Objects.equals(completed, goal.completed);
     }
-
 
     @Override
     public int hashCode() {
