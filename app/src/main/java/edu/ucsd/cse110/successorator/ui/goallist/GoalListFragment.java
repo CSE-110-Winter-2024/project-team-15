@@ -70,6 +70,8 @@ public class GoalListFragment extends Fragment {
                 List.of(),
                 () -> ResourcesCompat.getDrawable(getResources(), R.drawable.line, null),
                 activityModel::toggleCompleted,
+                activityModel::recurringRemove,
+
                 () -> ResourcesCompat.getDrawable(getResources(), R.drawable.homecontext, null),
                 () -> ResourcesCompat.getDrawable(getResources(), R.drawable.workcontext, null),
                 () -> ResourcesCompat.getDrawable(getResources(), R.drawable.schoolcontext, null),

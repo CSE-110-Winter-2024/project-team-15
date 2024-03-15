@@ -7,23 +7,21 @@ import androidx.room.Room;
 import edu.ucsd.cse110.successorator.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
-import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
+import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
-import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
-import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 // default implementation from lab 4 -- uses default goals
 public class SuccessoratorApplication extends Application {
     private InMemoryDataSource dataSource;
     private GoalRepository goalRepository;
-    private MutableSubject<SimpleDateTracker> dateTracker;
+    private MutableSubject<ComplexDateTracker> dateTracker;
     @Override
     public void onCreate(){
         super.onCreate();
         //this.dateTracker = SimpleDateTracker.getInstance();
-        this.dateTracker = SimpleDateTracker.getInstance();
+        this.dateTracker = ComplexDateTracker.getInstance();
 
         // InMemoryDataSource defaults
 //        this.dataSource = InMemoryDataSource.fromDefault();
@@ -54,7 +52,7 @@ public class SuccessoratorApplication extends Application {
         return goalRepository;
     }
 
-    public MutableSubject<SimpleDateTracker> getDateTracker() {
+    public MutableSubject<ComplexDateTracker> getDateTracker() {
         return this.dateTracker;
     }
 

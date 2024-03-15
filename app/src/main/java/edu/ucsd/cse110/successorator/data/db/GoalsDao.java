@@ -33,12 +33,18 @@ public interface GoalsDao {
     @Query("SELECT * FROM goals WHERE list_num = :listNum ORDER BY sort_order")
     LiveData<List<GoalEntity>> findAllAsLiveData(int listNum);
 
+    // livedata since the used findall is livedata ... basically a subject right
+    @Query("SELECT * FROM goals WHERE recurrence_type > 0")
+    LiveData<List<GoalEntity>> findAllWithRecurrenceLiveData();
+    @Query("SELECT * FROM goals WHERE recurrence_type > 0 AND list_num = 3")
+    List<GoalEntity> findAllWithRecurrence();
+
     @Query("SELECT Count(*) FROM goals")
     int count();
     @Query("SELECT Min(sort_order) FROM goals")
     int getMinSortOrder();
 
-    @Query("SELECT Min(sort_order) FROM goals WHERE context >= :context AND completed == false")
+    @Query("SELECT Min(sort_order) FROM goals WHERE (context >= :context AND context <= 4) AND completed == false")
     Integer getMinIncompleteSortOrderForContext(int context);
 
     @Query("SELECT Max(sort_order) FROM goals")
@@ -48,15 +54,45 @@ public interface GoalsDao {
             "WHERE sort_order >= :from AND sort_order <= :to")
     void shiftSortOrders(int from, int to, int by);
 
-    @Query("SELECT Max(sort_order) FROM goals WHERE completed = false")
+    @Query("SELECT Max(sort_order) FROM goals WHERE completed = false AND context <= 4")
     Integer getMaxIncompleteSortOrder();
 
-    @Query("SELECT Max(sort_order) FROM goals WHERE completed = false AND context <= :context")
+
+    //queries daily goals (recurrence_type = 1) that have a starting date at or before the date of
+    //the argument
+    @Query("SELECT * FROM goals WHERE recurrence_type = 1 AND " +
+            "(((372 * :year)+(31 * :month)+(:day)) >= " +
+            "((372 * year_starting)+(31 * month_starting)+(day_starting)))")
+    List<GoalEntity> getStartedDailyGoals(int day, int month, int year);
+
+    //queries yearly goals (recurrence_type = 4) that have the specified day and month and are set
+    //to start at or before the specified year
+    @Query("SELECT * FROM goals WHERE recurrence_type = 4 AND year_starting <= :year " +
+            "AND month_starting = :month AND day_starting = :day")
+    List<GoalEntity> getStartedYearlyGoalsForToday(int day, int month, int year);
+
+    //queries weekly goals (recurrence_type = 2) that have a starting date at or before the date of
+    //the argument and are set to recur on the passed dayOfWeek
+    @Query("SELECT * FROM goals WHERE recurrence_type = 2 AND " +
+            "(((372 * :year)+(31 * :month)+(:day)) >= " +
+            "((372 * year_starting)+(31 * month_starting)+(day_starting)))" +
+            "AND (day_of_week_to_recur == :todayOfWeek)")
+    List<GoalEntity> getStartedWeeklyGoalsForToday(int day, int month, int year, int todayOfWeek);
+
+    //queries monthly goals (recurrence_type = 3) that have a starting date at or before the date of
+    //the argument and are set to recur on the passed dayOfWeek as well as the passed weekOfMonth
+    @Query("SELECT * FROM goals WHERE recurrence_type = 3 AND " +
+            "(((372 * :year)+(31 * :month)+(:day)) >= " +
+            "((372 * year_starting)+(31 * month_starting)+(day_starting)))" +
+            "AND (day_of_week_to_recur == :todayOfWeek) " +
+            "AND (week_of_month_to_recur == :weekOfMonth)")
+    List<GoalEntity> getStartedMonthlyGoalsForToday(int day, int month, int year, int todayOfWeek, int weekOfMonth);
+
+    @Query("SELECT Max(sort_order) FROM goals WHERE completed = false AND (context <= :context AND context <=4)")
     Integer getMaxIncompleteSortOrderWithContext(int context);
 
 
-    //I don't know if query update happens before or after method body, definitely need to test
-    //also unsure if it matters as long as both happen now
+
     @Query("UPDATE goals SET sort_order = sort_order + 1 " +
             "WHERE completed = true")
     void shiftCompletedSortOrders();
@@ -69,8 +105,10 @@ public interface GoalsDao {
     default int prepend(GoalEntity goal){
         shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
         var newGoal = new GoalEntity(
+                goal.contents, getMinSortOrder()-1, goal.completed, goal.listNum,
+                goal.context, goal.recurrenceType, goal.dayStarting, goal.monthStarting,
+                goal.yearStarting, goal.dayOfWeekToRecur, goal.weekOfMonthToRecur
 
-                goal.contents, getMinSortOrder()-1, goal.completed, goal.listNum, goal.context
         );
         return Math.toIntExact(insert(newGoal));
     }
@@ -94,8 +132,9 @@ public interface GoalsDao {
         shiftSortOrders(minContextOrder, getMaxSortOrder(), 1);
         var newGoal = new GoalEntity(
 
-                goal.contents, minContextOrder, goal.completed,
-                goal.listNum, goal.context
+                goal.contents, minContextOrder, goal.completed, goal.listNum, goal.context,
+                goal.recurrenceType, goal.dayStarting, goal.monthStarting,
+                goal.yearStarting, goal.dayOfWeekToRecur, goal.weekOfMonthToRecur
         );
         return Math.toIntExact(insert(newGoal));
     }
@@ -114,7 +153,9 @@ public interface GoalsDao {
         }
 
         GoalEntity gol = new GoalEntity(
-                goal.contents, incomp, goal.completed, goal.listNum, goal.context
+                goal.contents, incomp, goal.completed, goal.listNum, goal.context,
+                goal.recurrenceType, goal.dayStarting, goal.monthStarting, goal.yearStarting,
+                goal.dayOfWeekToRecur, goal.weekOfMonthToRecur
         );
         insert(gol);
     }
@@ -133,7 +174,9 @@ public interface GoalsDao {
         }
 
         GoalEntity gol = new GoalEntity(
-                goal.contents, incomp, goal.completed, goal.listNum, goal.context
+                goal.contents, incomp, goal.completed, goal.listNum, goal.context,
+                goal.recurrenceType, goal.dayStarting, goal.monthStarting, goal.yearStarting,
+                goal.dayOfWeekToRecur, goal.weekOfMonthToRecur
         );
         insert(gol);
     }
@@ -159,6 +202,5 @@ public interface GoalsDao {
 
     @Query("SELECT context FROM goals WHERE id = :id")
     int getContext(int id);
-
 
 }
