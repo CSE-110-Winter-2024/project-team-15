@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.util.Subject;
@@ -36,7 +37,15 @@ public interface GoalRepository {
     void prepend(Goal goal);
 
     void clearCompletedGoals();
-    void setLastUpdated(String lastUpdated);
+    void setLastUpdated(String lastUpdated, int lastUpdatedYear);
+
+    void refreshRecurrence();
+
+    void addDaylies(int day, int month, int year);
+    void addRecurrencesToTomorrowForDate(int day, int month, int year, int dayOfWeek,
+                                         int weekOfMonth, boolean isLeapYear);
+    void addWeeklies(int day, int month, int year, int dayOfWeek);
+
     String getLastUpdated();
 
     /*
@@ -46,6 +55,8 @@ public interface GoalRepository {
      */
 //    void addContext(Goal goal); //method to give context
 
+    void setLastRecurrence(LocalDate last);
+    LocalDate getLastRecurrence();
 
 
 
