@@ -99,7 +99,7 @@ public class RoomGoalRepository implements GoalRepository {
 
         //the following lines are present in all add___lies methods and would probably do well in a
         //separate method for DRY purposes
-        insertAllUnderIncomplete(
+        insertAllUnderIncompleteWithContext(
                 goalContents.stream()
                         .map(GoalEntity::toGoal)
                         .collect(Collectors.toList())
@@ -114,7 +114,7 @@ public class RoomGoalRepository implements GoalRepository {
         var goalContents = goalsDao.getStartedWeeklyGoalsForToday(day, month, year, dayOfWeek);
 
         //add queried goals to repository
-        insertAllUnderIncomplete(
+        insertAllUnderIncompleteWithContext(
                 goalContents.stream()
                         .map(GoalEntity::toGoal)
                         .collect(Collectors.toList())
@@ -145,7 +145,7 @@ public class RoomGoalRepository implements GoalRepository {
                     weekOfMonth);
         }
         //add queried goals to repository
-        insertAllUnderIncomplete(
+        insertAllUnderIncompleteWithContext(
                 goalContents.stream()
                         .map(GoalEntity::toGoal)
                         .collect(Collectors.toList())
@@ -163,7 +163,7 @@ public class RoomGoalRepository implements GoalRepository {
             goalContents.addAll(goalsDao.getStartedYearlyGoalsForToday(29, 2, year));
         }
         //add queried goals to repository
-        insertAllUnderIncomplete(
+        insertAllUnderIncompleteWithContext(
                 goalContents.stream()
                         .map(GoalEntity::toGoal)
                         .collect(Collectors.toList())
@@ -203,7 +203,7 @@ public class RoomGoalRepository implements GoalRepository {
                 })
                 .map(goal -> goal.withoutRecurrence().withListNum(view))
                 // change this if necessary
-                .forEach(this::insertUnderIncompleteGoals);
+                .forEach(this::insertUnderIncompleteGoalsWithContext);
     }
     public void addRecurrencesBeforeDate(LocalDate T, int view) throws Exception {
         //need to add last-updated-year field to repo to make a local date out of it
@@ -278,7 +278,7 @@ public class RoomGoalRepository implements GoalRepository {
                 //you are calling compare on added goals here which have no recurrence data.
                 //I'm guessing sorting by sortOrder would do all you need here,
 //                .sorted(SimpleDateTracker::compareGoals)
-                .forEach(this::insertUnderIncompleteGoals);
+                .forEach(this::insertUnderIncompleteGoalsWithContext);
 
         // here we update the recurring goals
         save(recurringDateAdjusted);
@@ -289,8 +289,8 @@ public class RoomGoalRepository implements GoalRepository {
 //                .map(title -> new Goal(title, null, false, -1, 1))
 //                .collect(Collectors.toList());
 //    }
-    private void insertAllUnderIncomplete(List<Goal> all){
-        all.forEach(this::insertUnderIncompleteGoals);
+    private void insertAllUnderIncompleteWithContext(List<Goal> all){
+        all.forEach(this::insertUnderIncompleteGoalsWithContext);
     }
 
     private List<Goal> getAllRecurringTomorrow(){

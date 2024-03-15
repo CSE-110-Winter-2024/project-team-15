@@ -54,7 +54,7 @@ public interface GoalsDao {
             "WHERE sort_order >= :from AND sort_order <= :to")
     void shiftSortOrders(int from, int to, int by);
 
-    @Query("SELECT Max(sort_order) FROM goals WHERE completed = false")
+    @Query("SELECT Max(sort_order) FROM goals WHERE completed = false AND context <= 4")
     Integer getMaxIncompleteSortOrder();
 
 
