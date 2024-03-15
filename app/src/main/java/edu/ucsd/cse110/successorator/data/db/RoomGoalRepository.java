@@ -378,7 +378,7 @@ public class RoomGoalRepository implements GoalRepository {
                     // alight, apparently this just makes a copy, eugh .. that shouldn't happen
                     // since I don't want to ruin anything.. i'll just delete
                     goalsDao.delete(newGoal.id());
-                    goalsDao.insertUnderIncompleteGoals(GoalEntity.fromGoal(newGoal));
+                    goalsDao.insertUnderIncompleteGoalsWithContext(GoalEntity.fromGoal(newGoal));
                 });
         //});
     }
