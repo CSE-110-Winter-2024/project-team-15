@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_bar_menu_swap_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_swap"
+        android:orderInCategory="3"
+        android:title="@string/swap_views"
+        app:iconTint="@color/white"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_bar_menu_forward_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_forward"
+        android:orderInCategory="1"
+        android:title="@string/forward_day"
+        app:iconTint="@color/white"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_bar_menu_swap_lists"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_v"
+        android:orderInCategory="2"
+        android:title="@string/swap_lists"
+        app:iconTint="@color/white"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_bar_menu_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_menu"
+        android:title="@string/swap_lists"
+        app:iconTint="@color/white"
+        app:showAsAction="always"/>
+
+</menu>
