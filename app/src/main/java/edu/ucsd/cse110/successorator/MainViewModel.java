@@ -77,7 +77,7 @@ public class MainViewModel extends ViewModel {
             if (goals == null) return;
             orderedGoals.setValue(goals.stream()
                     //Yoav debugged and figured out this solution was necessary
-                    .filter(goal -> (goal.listNum() == getListShown()))
+                    .filter(goal -> (goal.listNum() == getListShown() && (getContextShown() == 6 || goal.context() == getContextShown()) ))
                     .sorted(Comparator.comparingInt(Goal::sortOrder))
                     .collect(Collectors.toList()));
 
@@ -137,6 +137,10 @@ public class MainViewModel extends ViewModel {
     public int getListShown(){
         //return listShown;
         return ViewNumInfo.getInstance().getValue().getListShown();
+    }
+
+    public int getContextShown(){
+        return GoalContextInfo.getInst().getValue().getContextShown();
     }
 
     public void toggleCompleted(Goal goal) {
@@ -210,6 +214,14 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    public void focusView(int context){
+        GoalContextInfo.setInst(context);
+
+        goalRepository.prepend(new Goal("a", Integer.MAX_VALUE, true, Integer.MAX_VALUE, 5, 0));
+        goalRepository.remove(Integer.MAX_VALUE);
+
+    }
+
     // Add a method to handle positive button click action from the dialog
     public void createRecurringGoal(String goalText, int recurrenceType, LocalDateTime representation, int context) {
         if(!goalText.equals("")) {
@@ -237,6 +249,4 @@ public class MainViewModel extends ViewModel {
         }
         return 0; // default or unknown type
     }
-
-
 }
