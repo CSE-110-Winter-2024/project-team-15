@@ -31,7 +31,7 @@ public class ModifyPendingDialogFragment extends DialogFragment {
     private MainViewModel activityModel;
     private FragmentDialogModifyPendingGoalsBinding view;
     private int goalId;
-    private static final String ARG_GOAL_ID = "goal_id";
+    private static Goal globalGoal; // i hate this
 
     public ModifyPendingDialogFragment() {
         // Required empty public constructor
@@ -40,7 +40,8 @@ public class ModifyPendingDialogFragment extends DialogFragment {
     public static ModifyPendingDialogFragment newInstance(Goal goal) {
         ModifyPendingDialogFragment fragment = new ModifyPendingDialogFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_GOAL_ID, goal.id());
+//        args.putInt(ARG_GOAL_ID, goal.id());
+        globalGoal = goal;
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,7 +50,7 @@ public class ModifyPendingDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.goalId = requireArguments().getInt(ARG_GOAL_ID);
+        this.goalId = globalGoal.id();
 
         var modelOwner = requireActivity();
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
@@ -96,7 +97,9 @@ public class ModifyPendingDialogFragment extends DialogFragment {
         }
         else if(view.pendingToFinishBtn.isChecked()){
             Log.i("mytag","Finish"+goalId);
-            activityModel.toggleCompleted(this.goalId);
+            Goal locGoal = globalGoal.withComplete(true).withListNum(0);
+            activityModel.pendingRemove(this.goalId);
+            activityModel.insertIncompleteGoal(locGoal);
         }
         else if(view.pendingToDeleteBtn.isChecked()){
             Log.i("mytag","Delete"+goalId);
