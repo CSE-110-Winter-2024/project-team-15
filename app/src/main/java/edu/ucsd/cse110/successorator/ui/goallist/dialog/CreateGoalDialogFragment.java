@@ -99,7 +99,7 @@ public class CreateGoalDialogFragment extends DialogFragment {
 
             // move the time forwards if we're in the tomorrow view since it defaults to today
             if (currentList == 1) {
-                myTime.plusDays(1);
+                myTime = myTime.plusDays(1);
             }
 
             // let's see if this works
