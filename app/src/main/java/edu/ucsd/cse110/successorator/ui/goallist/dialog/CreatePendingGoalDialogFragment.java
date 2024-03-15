@@ -58,7 +58,6 @@ public class CreatePendingGoalDialogFragment extends DialogFragment {
         var goalText = view.goalNameEditText.getText().toString();
 
         if(!goalText.equals("")){
-
             int contextToAdd = 0;
             if (view.homeContextButton.isChecked()) {
                 contextToAdd = 0;

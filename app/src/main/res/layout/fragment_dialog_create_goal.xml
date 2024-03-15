@@ -76,8 +76,6 @@
             android:backgroundTint="@drawable/homebackground"
             android:button="@null"
             android:foreground="@drawable/homecontext" />
-        <!--            android:backgroundTint="@drawable/styles"-->
-
         <RadioButton
             android:id="@+id/workContextButton"
             android:layout_width="wrap_content"

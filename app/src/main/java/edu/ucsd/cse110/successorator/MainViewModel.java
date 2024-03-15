@@ -115,6 +115,11 @@ public class MainViewModel extends ViewModel {
         if (!goalRepository.getLastUpdated().equals(timeChange.getDate()) && timeChange.getHour() >= 2) {
             goalRepository.clearCompletedGoals();
 
+            // MS2 US2 functionality :)
+            // moving goals from tomorrow to today ...
+            // gotta do this before we add recurrences, otherwise it'll add them too
+            goalRepository.moveTomorrowToToday();
+
             int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
             int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();
             int year = dateTracker.getValue().getNextDateYear();

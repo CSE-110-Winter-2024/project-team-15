@@ -57,11 +57,10 @@ public interface GoalRepository {
 //    void addContext(Goal goal); //method to give context
 
     void moveTomorrowToToday();
-
     void changePendingGoalStatus(int id, int listNum);
-
     void setLastRecurrence(LocalDate last);
     LocalDate getLastRecurrence();
+
 
 
 

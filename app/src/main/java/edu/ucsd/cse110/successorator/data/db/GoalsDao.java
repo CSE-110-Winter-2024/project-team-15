@@ -223,6 +223,9 @@ public interface GoalsDao {
 
     @Query("DELETE FROM goals WHERE id = :id")
     void delete(int id);
+
+    // apparently this is not necessary
+    //@Query("DELETE FROM goals WHERE completed = true AND list_num != 1")
     @Query("DELETE FROM goals WHERE completed = true")
     void clearCompletedGoals();
 

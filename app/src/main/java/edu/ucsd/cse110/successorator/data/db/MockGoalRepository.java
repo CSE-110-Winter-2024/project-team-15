@@ -172,7 +172,6 @@ public class MockGoalRepository implements GoalRepository {
 
     @Override
     public void changePendingGoalStatus(int id, int listNum) {
-
     }
 
     public void setLastUpdated(String lastUpdated, int lastUpdatedYear) {

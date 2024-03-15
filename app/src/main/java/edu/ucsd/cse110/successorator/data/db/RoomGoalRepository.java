@@ -390,7 +390,10 @@ public class RoomGoalRepository implements GoalRepository {
     public void changePendingGoalStatus(int id, int listNum) {
         goalsDao.updatesGoalStatus(id,listNum);
     }
-
+                    goalsDao.insertUnderIncompleteGoalsWithContext(GoalEntity.fromGoal(newGoal));
+                });
+        //});
+    }
     public int getContext(int id){ return goalsDao.getContext(id); }
 
     /*public Subject<List<Goal>> getAllSameContext(int cont) {
