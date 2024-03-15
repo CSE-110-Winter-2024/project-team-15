@@ -114,11 +114,11 @@ public class ComplexDateTrackerTest extends TestCase {
         LocalDate L = LocalDate.of(2023, 12, 31);
         LocalDate T = LocalDate.of(2024, 1, 5);
         Goal firstInstanceInRange = new Goal("first in", 0, false,
-                0, 0, 1, 1, 1,
-                2024, 1, 1, false);
+                0, 0, 0,1, 1, 1,
+                2024, 1, 1);
         Goal firstInstanceOutOfRange = new Goal("first out", 1, false,
-                1, 0, 1, 25, 1,
-                2024, 4, 4, false);
+                1, 0, 0,1, 25, 1,
+                2024, 4, 4);
 //        Goal recursInRange = new Goal("recur in", 2, false,
 //                2, 0, 1, 1, 1,
 //                2023, 1, 1, false);;
@@ -138,17 +138,14 @@ public class ComplexDateTrackerTest extends TestCase {
 //                dayStarting, monthStarting, yearStarting, dayOfWeekToRecur, weekOfMonthToRecur,
 //                overflowFlag);
         Goal firstInstanceInRange = new Goal("first in", 0, false,
-                0, 0, 2,
-                1, 1, 2024, 1, 1,
-                false);
+                0, 0, 0,2,
+                1, 1, 2024, 1, 1);
         Goal firstInstanceOutOfRange = new Goal("first out", 1, false,
-                1, 0, 2,
-                25, 1, 2024, 4, 4,
-                false);
+                1, 0, 1,2,
+                25, 1, 2024, 4, 4);
         Goal recursInRange = new Goal("recur in", 2, false,
-                2, 0, 2,
-                21, 12, 2023, 3, 1,
-                false);
+                2, 0,0,2,
+                21, 12, 2023, 3, 1);
 //        Goal recursOutOfRange = new Goal("recur out", 3, false,
 //                3, 0, 2,
 //                1, 1, 2024, 3, 1,
@@ -167,21 +164,17 @@ public class ComplexDateTrackerTest extends TestCase {
 //                dayStarting, monthStarting, yearStarting, dayOfWeekToRecur, weekOfMonthToRecur,
 //                overflowFlag);
         Goal firstInstanceInRange = new Goal("first in", 0, false,
-                0, 0, 3,
-                1, 1, 2024, 1, 1,
-                false);
+                0, 0, 0,3,
+                1, 1, 2024, 1, 1);
         Goal firstInstanceOutOfRange = new Goal("first out", 1, false,
-                1, 0, 3,
-                25, 1, 2024, 4, 4,
-                false);
+                1, 0, 0,3,
+                25, 1, 2024, 4, 4);
         Goal recursInRange = new Goal("recur in", 2, false,
-                2, 0, 3,
-                21, 12, 2023, 5, 1,
-                false);
+                2, 0, 0,3,
+                21, 12, 2023, 5, 1);
         Goal recursOutOfRange = new Goal("recur out", 3, false,
-                3, 0, 3,
-                1, 1, 2023, 1, 3,
-                false);
+                3, 0, 0,3,
+                1, 1, 2023, 1, 3);
         assert ComplexDateTracker.shouldHappen(firstInstanceInRange, L, T);
         assert !ComplexDateTracker.shouldHappen(firstInstanceOutOfRange, L, T);
         assert ComplexDateTracker.shouldHappen(recursInRange, L, T);
@@ -195,9 +188,8 @@ public class ComplexDateTrackerTest extends TestCase {
 //                dayStarting, monthStarting, yearStarting, dayOfWeekToRecur, weekOfMonthToRecur,
 //                overflowFlag);
         Goal recurOverflow = new Goal("recur overflow", 2, false,
-                2, 0, 3,
-                29, 12, 2023, 5, 5,
-                false);
+                2, 0, 0,3,
+                29, 12, 2023, 5, 5);
 
         LocalDate L2 = LocalDate.of(2024, 5, 1);
         LocalDate L3 = LocalDate.of(2024, 5, 4);
@@ -205,9 +197,8 @@ public class ComplexDateTrackerTest extends TestCase {
         LocalDate T3 = LocalDate.of(2024, 5, 2);
         LocalDate T4 = LocalDate.of(2024, 5, 20);
         Goal recurWeird = new Goal("recur may 3", 2, false,
-                2, 0, 3,
-                1, 5, 2024, 5, 5,
-                false);
+                2, 0,0,3,
+                1, 5, 2024, 5, 5);
 
         assert !ComplexDateTracker.shouldHappen(recurOverflow, L, T);
         assert ComplexDateTracker.shouldHappen(recurWeird, L2, T2);
@@ -216,9 +207,8 @@ public class ComplexDateTrackerTest extends TestCase {
     }
     public void testWhenHappen2() throws Exception {
         Goal recurWeird = new Goal("recur may 3", 2, false,
-                2, 0, 3,
-                1, 5, 2024, 5, 5,
-                false);
+                2, 0, 0 ,3,
+                1, 5, 2024, 5, 5);
         LocalDate L2 = LocalDate.of(2024, 5, 1);
         LocalDate L3 = LocalDate.of(2024, 5, 4);
         LocalDate End2 = LocalDate.of(2024, 5, 3);
@@ -236,21 +226,17 @@ public class ComplexDateTrackerTest extends TestCase {
 //                dayStarting, monthStarting, yearStarting, dayOfWeekToRecur, weekOfMonthToRecur,
 //                overflowFlag);
         Goal firstInstanceInRange = new Goal("first in", 0, false,
-                0, 0, 4,
-                1, 1, 2024, 1, 1,
-                false);
+                0, 0, 0,4,
+                1, 1, 2024, 1, 1);
         Goal firstInstanceOutOfRange = new Goal("first out", 1, false,
-                1, 0, 4,
-                25, 1, 2025, 4, 4,
-                false);
+                1, 0, 0,4,
+                25, 1, 2025, 4, 4);
         Goal recursInRange = new Goal("recur in", 2, false,
-                2, 0, 4,
-                1, 1, 2023, 5, 1,
-                false);
+                2, 0, 0,4,
+                1, 1, 2023, 5, 1);
         Goal recursOutOfRange = new Goal("recur out", 3, false,
-                3, 0, 4,
-                21, 1, 2023, 1, 3,
-                false);
+                3, 0, 0,4,
+                21, 1, 2023, 1, 3);
         assert ComplexDateTracker.shouldHappen(firstInstanceInRange, L, T);
         assert !ComplexDateTracker.shouldHappen(firstInstanceOutOfRange, L, T);
         assert ComplexDateTracker.shouldHappen(recursInRange, L, T);

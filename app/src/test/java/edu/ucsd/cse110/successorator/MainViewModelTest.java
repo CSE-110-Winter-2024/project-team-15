@@ -176,7 +176,7 @@ public class MainViewModelTest {
         assertNotEquals(defaultView, mvm.getListShown());
         /* ************************************************************************************* */
     }
-
+    //test is crashing
     @Test
     public void createRecurringGoal() {
         // Given a valid input, when we create a recurring goal, then the goal is created
@@ -188,7 +188,7 @@ public class MainViewModelTest {
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
 
         String goalText = "daily";
-        int recurrenceType = 1; // Daily
+        int recurrenceType = 0; // Daily
         LocalDateTime representation = LocalDateTime.of(2024, 3, 14, 0, 0);
 
         // When: createRecurringGoal is called with the given inputs
