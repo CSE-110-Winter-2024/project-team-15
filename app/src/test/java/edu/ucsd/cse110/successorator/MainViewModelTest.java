@@ -11,9 +11,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-import org.mockito.Mockito;
-
 import edu.ucsd.cse110.successorator.data.db.GoalEntity;
 import edu.ucsd.cse110.successorator.data.db.GoalsDao;
 //import edu.ucsd.cse110.successorator.data.db.MockGoalRepository;
