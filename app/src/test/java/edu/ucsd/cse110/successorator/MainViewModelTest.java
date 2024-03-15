@@ -269,5 +269,72 @@ public class MainViewModelTest {
 //
 //    }
 
+    @Test
+    public void focusContextFilterHome(){
 
+        var dataSource = new InMemoryDataSource();
+        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
+        var dateTracker = ComplexDateTracker.getInstance();
+
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
+        int defaultContext = mvm.getContextShown();
+
+        int contextToFocus = 0;
+        mvm.focusView(contextToFocus);
+
+        assertEquals(contextToFocus, mvm.getContextShown());
+        assertNotEquals(defaultContext, mvm.getContextShown());
+
+    }
+    @Test
+    public void focusContextFilterWork(){
+
+        var dataSource = new InMemoryDataSource();
+        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
+        var dateTracker = ComplexDateTracker.getInstance();
+
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
+        int defaultContext = mvm.getContextShown();
+
+        int contextToFocus = 1;
+        mvm.focusView(contextToFocus);
+
+        assertEquals(contextToFocus, mvm.getContextShown());
+        assertNotEquals(defaultContext, mvm.getContextShown());
+
+    }
+    @Test
+    public void focusContextFilterSchool(){
+
+        var dataSource = new InMemoryDataSource();
+        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
+        var dateTracker = ComplexDateTracker.getInstance();
+
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
+        int defaultContext = mvm.getContextShown();
+
+        int contextToFocus = 2;
+        mvm.focusView(contextToFocus);
+
+        assertEquals(contextToFocus, mvm.getContextShown());
+        assertNotEquals(defaultContext, mvm.getContextShown());
+
+    }
+    @Test
+    public void focusContextFilterErrands(){
+
+        var dataSource = new InMemoryDataSource();
+        SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
+        var dateTracker = ComplexDateTracker.getInstance();
+
+        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
+        int defaultContext = mvm.getContextShown();
+
+        int contextToFocus = 3;
+        mvm.focusView(contextToFocus);
+
+        assertEquals(contextToFocus, mvm.getContextShown());
+        assertNotEquals(defaultContext, mvm.getContextShown());
+
+    }
 }

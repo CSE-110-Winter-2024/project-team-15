@@ -13,6 +13,7 @@ import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreatePendingGoalDialogFragment;
+import edu.ucsd.cse110.successorator.ui.goallist.dialog.FocusModeDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateRecurringGoalDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.SwitchViewDialogFragment;
 
@@ -109,10 +110,12 @@ public class MainActivity extends AppCompatActivity {
             // for swapping views
             var dialogFragment = SwitchViewDialogFragment.newInstance();
             dialogFragment.show(getSupportFragmentManager(), "SwitchViewDialogFragment");
-
+        }
+        else if(item.getItemId() == R.id.action_bar_menu_filter){
+            var dialogFragment = FocusModeDialogFragment.newInstance(item);
+            dialogFragment.show(getSupportFragmentManager(), "FocusModeDialogFragment");
         }
         return super.onOptionsItemSelected(item);
-
     }
 
     // this violates OCP since we might want to change Today to something else
