@@ -7,13 +7,24 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.*;
+import org.mockito.Mockito;
+
+import edu.ucsd.cse110.successorator.data.db.GoalEntity;
+import edu.ucsd.cse110.successorator.data.db.GoalsDao;
+import edu.ucsd.cse110.successorator.data.db.MockGoalRepository;
+import edu.ucsd.cse110.successorator.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
+import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 
 public class MainViewModelTest {
 
@@ -222,6 +233,41 @@ public class MainViewModelTest {
         assertEquals(4, mvm.resolveRecurrenceType(yearlyButtonId));
     }
 
+
+    // Not possible to test this since it uses room goal repository methods that mainly
+    // utilize goalsdao
+    // Per Elaine we do not need to test room goal repository methods
+    // Therefore we do not need to test this ...
+//    @Test
+//    public void handleDateChangeForRecurrence() {
+//        // Given all empty views
+//        // Given a valid input, when we create a recurring goal, then the goal is created
+//        // Given: A MainViewModel instance and valid input for creating a recurring goal
+//        GoalRepository testRepo = new MockGoalRepository();
+//        var dateTracker = ComplexDateTracker.getInstance();
+//        MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
+//
+//
+//        // Given the day is today
+//        var localDate = dateTracker.getValue().getDateTime();
+//
+//        // And there are no goals
+//
+//        // When I add a daily recurring goal starting tmrw
+//        mvm.createRecurringGoal("hi", 1, localDate,0);
+//
+//        // Then it is added to the recurring view
+//        assert mvm.getOrderedGoals().getValue().get(0).listNum() == 3;
+//
+//        // When the day is forwarded
+//        dateTracker.getValue().setForwardBy(1);
+//        dateTracker.setValue(dateTracker.getValue());
+//
+//        // It is added to the tomorrow view
+//        mvm.handleDateChange(dateTracker.getValue());
+//        assert mvm.getOrderedGoals().getValue().get(1).listNum() == 0;
+//
+//    }
 
 
 }
