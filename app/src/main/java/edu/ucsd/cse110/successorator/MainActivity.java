@@ -71,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
 
         getMenuInflater().inflate(R.menu.action_bar, menu);
+        int context = GoalContextInfo.getInst().getValue().getContextShown();
+        int[] contextIcons = {R.drawable.homecontext, R.drawable.workcontext, R.drawable.schoolcontext, R.drawable.errandscontext};
+        MenuItem item = menu.findItem(R.id.action_bar_menu_filter);
+        if(context==6){
+            item.setIcon(R.drawable.ic_menu);
+        }else{
+            item.setIcon(contextIcons[context]);
+        }
         return true;
     }
 
