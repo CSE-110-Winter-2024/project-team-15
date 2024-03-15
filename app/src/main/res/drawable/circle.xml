@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M 483 800 q 133 0 226.5 -93.5 T 803 480 q 0 -133 -93.5 -226.5 T 483 160 q -133 0 -226.5 93.5 T 163 480 q 0 133 93.5 226.5 T 483 800 Z
+"/>
+</vector>
+<!--    https://yqnn.github.io/svg-path-editor/-->
+<!--used this to edit the XMLs-->

@@ -75,7 +75,13 @@ public class GoalListFragment extends Fragment {
                 goal ->{
                     var dialogFragment = ModifyPendingDialogFragment.newInstance(goal);
                     dialogFragment.show(getParentFragmentManager(),"ModifyPendingGoalDialogFragment");
-                }
+                },
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.homecontext, null),
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.workcontext, null),
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.schoolcontext, null),
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.errandscontext, null),
+                () -> ResourcesCompat.getDrawable(getResources(), R.drawable.circle, null)
+
         );
         activityModel.getOrderedGoals().observe(goals -> {
             if (goals == null) return;

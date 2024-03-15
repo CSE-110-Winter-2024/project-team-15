@@ -3,11 +3,15 @@ package edu.ucsd.cse110.successorator.data.db;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.MonthDay;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.successorator.lib.domain.DateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalBuilder;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
@@ -19,6 +23,7 @@ import edu.ucsd.cse110.successorator.util.LiveDataSubjectAdapter;
 public class RoomGoalRepository implements GoalRepository {
     private final GoalsDao goalsDao;
     private String lastUpdated;
+    private int lastUpdatedYear;
 
     public RoomGoalRepository(GoalsDao goalsDao){
         this.goalsDao = goalsDao;
@@ -39,6 +44,24 @@ public class RoomGoalRepository implements GoalRepository {
         });
         return new LiveDataSubjectAdapter<>(goalsLiveData);
     }
+    public void setLastRecurrence(LocalDate last){
+        goalsDao.insert(GoalEntity.fromGoal(
+                new Goal("IF YOU SEE THIS, YOU ARE LOST", 9999,
+                        false, 9999, 9999, 5)
+                .withRecurrenceData(0, last.getDayOfMonth(), last.getMonthValue(),
+                        last.getYear(),0,0)));
+    }
+    public LocalDate getLastRecurrence(){
+        var ourEntity = goalsDao.find(9999);
+        if (ourEntity == null){
+            setLastRecurrence(LocalDate.now());
+            ourEntity = goalsDao.find(9999);
+        }
+        var ourGoal = ourEntity.toGoal();
+        return LocalDate.of(ourGoal.yearStarting(), ourGoal.monthStarting(),
+                ourGoal.dayStarting());
+    }
+
 
     public Subject<List<Goal>> findAll(int listNum){
         var entitiesLiveData = goalsDao.findAllAsLiveData(listNum);
@@ -63,6 +86,8 @@ public class RoomGoalRepository implements GoalRepository {
     public void prepend(Goal goal){
         goalsDao.prepend(GoalEntity.fromGoal(goal));
     }
+
+    //method should probably be deprecated
     public void insertUnderIncompleteGoals(Goal goal){
         goalsDao.insertUnderIncompleteGoals(GoalEntity.fromGoal(goal));
     }
@@ -74,15 +99,14 @@ public class RoomGoalRepository implements GoalRepository {
 
         //the following lines are present in all add___lies methods and would probably do well in a
         //separate method for DRY purposes
-        for(String title: goalContents){
-            //query returns only the contents string from the goal, so for each goal, create a new
-            //one without recurrence for Tomorrow list and add it (if we had time I would change
-            //the queries to return a list of goals instead and run
-            //title.withoutRecurrence().withListNum(1) instead which would be much better)
-            Goal toAdd = new Goal(title, null, false, -1, 1);
-            this.insertUnderIncompleteGoals(toAdd);
-
-        }
+        insertAllUnderIncompleteWithContext(
+                goalContents.stream()
+                        .map(GoalEntity::toGoal)
+                        .collect(Collectors.toList())
+                        .stream()
+                        .map(goal -> goal.withoutRecurrence().withListNum(1))
+                        .collect(Collectors.toList())
+        );
     }
 
     public void addWeeklies(int day, int month, int year, int dayOfWeek){
@@ -90,21 +114,29 @@ public class RoomGoalRepository implements GoalRepository {
         var goalContents = goalsDao.getStartedWeeklyGoalsForToday(day, month, year, dayOfWeek);
 
         //add queried goals to repository
-        for(String title: goalContents){
-            Goal toAdd = new Goal(title, null, false, -1, 1);
-            this.insertUnderIncompleteGoals(toAdd);
-
-        }
+        insertAllUnderIncompleteWithContext(
+                goalContents.stream()
+                        .map(GoalEntity::toGoal)
+                        .collect(Collectors.toList())
+                        .stream()
+                        .map(goal -> goal.withoutRecurrence().withListNum(1))
+                        .collect(Collectors.toList())
+        );
     }
+    /*
+
+     */
 
     public void addMonthlies(int day, int month, int year, int dayOfWeek, int weekOfMonth){
         //6 is used to mean that this is a day for both 1st and 5th week of month
-        List<String> goalContents;
+        List<GoalEntity> goalContents;
         if(weekOfMonth == 6) {
             //when weekOfMonth is 6, we want to load in goals recurring on both the 1st
             //and 5th ocurrence of the dayOfWeek
-            goalContents = goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, 1);
-            goalContents.addAll(goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek, 5));
+            goalContents = goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek,
+                    1);
+            goalContents.addAll(goalsDao.getStartedMonthlyGoalsForToday(day, month, year, dayOfWeek,
+                    5));
         }
         else {
             //for normal values, just query started monthly goals for the specified weekOfMonth
@@ -113,10 +145,14 @@ public class RoomGoalRepository implements GoalRepository {
                     weekOfMonth);
         }
         //add queried goals to repository
-        for(String title: goalContents){
-            Goal toAdd = new Goal(title, null, false, -1, 1);
-            this.insertUnderIncompleteGoals(toAdd);
-        }
+        insertAllUnderIncompleteWithContext(
+                goalContents.stream()
+                        .map(GoalEntity::toGoal)
+                        .collect(Collectors.toList())
+                        .stream()
+                        .map(goal -> goal.withoutRecurrence().withListNum(1))
+                        .collect(Collectors.toList())
+        );
     }
 
     public void addYearlies(int day, int month, int year, boolean isLeapYear){
@@ -127,10 +163,14 @@ public class RoomGoalRepository implements GoalRepository {
             goalContents.addAll(goalsDao.getStartedYearlyGoalsForToday(29, 2, year));
         }
         //add queried goals to repository
-        for(String title: goalContents){
-            Goal toAdd = new Goal(title, null, false, -1, 1);
-            this.insertUnderIncompleteGoals(toAdd);
-        }
+        insertAllUnderIncompleteWithContext(
+                goalContents.stream()
+                        .map(GoalEntity::toGoal)
+                        .collect(Collectors.toList())
+                        .stream()
+                        .map(goal -> goal.withoutRecurrence().withListNum(1))
+                        .collect(Collectors.toList())
+        );
     }
 
     //adds goals that should recur on the passed date to the repository
@@ -140,6 +180,41 @@ public class RoomGoalRepository implements GoalRepository {
         addWeeklies(day, month, year, dayOfWeek);
         addMonthlies(day, month, year, dayOfWeek, weekOfMonth);
         addYearlies(day, month, year, isLeapYear);
+        try {
+            LocalDate T = LocalDate.of(year, month, day);
+            addRecurrencesBeforeDate(T, 0);
+            // might be possible to do something like
+            // addRecurrencesInRange(T, T.plusDays(1), 1)
+            // this could replace the four method calls above
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void addRecurrencesInRange(LocalDate L, LocalDate T, int view) {
+        var range = goalsDao.findAllWithRecurrence();
+        range.stream()
+                .map(GoalEntity::toGoal)
+                .filter(goal -> {
+                    try {
+                        return ComplexDateTracker.shouldHappen(goal, L, T);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .map(goal -> goal.withoutRecurrence().withListNum(view))
+                // change this if necessary
+                .forEach(this::insertUnderIncompleteGoalsWithContext);
+    }
+    public void addRecurrencesBeforeDate(LocalDate T, int view) throws Exception {
+        //need to add last-updated-year field to repo to make a local date out of it
+//        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("EEE, MMM dd");
+        LocalDate L = getLastRecurrence();
+        //if range is too small to be adding goals to today, don't add them
+        if(!T.isAfter(L.plusDays(2))){return;}
+        addRecurrencesInRange(L, T, view);}
+
+    public void insertUnderIncompleteGoalsWithContext(Goal goal){
+        goalsDao.insertUnderIncompleteGoalsWithContext(GoalEntity.fromGoal(goal));
     }
     public void toggleCompleteGoal(Goal goal){
         goalsDao.toggleCompleteGoal(goal);
@@ -156,7 +231,11 @@ public class RoomGoalRepository implements GoalRepository {
 
     public String getLastUpdated(){ return this.lastUpdated; }
 
-    public void setLastUpdated(String lastUpdated){ this.lastUpdated = lastUpdated; }
+    //may have broken tests, but haven't checked yet
+    public void setLastUpdated(String lastUpdated, int lastUpdatedYear){
+        this.lastUpdated = lastUpdated;
+        this.lastUpdatedYear = lastUpdatedYear;
+    }
 
     // need method to move goals from tomorrow to today
 
@@ -203,12 +282,20 @@ public class RoomGoalRepository implements GoalRepository {
                 //you are calling compare on added goals here which have no recurrence data.
                 //I'm guessing sorting by sortOrder would do all you need here,
 //                .sorted(SimpleDateTracker::compareGoals)
-                .forEach(this::insertUnderIncompleteGoals);
+                .forEach(this::insertUnderIncompleteGoalsWithContext);
 
         // here we update the recurring goals
         save(recurringDateAdjusted);
     }
-
+    //no longer used, so commenting out
+//    private List<Goal> stringToGoal(List<String> titles){
+//        return titles.stream()
+//                .map(title -> new Goal(title, null, false, -1, 1))
+//                .collect(Collectors.toList());
+//    }
+    private void insertAllUnderIncompleteWithContext(List<Goal> all){
+        all.forEach(this::insertUnderIncompleteGoalsWithContext);
+    }
 
     private List<Goal> getAllRecurringTomorrow(){
         return goalsDao.findAllWithRecurrence().stream()
@@ -276,7 +363,7 @@ public class RoomGoalRepository implements GoalRepository {
         // if anyone wants to make this use builder instead FEEL FREE
         Goal newGoal = goal.withRecurrenceData(
                 goal.recurrenceType(), newDayStarting, newMonthStarting, newYearStarting,
-                newDayOfWeekToRecur, newWeekOfMonthToRecur, false);
+                newDayOfWeekToRecur, newWeekOfMonthToRecur);
 
         return newGoal;
     }
@@ -304,6 +391,6 @@ public class RoomGoalRepository implements GoalRepository {
         goalsDao.updatesGoalStatus(id,listNum);
     }
 
-
+    public int getContext(int id){ return goalsDao.getContext(id); }
 
 }

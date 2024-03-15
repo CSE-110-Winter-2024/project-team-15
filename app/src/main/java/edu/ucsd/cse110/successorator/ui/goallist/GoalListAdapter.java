@@ -1,6 +1,8 @@
 package edu.ucsd.cse110.successorator.ui.goallist;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,15 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
     private final Consumer<Goal> onGoalClicked;
 
     private final Consumer<Goal> onRecurringGoalLongPressed;
+    private final Supplier<Drawable> homeContextSupplier;
+
+    private final Supplier<Drawable> workContextSupplier;
+
+    private final Supplier<Drawable> schoolContextSupplier;
+
+    private final Supplier<Drawable> errandsContextSupplier;
+
+    private final Supplier<Drawable> circleSupplier;
 
     private final Consumer<Goal> onPendingGoalLongPressed;
 
@@ -38,13 +49,25 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             Supplier<Drawable> strikethroughSupplier,
             Consumer<Goal> onGoalClicked,
             Consumer<Goal> onRecurringGoalLongPressed,
-            Consumer<Goal> onPendingGoalLongPressed
+            Consumer<Goal> onPendingGoalLongPressed,
+
+            Supplier<Drawable> homeContextSupplier,
+            Supplier<Drawable> workContextSupplier,
+            Supplier<Drawable> schoolContextSupplier,
+            Supplier<Drawable> errandsContextSupplier,
+            Supplier<Drawable> circleSupplier
     ){
         super(context, 0, new ArrayList<>(goals));
         this.strikethroughSupplier = strikethroughSupplier;
         this.onGoalClicked = onGoalClicked;
         this.onRecurringGoalLongPressed = onRecurringGoalLongPressed;
         this.onPendingGoalLongPressed = onPendingGoalLongPressed;
+
+        this.homeContextSupplier = homeContextSupplier;
+        this.workContextSupplier = workContextSupplier;
+        this.schoolContextSupplier = schoolContextSupplier;
+        this.errandsContextSupplier = errandsContextSupplier;
+        this.circleSupplier = circleSupplier;
     }
 
     @NonNull
@@ -72,6 +95,25 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
             binding.goalText.setText(titleAssembler.makeTitle());
         } else {
             binding.goalText.setText(goal.contents());
+        }
+
+        if(goal.context() == 0){
+            binding.contextIcon.setImageDrawable(circleSupplier.get());
+            binding.contextIcon.setForeground(homeContextSupplier.get());
+            binding.contextIcon.setColorFilter(Color.parseColor("#EDDB35"));
+        }else if(goal.context() == 1){
+            binding.contextIcon.setImageDrawable(circleSupplier.get());
+            binding.contextIcon.setForeground(workContextSupplier.get());
+            binding.contextIcon.setColorFilter(Color.parseColor("#56AEF4"));
+        }else if(goal.context() == 2){
+            binding.contextIcon.setImageDrawable(circleSupplier.get());
+            binding.contextIcon.setForeground(schoolContextSupplier.get());
+            binding.contextIcon.setColorFilter(Color.parseColor("#956AE1"));
+        }else if(goal.context() == 3){
+            binding.contextIcon.setImageDrawable(circleSupplier.get());
+            binding.contextIcon.setForeground(errandsContextSupplier.get());
+            binding.contextIcon.setColorFilter(Color.parseColor("#6AE46F"));
+
         }
 
         if (goal.completed()) {//US7 adding strikethrough
