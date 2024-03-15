@@ -274,7 +274,7 @@ public class MainViewModelTest {
 
         var dataSource = new InMemoryDataSource();
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
 
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         int defaultContext = mvm.getContextShown();
@@ -291,7 +291,7 @@ public class MainViewModelTest {
 
         var dataSource = new InMemoryDataSource();
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
 
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         int defaultContext = mvm.getContextShown();
@@ -308,7 +308,7 @@ public class MainViewModelTest {
 
         var dataSource = new InMemoryDataSource();
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
 
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         int defaultContext = mvm.getContextShown();
@@ -325,7 +325,7 @@ public class MainViewModelTest {
 
         var dataSource = new InMemoryDataSource();
         SimpleGoalRepository testRepo = new SimpleGoalRepository(dataSource);
-        var dateTracker = SimpleDateTracker.getInstance();
+        var dateTracker = ComplexDateTracker.getInstance();
 
         MainViewModel mvm = new MainViewModel(testRepo, dateTracker);
         int defaultContext = mvm.getContextShown();
