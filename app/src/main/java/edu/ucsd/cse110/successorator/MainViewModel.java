@@ -6,6 +6,8 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
 
+import android.util.Log;
+
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -85,6 +87,7 @@ public class MainViewModel extends ViewModel {
 
         // handling time change encapsulated :)
         this.dateTracker.observe(timeChange -> {
+
             assert timeChange != null; // the compiler said so ...
             handleDateChange(timeChange);
         });
@@ -153,8 +156,20 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    public void toggleCompleted(int id){
+        goalRepository.toggleCompleteGoal(id);
+    }
+
+    public void changePendingGoalStatus(int id,int listNum){
+        goalRepository.changePendingGoalStatus(id,listNum);
+    }
+
     public void recurringRemove(Goal goal){
         goalRepository.remove(goal.id());
+    }
+
+    public void pendingRemove(int id){
+        goalRepository.remove(id);
     }
 
     //lab makes dialogFragment call a method that is only
@@ -166,6 +181,11 @@ public class MainViewModel extends ViewModel {
         //changed this method rather than making a new one since this is now always the desired
         //behaviour of inserting an Incomplete Goal to my knowledge
         goalRepository.insertUnderIncompleteGoalsWithContext(goal);
+    }
+    public void insertCompleteGoal(Goal goal) {
+        //changed this method rather than making a new one since this is now always the desired
+        //behaviour of inserting an Incomplete Goal to my knowledge
+        goalRepository.insertUnderIncompleteGoals(goal);
     }
 
     public void clearCompletedGoals() {

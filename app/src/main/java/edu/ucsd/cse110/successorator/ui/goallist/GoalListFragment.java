@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.databinding.FragmentGoalListBinding;
+import edu.ucsd.cse110.successorator.ui.goallist.dialog.ModifyPendingDialogFragment;
 // removing this since i don't want to use default cards
 //import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 
@@ -71,7 +72,10 @@ public class GoalListFragment extends Fragment {
                 () -> ResourcesCompat.getDrawable(getResources(), R.drawable.line, null),
                 activityModel::toggleCompleted,
                 activityModel::recurringRemove,
-
+                goal ->{
+                    var dialogFragment = ModifyPendingDialogFragment.newInstance(goal);
+                    dialogFragment.show(getParentFragmentManager(),"ModifyPendingGoalDialogFragment");
+                },
                 () -> ResourcesCompat.getDrawable(getResources(), R.drawable.homecontext, null),
                 () -> ResourcesCompat.getDrawable(getResources(), R.drawable.workcontext, null),
                 () -> ResourcesCompat.getDrawable(getResources(), R.drawable.schoolcontext, null),

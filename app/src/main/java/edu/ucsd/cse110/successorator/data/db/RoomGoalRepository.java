@@ -219,6 +219,10 @@ public class RoomGoalRepository implements GoalRepository {
     public void toggleCompleteGoal(Goal goal){
         goalsDao.toggleCompleteGoal(goal);
     }
+
+    public void toggleCompleteGoal(int id){
+        goalsDao.toggleCompleteGoal(id);
+    }
     public void remove(int id){
         goalsDao.delete(id);
     }
@@ -378,11 +382,14 @@ public class RoomGoalRepository implements GoalRepository {
                     // alight, apparently this just makes a copy, eugh .. that shouldn't happen
                     // since I don't want to ruin anything.. i'll just delete
                     goalsDao.delete(newGoal.id());
-                    goalsDao.insertUnderIncompleteGoalsWithContext(GoalEntity.fromGoal(newGoal));
+                    goalsDao.insertUnderIncompleteGoals(GoalEntity.fromGoal(newGoal));
                 });
         //});
     }
-
+    @Override
+    public void changePendingGoalStatus(int id, int listNum) {
+        goalsDao.updatesGoalStatus(id,listNum);
+    }
     public int getContext(int id){ return goalsDao.getContext(id); }
 
     /*public Subject<List<Goal>> getAllSameContext(int cont) {

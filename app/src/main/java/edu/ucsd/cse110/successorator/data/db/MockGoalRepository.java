@@ -148,6 +148,11 @@ public class MockGoalRepository implements GoalRepository {
         // Commented out
     }
 
+    @Override
+    public void toggleCompleteGoal(int id) {
+
+    }
+
     public void remove(int id) {
         // Commented out
     }
@@ -162,6 +167,11 @@ public class MockGoalRepository implements GoalRepository {
 
     @Override
     public void moveTomorrowToToday() {
+
+    }
+
+    @Override
+    public void changePendingGoalStatus(int id, int listNum) {
     }
 
     public void setLastUpdated(String lastUpdated, int lastUpdatedYear) {

@@ -79,6 +79,7 @@ public class SimpleGoalRepository implements GoalRepository {
         }
 
     }
+    public void toggleCompleteGoal(int id) {}
 
     @Override
     public void prepend(Goal goal) {
@@ -129,10 +130,12 @@ public class SimpleGoalRepository implements GoalRepository {
     public void moveTomorrowToToday() {}
 
     @Override
+    public void changePendingGoalStatus(int id, int listNum) {
+
+    }
     public LocalDate getLastRecurrence() {
         return null;
     }
-
     public void insertUnderIncompleteGoalsWithContext(Goal goal){
         //going to just use other method so tests don't crash rather than implementing properly
         insertUnderIncompleteGoals(goal);

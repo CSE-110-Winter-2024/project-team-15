@@ -199,6 +199,28 @@ public interface GoalsDao {
             prependWithContext(toggledGoal);
         }
     }
+
+    @Transaction
+    default void toggleCompleteGoal(int id) {
+        var toggledGoal = find(id);
+        toggledGoal.completed = !toggledGoal.completed;
+        delete(id); // delete old goal, insert new one
+
+        // then add into correct location with toggled complete
+        if (toggledGoal.completed) {
+            insertUnderIncompleteGoals(toggledGoal);
+        } else {
+            prepend(toggledGoal);
+        }
+    }
+    @Transaction
+    default void updatesGoalStatus(int id, int listNum){
+        var updated  = find(id);
+        delete(id);
+        updated.listNum = listNum;
+        prepend(updated);
+    }
+
     @Query("DELETE FROM goals WHERE id = :id")
     void delete(int id);
 
@@ -210,3 +232,4 @@ public interface GoalsDao {
     @Query("SELECT context FROM goals WHERE id = :id")
     int getContext(int id);
 }
+

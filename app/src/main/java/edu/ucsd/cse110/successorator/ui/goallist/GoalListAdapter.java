@@ -21,6 +21,8 @@ import edu.ucsd.cse110.successorator.ViewNumInfo;
 import edu.ucsd.cse110.successorator.RecurrenceTitleAssembler;
 import edu.ucsd.cse110.successorator.databinding.ListItemGoalBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.ui.goallist.dialog.ModifyPendingDialogFragment;
+import edu.ucsd.cse110.successorator.ui.goallist.dialog.SwitchViewDialogFragment;
 //import edu.ucsd.cse110.successorator.R;
 
 public class GoalListAdapter extends ArrayAdapter<Goal> {
@@ -39,12 +41,15 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
     private final Supplier<Drawable> circleSupplier;
 
+    private final Consumer<Goal> onPendingGoalLongPressed;
+
     public GoalListAdapter(
             Context context,
             List<Goal> goals,
             Supplier<Drawable> strikethroughSupplier,
             Consumer<Goal> onGoalClicked,
             Consumer<Goal> onRecurringGoalLongPressed,
+            Consumer<Goal> onPendingGoalLongPressed,
 
             Supplier<Drawable> homeContextSupplier,
             Supplier<Drawable> workContextSupplier,
@@ -56,6 +61,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         this.strikethroughSupplier = strikethroughSupplier;
         this.onGoalClicked = onGoalClicked;
         this.onRecurringGoalLongPressed = onRecurringGoalLongPressed;
+        this.onPendingGoalLongPressed = onPendingGoalLongPressed;
 
         this.homeContextSupplier = homeContextSupplier;
         this.workContextSupplier = workContextSupplier;
@@ -125,6 +131,9 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         binding.goalText.setOnLongClickListener(v -> {
             if (ViewNumInfo.getInstance().getValue().getListShown() == 3){
                 onRecurringGoalLongPressed.accept(goal);
+            }
+            if (ViewNumInfo.getInstance().getValue().getListShown() == 2){
+                onPendingGoalLongPressed.accept(goal);
             }
             return true;
         });
