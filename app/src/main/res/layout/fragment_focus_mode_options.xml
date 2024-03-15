@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/Focus_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Focus Mode Menu"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What would you like to focus on?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Focus_Title" />
+
+
+    <TextView
+        android:id="@+id/homeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="27dp"
+        android:text="Home"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.005"
+        app:layout_constraintStart_toEndOf="@+id/homeContextButton"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/workText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Work"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/workContextButton"
+        app:layout_constraintTop_toBottomOf="@+id/homeText" />
+
+    <TextView
+        android:id="@+id/schoolText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="School"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/schoolContextButton"
+        app:layout_constraintTop_toBottomOf="@+id/workText" />
+
+    <TextView
+        android:id="@+id/errandText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Errand"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/errandContextButton"
+        app:layout_constraintTop_toBottomOf="@+id/schoolText" />
+
+    <Button
+        android:id="@+id/cancelFocusButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/errandText" />
+
+    <Button
+        android:id="@+id/homeContextButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="97dp"
+        android:layout_marginTop="17dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/yellow"
+        android:button="@drawable/circle"
+        android:foreground="@drawable/homecontext"
+        android:contentDescription=""
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+    </Button>
+
+    <Button
+        android:id="@+id/workContextButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="97dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@drawable/workbackground"
+        android:button="@null"
+        android:foreground="@drawable/workcontext"
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homeContextButton" />
+
+    <Button
+        android:id="@+id/schoolContextButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="97dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@drawable/schoolbackground"
+        android:button="@null"
+        android:foreground="@drawable/schoolcontext"
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workContextButton" />
+
+    <Button
+        android:id="@+id/errandContextButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="97dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@drawable/errandsbackground"
+        android:button="@null"
+        android:foreground="@drawable/errandscontext"
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/schoolContextButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--    https://stackoverflow.com/questions/64715253/cant-change-buttons-background-color-in-xml-android-studio-->
+<!--showed us how to get the background back to our wanted color instead of it using the default-->

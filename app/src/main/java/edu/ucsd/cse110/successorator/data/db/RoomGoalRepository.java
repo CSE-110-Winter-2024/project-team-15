@@ -385,4 +385,18 @@ public class RoomGoalRepository implements GoalRepository {
 
     public int getContext(int id){ return goalsDao.getContext(id); }
 
+    /*public Subject<List<Goal>> getAllSameContext(int cont) {
+        var entitiesLiveData = goalsDao.getAllSameContext(cont);
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities ->{
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+
+
+
+    }*/
+
+
 }

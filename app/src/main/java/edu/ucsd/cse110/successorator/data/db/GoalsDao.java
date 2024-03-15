@@ -10,6 +10,7 @@ import androidx.room.Transaction;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 @Dao
 public interface GoalsDao {
@@ -208,5 +209,4 @@ public interface GoalsDao {
 
     @Query("SELECT context FROM goals WHERE id = :id")
     int getContext(int id);
-
 }
