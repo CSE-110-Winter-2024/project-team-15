@@ -113,7 +113,8 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
         if (goal.completed()) {
             binding.goalText.setForeground(strikethroughSupplier.get());
-            
+            color = "#808080";
+            binding.contextIcon.setColorFilter(Color.parseColor(color)); 
         } else {
             binding.goalText.setForeground(null);
 
