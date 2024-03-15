@@ -99,7 +99,7 @@ public class ModifyPendingDialogFragment extends DialogFragment {
             Log.i("mytag","Finish"+goalId);
             Goal locGoal = globalGoal.withComplete(true).withListNum(0);
             activityModel.pendingRemove(this.goalId);
-            activityModel.insertIncompleteGoal(locGoal);
+            activityModel.insertCompleteGoal(locGoal);
         }
         else if(view.pendingToDeleteBtn.isChecked()){
             Log.i("mytag","Delete"+goalId);

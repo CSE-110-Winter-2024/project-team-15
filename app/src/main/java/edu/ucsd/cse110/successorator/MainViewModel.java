@@ -173,6 +173,11 @@ public class MainViewModel extends ViewModel {
         //behaviour of inserting an Incomplete Goal to my knowledge
         goalRepository.insertUnderIncompleteGoalsWithContext(goal);
     }
+    public void insertCompleteGoal(Goal goal) {
+        //changed this method rather than making a new one since this is now always the desired
+        //behaviour of inserting an Incomplete Goal to my knowledge
+        goalRepository.insertUnderIncompleteGoals(goal);
+    }
 
     public void clearCompletedGoals() {
         // this method is used only once for the onResume() of GoalListFragment
