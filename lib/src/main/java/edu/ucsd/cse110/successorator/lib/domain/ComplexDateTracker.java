@@ -94,6 +94,9 @@ public class ComplexDateTracker implements DateTracker {
         this.currentDate = this.dateTime.format(dateFormat);
     }
 
+    public LocalDateTime getLocalDateTime() {
+        return this.dateTime = LocalDateTime.now();
+    }
 
     public String getNextDate() {
         // no need for a copy ahahah we're thread safe here

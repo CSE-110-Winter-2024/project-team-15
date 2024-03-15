@@ -7,7 +7,6 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 
 
 import java.time.LocalDateTime;
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -112,6 +111,11 @@ public class MainViewModel extends ViewModel {
         // in case 2, it's redundant but not harmful.
         if (!goalRepository.getLastUpdated().equals(timeChange.getDate()) && timeChange.getHour() >= 2) {
             goalRepository.clearCompletedGoals();
+
+            // MS2 US2 functionality :)
+            // moving goals from tomorrow to today ...
+            // gotta do this before we add recurrences, otherwise it'll add them too
+            goalRepository.moveTomorrowToToday();
 
             int dayOfMonth = dateTracker.getValue().getNextDateDayOfMonth();
             int monthOfYear = dateTracker.getValue().getNextDateMonthOfYear();

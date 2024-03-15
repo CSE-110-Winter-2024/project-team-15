@@ -126,6 +126,7 @@ public class SimpleGoalRepository implements GoalRepository {
 
     }
     */
+    public void moveTomorrowToToday() {}
 
     @Override
     public LocalDate getLastRecurrence() {

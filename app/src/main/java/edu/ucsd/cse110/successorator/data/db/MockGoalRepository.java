@@ -160,6 +160,10 @@ public class MockGoalRepository implements GoalRepository {
         return this.lastUpdated;
     }
 
+    @Override
+    public void moveTomorrowToToday() {
+    }
+
     public void setLastUpdated(String lastUpdated, int lastUpdatedYear) {
         this.lastUpdated = lastUpdated;
         this.lastUpdatedYear = lastUpdatedYear;

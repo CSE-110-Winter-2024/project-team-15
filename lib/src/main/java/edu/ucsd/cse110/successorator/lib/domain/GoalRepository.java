@@ -55,8 +55,11 @@ public interface GoalRepository {
      */
 //    void addContext(Goal goal); //method to give context
 
+    void moveTomorrowToToday();
+
     void setLastRecurrence(LocalDate last);
     LocalDate getLastRecurrence();
+
 
 
 

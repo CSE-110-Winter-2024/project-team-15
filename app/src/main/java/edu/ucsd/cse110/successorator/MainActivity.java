@@ -9,10 +9,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.successorator.lib.domain.SimpleDateTracker;
 import edu.ucsd.cse110.successorator.lib.domain.ComplexDateTracker;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateGoalDialogFragment;
+import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreatePendingGoalDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.FocusModeDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.CreateRecurringGoalDialogFragment;
 import edu.ucsd.cse110.successorator.ui.goallist.dialog.SwitchViewDialogFragment;
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private MutableSubject<ComplexDateTracker> dateTracker;
     private Integer daysForwarded;
     private boolean isShowingList = true;
-    private String dayOfWeek;
+    private String listTitle;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,25 +43,25 @@ public class MainActivity extends AppCompatActivity {
 
             switch (listShown){
                 case 0:
-                    dayOfWeek = "Today, ";
+                    listTitle = "Today, ";
                     break;
                 case 1:
-                    dayOfWeek = "Tomorrow, ";
+                    listTitle = "Tomorrow, ";
                     dateString = rawDateTracker.getNextDate();
                     break;
                 case 2:
-                    dayOfWeek = "Pending";
+                    listTitle = "Pending";
                     dateString = "";
                     break;
                 case 3:
-                    dayOfWeek = "Recurring";
+                    listTitle = "Recurring";
                     dateString = "";
                     break;
                 default:
-                    dayOfWeek = "invalid";
+                    listTitle = "invalid";
             }
 
-            setTitle(dayOfWeek + dateString);
+            setTitle(listTitle + dateString);
 
         });
     }
@@ -86,13 +86,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
 
         if (item.getItemId() == R.id.action_bar_menu_swap_views) {
+            int currentList = ViewNumInfo.getInstance().getValue().getListShown();
+
             // for adding goals
-            if (ViewNumInfo.getInstance().getValue().getListShown() == 3) {
+            if (currentList == 3) {
+                // recurrence list adding goals
                 var dialogFragment = CreateRecurringGoalDialogFragment.newInstance();
                 dialogFragment.show(getSupportFragmentManager(), "idk yet");
-            } else {
+            } else if (currentList == 0 || currentList == 1) {
+                // today list adding goals .. we use the default fragment
                 var dialogFragment = CreateGoalDialogFragment.newInstance();
                 dialogFragment.show(getSupportFragmentManager(), "CreateGoalDialogFragment");
+            } else {
+                // basically just adding pending goals, nothing here yet
+                var dialogFragment = CreatePendingGoalDialogFragment.newInstance();
+                dialogFragment.show(getSupportFragmentManager(), "CreatePendingGoalDialogFragment");
             }
 
         } else if (item.getItemId() == R.id.action_bar_menu_forward_day){
@@ -130,11 +138,11 @@ public class MainActivity extends AppCompatActivity {
 
         if(rawDateTracker.getHour()>=2) {
             if(listNum == 0){
-                setTitle(dayOfWeek + rawDateTracker.getDate());
+                setTitle(listTitle + rawDateTracker.getDate());
             } else if(listNum == 1){
-                setTitle(dayOfWeek + rawDateTracker.getNextDate());
+                setTitle(listTitle + rawDateTracker.getNextDate());
             } else {
-                setTitle(dayOfWeek);
+                setTitle(listTitle);
             }
         }
 
